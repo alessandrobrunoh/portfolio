@@ -1,6 +1,6 @@
 import { Component, computed, input } from "@angular/core";
 
-export type IconName = "github" | "menu" | "x" | "sun" | "moon" | "arrow-up-right";
+export type IconName = "github" | "menu" | "x" | "sun" | "moon" | "arrow-up-right" | "download" | "mail" | "x-social";
 
 /** Lucide-compatible stroke icons, ported 1:1 from lucide-react path data. */
 @Component({
@@ -40,6 +40,20 @@ export type IconName = "github" | "menu" | "x" | "sun" | "moon" | "arrow-up-righ
       @case ("arrow-up-right") {
         <svg:path d="M7 7h10v10" />
         <svg:path d="M7 17 17 7" />
+      }
+      @case ("download") {
+        <svg:path d="M12 3v12" />
+        <svg:path d="m7 10 5 5 5-5" />
+        <svg:path d="M5 21h14" />
+      }
+      @case ("mail") {
+        <svg:rect width="20" height="16" x="2" y="4" rx="2" />
+        <svg:path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+      }
+      @case ("x-social") {
+        <svg:path d="M4 4l7.5 9.5L4.5 20" />
+        <svg:path d="M20 4l-7.4 8.9L20 20h-4l-5-6.3" />
+        <svg:path d="M8 4H4" />
       }
     }
   `,

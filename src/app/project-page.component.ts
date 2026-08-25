@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from "@angular/common";
 import { PLATFORM_ID } from "@angular/core";
 import { AfterViewInit, Component, OnDestroy, computed, inject, input, signal } from "@angular/core";
+import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { IconComponent } from "./icon.component";
 import { KeybindComponent } from "./keybind.component";
@@ -177,10 +178,12 @@ import type { TocItem } from "../lib/site.types";
                       <dt class="text-muted">Status</dt>
                       <dd class="mt-1 text-fg">{{ p.meta }}</dd>
                     </div>
-                    <div>
-                      <dt class="text-muted">Repository</dt>
-                      <dd class="mt-1 break-all text-fg">{{ p.href.replace('https://github.com/', '') }}</dd>
-                    </div>
+                    @if (p.href) {
+                      <div>
+                        <dt class="text-muted">Repository</dt>
+                        <dd class="mt-1 break-all text-fg">{{ p.href.replace('https://github.com/', '') }}</dd>
+                      </div>
+                    }
                     @if (stats(); as live) {
                       <div>
                         <dt class="text-muted">Useful lines</dt>
@@ -220,10 +223,14 @@ import type { TocItem } from "../lib/site.types";
                       <li><app-keybind>{{ tag }}</app-keybind></li>
                     }
                   </ul>
-                  <a [href]="p.href" target="_blank" rel="noreferrer" class="mt-6 inline-flex items-center gap-2 font-mono text-caption tracking-mono text-accent hover:underline">
-                    View repository
-                    <svg appIcon="arrow-up-right" class="size-3.5"></svg>
-                  </a>
+                  @if (p.href) {
+                    <a [href]="p.href" target="_blank" rel="noreferrer" class="mt-6 inline-flex items-center gap-2 font-mono text-caption tracking-mono text-accent hover:underline">
+                      View repository
+                      <svg appIcon="arrow-up-right" class="size-3.5"></svg>
+                    </a>
+                  } @else {
+                    <p class="mt-6 font-mono text-caption tracking-mono text-muted">Not started yet — no repository to show.</p>
+                  }
                 </div>
               </aside>
             </div>
@@ -245,6 +252,7 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
   protected readonly loading = signal(false);
   protected readonly active = signal("#overview");
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly title = inject(Title);
   private router = inject(Router);
   private observer: IntersectionObserver | null = null;
   private timeout: ReturnType<typeof setTimeout> | null = null;
@@ -263,6 +271,7 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
   ngOnInit() {
     if (!isPlatformBrowser(this.platformId)) return;
     const current = this.project();
+    this.title.setTitle(current ? `${current.name} · Alessandro Bruno` : "Project not found · Alessandro Bruno");
     if (!current) return;
     this.loading.set(true);
     this.timeout = setTimeout(() => {

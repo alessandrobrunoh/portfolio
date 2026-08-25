@@ -27,6 +27,10 @@ const EXIT_MS = 300;
               {{ p.year }}
               <span class="text-fg/20"> · </span>
               {{ p.lang }}
+              @if (p.stars) {
+                <span class="text-fg/20"> · </span>
+                <span title="GitHub stars">★ {{ p.stars }}</span>
+              }
             </p>
             <h2 id="project-title" class="mt-2 font-display text-heading-sm text-fg">{{ p.name }}</h2>
             <p id="project-body" class="mt-4 max-w-prose font-serif text-body text-muted">{{ p.body }}</p>
@@ -56,6 +60,12 @@ const EXIT_MS = 300;
                 View on GitHub
                 <svg appIcon="arrow-up-right" class="size-3.5"></svg>
               </a>
+              @if (p.demo) {
+                <a appButton="primary" [href]="p.demo" target="_blank" rel="noreferrer">
+                  Live demo
+                  <svg appIcon="arrow-up-right" class="size-3.5"></svg>
+                </a>
+              }
             </div>
           </div>
         }

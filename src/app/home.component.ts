@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, signal } from "@angular/core";
+import { AfterViewInit, Component, OnDestroy, OnInit, inject, signal } from "@angular/core";
+import { Title } from "@angular/platform-browser";
 import { BlogComponent } from "./blog.component";
+import { ContactComponent } from "./contact.component";
 import { ExperienceComponent } from "./experience.component";
 import { FooterComponent } from "./footer.component";
-import { FutureProjectsComponent } from "./future-projects.component";
 import { IntroComponent } from "./intro.component";
 
 import { OpenSourceComponent } from "./open-source.component";
@@ -17,9 +18,9 @@ import { TOC, UI } from "../lib/site";
   standalone: true,
   imports: [
     BlogComponent,
+    ContactComponent,
     ExperienceComponent,
     FooterComponent,
-    FutureProjectsComponent,
     IntroComponent,
 
     OpenSourceComponent,
@@ -43,11 +44,11 @@ import { TOC, UI } from "../lib/site";
           <app-intro />
           <app-experience />
           <app-projects />
-          <app-pulse />
           <app-open-source />
-          <app-blog />
           <app-stack />
-          <app-future-projects />
+          <app-pulse />
+          <app-blog />
+          <app-contact />
           <app-footer />
         </main>
       </div>
@@ -59,8 +60,10 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
   protected readonly ui = UI;
   private observer: IntersectionObserver | null = null;
   private revealObserver: IntersectionObserver | null = null;
+  private readonly title = inject(Title);
 
   ngOnInit() {
+    this.title.setTitle("Alessandro Bruno — Systems & Product Engineer");
     const ids = TOC.map((item) => item.href.slice(1));
     const els = ids.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => el !== null);
     if (els.length === 0) return;

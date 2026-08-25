@@ -53,7 +53,11 @@ import { cn } from "../lib/utils";
           <div>
             <dt class="font-mono text-caption tracking-mono text-accent">{{ ui.tocContact }}</dt>
             <dd class="mt-1 flex flex-wrap gap-x-3 gap-y-1 font-mono text-caption tracking-mono">
+              <a [href]="'mailto:' + profile.email" class="text-muted hover:text-accent">Email</a>
               <a [href]="profile.github" target="_blank" rel="noreferrer" class="text-muted hover:text-accent">GitHub</a>
+              @if (profile.x) {
+                <a [href]="'https://x.com/' + profile.x" target="_blank" rel="noreferrer" class="text-muted hover:text-accent">X</a>
+              }
             </dd>
           </div>
         </dl>

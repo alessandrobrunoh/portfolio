@@ -1,16 +1,18 @@
-import { Component, computed, signal } from "@angular/core";
-import { CHART, indexFromFraction, plotHeight, xAt, yAt } from "./pulse-chart.util";
-import { PULSE } from "../lib/site";
+import { AfterViewInit, Component, ElementRef, OnDestroy, computed, inject, signal } from "@angular/core";
+import { CHART, indexFromFraction, niceTicks, plotHeight, xAt, yAt } from "./pulse-chart.util";
+import { GITHUB_STATS } from "../lib/github-stats";
 
-const DOMAIN_MAX = 600;
-const GRID_TICKS = [0, 150, 300, 450, 600];
+const SERIES = GITHUB_STATS.series;
+/** Rounded up from the real peak so the tallest bar never touches the frame. */
+const DOMAIN_MAX = niceTicks(Math.max(...SERIES.map((row) => row.contributions)));
+const GRID_TICKS = [0, 0.25, 0.5, 0.75, 1].map((fraction) => Math.round(DOMAIN_MAX * fraction));
 const BAR_WIDTH = 14;
 
 @Component({
   selector: "app-activity-chart",
   standalone: true,
   template: `
-    <div class="relative h-full w-full" (mousemove)="onMove($event)" (mouseleave)="hoverIndex.set(null)">
+    <div class="chart-stage relative h-full w-full" [class.is-visible]="isVisible()" (mousemove)="onMove($event)" (mouseleave)="hoverIndex.set(null)">
       <svg [attr.viewBox]="viewBox" preserveAspectRatio="none" class="h-full w-full">
         @for (tick of ticks; track tick) {
           <line
@@ -27,28 +29,17 @@ const BAR_WIDTH = 14;
           }}</text>
         }
 
-        <line
-          class="chart-now-line"
-          [attr.x1]="nowX()"
-          [attr.x2]="nowX()"
-          [attr.y1]="chart.padTop"
-          [attr.y2]="chart.padTop + plotH"
-          stroke="var(--accent)"
-          stroke-opacity="0.45"
-          stroke-dasharray="2 6"
-        />
-
         @for (row of series; track row.q; let i = $index) {
           <rect
             class="chart-bar"
             [style.animation-delay.ms]="i * 45"
             [attr.x]="xAt(i, series.length) - barWidth / 2"
-            [attr.y]="yAt(row.commits, domainMax)"
+            [attr.y]="yAt(row.contributions, domainMax)"
             [attr.width]="barWidth"
-            [attr.height]="chart.padTop + plotH - yAt(row.commits, domainMax)"
+            [attr.height]="chart.padTop + plotH - yAt(row.contributions, domainMax)"
             rx="2"
             fill="var(--accent)"
-            [attr.fill-opacity]="row.forecast ? 0.14 : 0.4"
+            fill-opacity="0.4"
           />
         }
 
@@ -77,15 +68,15 @@ const BAR_WIDTH = 14;
           <p class="font-mono text-caption tracking-mono text-accent">
             {{ series[i].q }}{{ series[i].q === now ? " · now" : "" }}
           </p>
-          <p class="mt-1 font-serif text-small tabular-nums text-fg">Public activity <span class="text-muted">{{ series[i].commits }}</span></p>
+          <p class="mt-1 font-serif text-small tabular-nums text-fg">Contributions <span class="text-muted">{{ series[i].contributions }}</span></p>
         </div>
       }
     </div>
   `,
 })
-export class ActivityChartComponent {
-  protected readonly series = PULSE.series;
-  protected readonly now = PULSE.now;
+export class ActivityChartComponent implements AfterViewInit, OnDestroy {
+  protected readonly series = SERIES;
+  protected readonly now = GITHUB_STATS.now;
   protected readonly chart = CHART;
   protected readonly plotH = plotHeight;
   protected readonly domainMax = DOMAIN_MAX;
@@ -96,14 +87,35 @@ export class ActivityChartComponent {
   protected readonly yAt = yAt;
 
   hoverIndex = signal<number | null>(null);
+  isVisible = signal(false);
+  private readonly host = inject(ElementRef<HTMLElement>);
+  private observer: IntersectionObserver | null = null;
   hoverLeftPct = computed(() => {
     const i = this.hoverIndex();
     if (i === null) return 0;
     return (xAt(i, this.series.length) / CHART.width) * 100;
   });
 
-  private nowIndex = this.series.findIndex((row) => row.q === PULSE.now);
-  nowX = computed(() => xAt(this.nowIndex, this.series.length));
+  ngAfterViewInit() {
+    if (!("IntersectionObserver" in window)) {
+      this.isVisible.set(true);
+      return;
+    }
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          this.isVisible.set(true);
+          this.observer?.disconnect();
+        }
+      },
+      { threshold: 0.2 },
+    );
+    this.observer.observe(this.host.nativeElement);
+  }
+
+  ngOnDestroy() {
+    this.observer?.disconnect();
+  }
 
   onMove(event: MouseEvent) {
     const el = event.currentTarget as HTMLElement;

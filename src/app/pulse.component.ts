@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { ActivityChartComponent } from "./activity-chart.component";
 import { ContributionChartComponent } from "./contribution-chart.component";
+import { FutureProjectsComponent } from "./future-projects.component";
 import { LanguageChartComponent } from "./language-chart.component";
 import { PulseKpiComponent } from "./pulse-kpi.component";
 import { SectionHeadComponent } from "./section-head.component";
@@ -9,10 +10,10 @@ import { PULSE, UI } from "../lib/site";
 @Component({
   selector: "app-pulse",
   standalone: true,
-  imports: [ActivityChartComponent, ContributionChartComponent, LanguageChartComponent, PulseKpiComponent, SectionHeadComponent],
+  imports: [ActivityChartComponent, ContributionChartComponent, FutureProjectsComponent, LanguageChartComponent, PulseKpiComponent, SectionHeadComponent],
   template: `
     <section id="pulse" class="scroll-mt-20 border-t border-fg/10 pt-14">
-      <app-section-head n="04" [title]="ui.sectionTitles.pulse" />
+      <app-section-head n="06" [title]="ui.sectionTitles.pulse" />
       <p class="mb-6 max-w-prose font-serif text-body text-muted">{{ pulse.lede }}</p>
 
       <div class="grid gap-3 sm:grid-cols-3">
@@ -30,19 +31,16 @@ import { PULSE, UI } from "../lib/site";
 
       <div class="mt-3 grid gap-3 lg:grid-cols-2">
         <div class="reveal-card rounded-md bg-surface p-5 shadow-border sm:p-6">
-          <p class="font-mono text-caption tracking-mono text-accent">Public activity</p>
+          <p class="font-mono text-caption tracking-mono text-accent">Contributions</p>
           <p class="mt-1 max-w-prose font-serif text-small text-muted">
-            How much I ship, by quarter. Fainter bars after now are a projection.
+            GitHub's own contribution count, by quarter. Q3 ’25 is when the internship started.
           </p>
           <div class="chart-frame mt-4 h-56 w-full sm:h-64">
             <app-activity-chart />
           </div>
           <ul class="mt-3 flex flex-wrap gap-x-4 gap-y-1">
             <li class="flex items-center gap-2 font-mono text-caption tracking-mono text-muted">
-              <span class="swatch swatch-bar" aria-hidden="true"></span>Shipped
-            </li>
-            <li class="flex items-center gap-2 font-mono text-caption tracking-mono text-muted">
-              <span class="swatch swatch-dash" aria-hidden="true"></span>Projected
+              <span class="swatch swatch-bar" aria-hidden="true"></span>Contributions per quarter
             </li>
           </ul>
         </div>
@@ -50,7 +48,7 @@ import { PULSE, UI } from "../lib/site";
         <div class="reveal-card rounded-md bg-surface p-5 shadow-border sm:p-6">
           <p class="font-mono text-caption tracking-mono text-accent">What I write</p>
           <p class="mt-1 max-w-prose font-serif text-small text-muted">
-            Relative share of public work. Internship was Java. The role I was hired for is Rust.
+            Share of each quarter's commits, by the primary language of the repository they landed in.
           </p>
           <div class="chart-frame mt-4 h-56 w-full sm:h-64">
             <app-language-chart />
@@ -64,6 +62,9 @@ import { PULSE, UI } from "../lib/site";
             </li>
             <li class="flex items-center gap-2 font-mono text-caption tracking-mono text-muted">
               <span class="swatch swatch-soft" aria-hidden="true"></span>Java
+            </li>
+            <li class="flex items-center gap-2 font-mono text-caption tracking-mono text-muted">
+              <span class="swatch swatch-dash" aria-hidden="true"></span>Other
             </li>
           </ul>
         </div>
@@ -97,6 +98,8 @@ import { PULSE, UI } from "../lib/site";
           </li>
         }
       </ol>
+
+      <app-future-projects />
 
       <p class="mt-6 max-w-prose font-serif text-caption text-muted">{{ pulse.note }}</p>
     </section>

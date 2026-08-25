@@ -16,7 +16,7 @@ import { PROJECTS } from "../lib/site";
       <ul class="simple-card-grid">
         @for (p of projects; track p.id; let i = $index) {
           <li class="reveal-on-scroll"><a [routerLink]="['/projects', p.id]" class="simple-project-card group" [attr.data-tooltip]="'Open ' + p.name">
-            <div class="flex items-start justify-between gap-3"><span class="font-mono text-caption tracking-mono text-accent">0{{ i + 1 }}</span><span class="font-mono text-caption tracking-mono text-muted">{{ p.year }}</span></div>
+            <div class="flex items-start justify-between gap-3"><span class="font-mono text-caption tracking-mono text-accent">0{{ i + 1 }}</span><span class="flex items-center gap-2 font-mono text-caption tracking-mono text-muted">@if (p.stars) { <span title="GitHub stars">★ {{ p.stars }}</span><span class="text-fg/20">·</span> }{{ p.year }}</span></div>
             <h3 class="mt-8 font-serif text-subhead text-fg transition-colors group-hover:text-accent">{{ p.name }}</h3>
             <p class="mt-2 flex-1 font-serif text-small text-muted">{{ p.blurb }}</p>
             <div class="mt-6 flex items-center justify-between gap-3"><div class="flex flex-wrap items-center gap-2"><app-keybind>{{ p.lang }}</app-keybind><span class="font-mono text-caption tracking-mono text-muted">{{ p.meta }}</span></div><svg appIcon="arrow-up-right" class="size-4 text-muted transition-[color,transform] duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"></svg></div>
