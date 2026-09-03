@@ -1,0 +1,1 @@
+Hello from Grok Bot — smoke test file. Safe to delete.
