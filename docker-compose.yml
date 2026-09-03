@@ -1,13 +1,7 @@
 services:
   portfolio:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: alessandrobrunoh/portfolio:latest
+    image: ghcr.io/alessandrobrunoh/portfolio:${IMAGE_TAG:-latest}
     container_name: portfolio
-    # Host port is overridable so this can sit behind a reverse proxy: PORT=3000 docker compose up
-    ports:
-      - "${PORT:-8080}:8080"
     restart: unless-stopped
     init: true
     read_only: true
@@ -28,3 +22,17 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=proxy
+      - traefik.http.routers.portfolio.rule=Host(`alessandrobrunoh.it`) || Host(`www.alessandrobrunoh.it`)
+      - traefik.http.routers.portfolio.entrypoints=websecure
+      - traefik.http.routers.portfolio.tls=true
+      - traefik.http.routers.portfolio.tls.certresolver=le
+      - traefik.http.services.portfolio.loadbalancer.server.port=8080
+
+networks:
+  proxy:
+    external: true
