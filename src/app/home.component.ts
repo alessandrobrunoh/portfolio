@@ -1,11 +1,12 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, inject, signal } from "@angular/core";
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, inject, signal } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 import { BlogComponent } from "./blog.component";
 import { ContactComponent } from "./contact.component";
 import { ExperienceComponent } from "./experience.component";
 import { FooterComponent } from "./footer.component";
+import { FutureProjectsComponent } from "./future-projects.component";
+import { IconComponent } from "./icon.component";
 import { IntroComponent } from "./intro.component";
-
 import { OpenSourceComponent } from "./open-source.component";
 import { ProjectsComponent } from "./projects.component";
 import { PulseComponent } from "./pulse.component";
@@ -21,8 +22,9 @@ import { TOC, UI } from "../lib/site";
     ContactComponent,
     ExperienceComponent,
     FooterComponent,
+    FutureProjectsComponent,
+    IconComponent,
     IntroComponent,
-
     OpenSourceComponent,
     ProjectsComponent,
     PulseComponent,
@@ -47,20 +49,50 @@ import { TOC, UI } from "../lib/site";
           <app-open-source />
           <app-stack />
           <app-pulse />
+          <app-future-projects />
           <app-blog />
           <app-contact />
           <app-footer />
         </main>
       </div>
+
+      <!-- Floating Quick Scroll-to-Top Button -->
+      <button
+        type="button"
+        (click)="scrollToTop()"
+        [class]="
+          showScrollTop()
+            ? 'opacity-100 translate-y-0 pointer-events-auto'
+            : 'opacity-0 translate-y-4 pointer-events-none'
+        "
+        class="fixed bottom-6 right-6 z-40 inline-flex size-10 items-center justify-center rounded-full bg-surface text-fg shadow-lift border border-fg/15 transition-all duration-300 hover:text-accent hover:border-accent/40 hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent cursor-pointer"
+        aria-label="Scroll back to top"
+      >
+        <svg appIcon="arrow-up" class="size-4 transition-transform duration-200 hover:-translate-y-0.5"></svg>
+      </button>
     </div>
   `,
 })
 export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
   active = signal("#intro");
+  showScrollTop = signal(false);
   protected readonly ui = UI;
   private observer: IntersectionObserver | null = null;
   private revealObserver: IntersectionObserver | null = null;
   private readonly title = inject(Title);
+
+  @HostListener("window:scroll")
+  onWindowScroll() {
+    if (typeof window !== "undefined") {
+      this.showScrollTop.set(window.scrollY > 400);
+    }
+  }
+
+  scrollToTop() {
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
 
   ngOnInit() {
     this.title.setTitle("Alessandro Bruno — Systems & Product Engineer");

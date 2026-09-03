@@ -24,8 +24,9 @@ export const EN: SiteData = {
     { n: "04", href: "#oss", label: "Open Source" },
     { n: "05", href: "#stack", label: "Stack" },
     { n: "06", href: "#pulse", label: "Pulse" },
-    { n: "07", href: "#blog", label: "Writing" },
-    { n: "08", href: "#contact", label: "Contact" },
+    { n: "07", href: "#exploring", label: "Exploring" },
+    { n: "08", href: "#blog", label: "Writing" },
+    { n: "09", href: "#contact", label: "Contact" },
   ],
 
   COMPANY: {
@@ -392,7 +393,7 @@ export const EN: SiteData = {
       openSource: "Open Source",
       blog: "Blog",
       stack: "Stack",
-      futureProjects: "Exploring next",
+      futureProjects: "Exploring",
       contact: "Contact",
     },
     backToBlog: "← Back to Blog",

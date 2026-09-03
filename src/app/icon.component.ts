@@ -1,6 +1,21 @@
 import { Component, computed, input } from "@angular/core";
 
-export type IconName = "github" | "menu" | "x" | "sun" | "moon" | "arrow-up-right" | "download" | "mail" | "x-social";
+export type IconName =
+  | "github"
+  | "menu"
+  | "x"
+  | "sun"
+  | "moon"
+  | "arrow-up-right"
+  | "download"
+  | "mail"
+  | "x-social"
+  | "chevron-left"
+  | "chevron-right"
+  | "arrow-up"
+  | "arrow-left"
+  | "arrow-right"
+  | "compass";
 
 /** Lucide-compatible stroke icons, ported 1:1 from lucide-react path data. */
 @Component({
@@ -54,6 +69,28 @@ export type IconName = "github" | "menu" | "x" | "sun" | "moon" | "arrow-up-righ
         <svg:path d="M4 4l7.5 9.5L4.5 20" />
         <svg:path d="M20 4l-7.4 8.9L20 20h-4l-5-6.3" />
         <svg:path d="M8 4H4" />
+      }
+      @case ("chevron-left") {
+        <svg:path d="m15 18-6-6 6-6" />
+      }
+      @case ("chevron-right") {
+        <svg:path d="m9 18 6-6 6 6" />
+      }
+      @case ("arrow-up") {
+        <svg:path d="m5 12 7-7 7 7" />
+        <svg:path d="M12 19V5" />
+      }
+      @case ("arrow-left") {
+        <svg:path d="m12 19-7-7 7-7" />
+        <svg:path d="M19 12H5" />
+      }
+      @case ("arrow-right") {
+        <svg:path d="M5 12h14" />
+        <svg:path d="m12 5 7 7-7 7" />
+      }
+      @case ("compass") {
+        <svg:circle cx="12" cy="12" r="10" />
+        <svg:polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
       }
     }
   `,

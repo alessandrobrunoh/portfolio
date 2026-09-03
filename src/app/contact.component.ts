@@ -10,7 +10,7 @@ import { PROFILE, UI } from "../lib/site";
   template: `
     <section id="contact" class="scroll-mt-20 border-t border-fg/10 pt-14">
       <div class="flex flex-wrap items-end justify-between gap-4">
-        <app-section-head n="08" [title]="ui.sectionTitles.contact" />
+        <app-section-head n="09" [title]="ui.sectionTitles.contact" />
         <span class="mb-8 font-mono text-caption tracking-mono text-muted">say hello</span>
       </div>
 

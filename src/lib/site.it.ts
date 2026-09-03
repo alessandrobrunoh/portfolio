@@ -28,8 +28,9 @@ export const IT: SiteData = {
     { n: "04", href: "#oss", label: "Open Source" },
     { n: "05", href: "#stack", label: "Stack" },
     { n: "06", href: "#pulse", label: "Attività" },
-    { n: "07", href: "#blog", label: "Scritti" },
-    { n: "08", href: "#contact", label: "Contatti" },
+    { n: "07", href: "#exploring", label: "Esplorazioni" },
+    { n: "08", href: "#blog", label: "Scritti" },
+    { n: "09", href: "#contact", label: "Contatti" },
   ],
 
   COMPANY: {
@@ -413,7 +414,7 @@ export const IT: SiteData = {
       openSource: "Open Source",
       blog: "Blog",
       stack: "Stack",
-      futureProjects: "Prossime esplorazioni",
+      futureProjects: "Esplorazioni",
       contact: "Contatti",
     },
     backToBlog: "← Torna al Blog",

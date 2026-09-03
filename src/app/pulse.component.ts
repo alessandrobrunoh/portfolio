@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { ActivityChartComponent } from "./activity-chart.component";
 import { ContributionChartComponent } from "./contribution-chart.component";
-import { FutureProjectsComponent } from "./future-projects.component";
 import { LanguageChartComponent } from "./language-chart.component";
 import { PulseKpiComponent } from "./pulse-kpi.component";
 import { SectionHeadComponent } from "./section-head.component";
@@ -10,7 +9,13 @@ import { PULSE, UI } from "../lib/site";
 @Component({
   selector: "app-pulse",
   standalone: true,
-  imports: [ActivityChartComponent, ContributionChartComponent, FutureProjectsComponent, LanguageChartComponent, PulseKpiComponent, SectionHeadComponent],
+  imports: [
+    ActivityChartComponent,
+    ContributionChartComponent,
+    LanguageChartComponent,
+    PulseKpiComponent,
+    SectionHeadComponent,
+  ],
   template: `
     <section id="pulse" class="scroll-mt-20 border-t border-fg/10 pt-14">
       <app-section-head n="06" [title]="ui.sectionTitles.pulse" />
@@ -98,8 +103,6 @@ import { PULSE, UI } from "../lib/site";
           </li>
         }
       </ol>
-
-      <app-future-projects />
 
       <p class="mt-6 max-w-prose font-serif text-caption text-muted">{{ pulse.note }}</p>
     </section>
