@@ -1,425 +1,337 @@
-# Altitude — Style Reference
-> midnight financial editorial — a darkened trading floor printed on bone-white serif stock, lit only by thin borders and a single blue accent.
+---
+name: Alessandro Bruno
+description: Personal site of a Systems & Product Engineer — a quiet editorial journal of systems work, not a product landing page.
+colors:
+  canvas: "oklch(0.96 0.008 264)"
+  surface: "oklch(0.995 0.004 264)"
+  fg: "oklch(0.24 0.03 264)"
+  muted: "oklch(0.48 0.03 264)"
+  accent: "oklch(0.48 0.22 264)"
+  on-accent: "oklch(0.99 0.004 264)"
+  overlay: "color-mix(in oklch, var(--fg) 38%, transparent)"
+  canvas-dark: "oklch(0.07 0.006 264)"
+  surface-dark: "oklch(0.13 0.01 264)"
+  fg-dark: "oklch(0.94 0.01 260)"
+  muted-dark: "oklch(0.68 0.016 260)"
+  accent-dark: "oklch(0.72 0.16 260)"
+  on-accent-dark: "oklch(0.12 0.02 264)"
+typography:
+  display:
+    fontFamily: "Fraunces, Iowan Old Style, Palatino Linotype, Palatino, serif"
+    fontSize: "clamp(2.75rem, 4vw + 1.8rem, 5.5rem)"
+    fontWeight: 300
+    lineHeight: 0.95
+    letterSpacing: "-0.01em"
+    fontVariation: '"opsz" 144, "SOFT" 0, "WONK" 0'
+  headline:
+    fontFamily: "Fraunces, Iowan Old Style, Palatino Linotype, Palatino, serif"
+    fontSize: "1.75rem"
+    fontWeight: 300
+    lineHeight: 1.15
+  title:
+    fontFamily: "Fraunces, Iowan Old Style, Palatino Linotype, Palatino, serif"
+    fontSize: "1.25rem"
+    fontWeight: 400
+    lineHeight: 1.3
+  lede:
+    fontFamily: "Fraunces, Iowan Old Style, Palatino Linotype, Palatino, serif"
+    fontSize: "1.125rem"
+    fontWeight: 400
+    lineHeight: 1.55
+  body:
+    fontFamily: "Fraunces, Iowan Old Style, Palatino Linotype, Palatino, serif"
+    fontSize: "1rem"
+    fontWeight: 400
+    lineHeight: 1.6
+  small:
+    fontFamily: "Fraunces, Iowan Old Style, Palatino Linotype, Palatino, serif"
+    fontSize: "0.875rem"
+    fontWeight: 400
+    lineHeight: 1.55
+  label:
+    fontFamily: "DM Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+    fontSize: "0.75rem"
+    fontWeight: 400
+    lineHeight: 1.4
+    letterSpacing: "0.08em"
+rounded:
+  sm: "4px"
+  md: "12px"
+  lg: "16px"
+  xl: "28px"
+  full: "9999px"
+spacing:
+  1: "4px"
+  2: "8px"
+  3: "12px"
+  4: "16px"
+  5: "20px"
+  6: "24px"
+  8: "32px"
+  10: "40px"
+  14: "56px"
+  section: "3.5rem"
+components:
+  button-primary:
+    backgroundColor: "{colors.accent}"
+    textColor: "{colors.on-accent}"
+    rounded: "{rounded.full}"
+    padding: "8px 16px"
+    typography: "{typography.label}"
+  button-primary-hover:
+    backgroundColor: "{colors.fg}"
+    textColor: "{colors.on-accent}"
+  button-ghost:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.muted}"
+    rounded: "{rounded.full}"
+    padding: "8px 16px"
+    typography: "{typography.label}"
+  button-chrome:
+    backgroundColor: "transparent"
+    textColor: "{colors.fg}"
+    rounded: "{rounded.sm}"
+    padding: "10px 16px"
+    typography: "{typography.body}"
+  chip-keybind:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.fg}"
+    rounded: "{rounded.sm}"
+    padding: "4px 8px"
+    typography: "{typography.label}"
+  chip-availability:
+    backgroundColor: "color-mix(in oklch, var(--accent) 10%, transparent)"
+    textColor: "{colors.accent}"
+    rounded: "{rounded.full}"
+    padding: "6px 12px"
+    typography: "{typography.label}"
+  card-project:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.fg}"
+    rounded: "{rounded.sm}"
+    padding: "20px"
+  input-search:
+    backgroundColor: "transparent"
+    textColor: "{colors.fg}"
+    typography: "{typography.body}"
+  nav-toc-active:
+    backgroundColor: "color-mix(in oklch, var(--accent) 10%, transparent)"
+    textColor: "{colors.accent}"
+    rounded: "{rounded.sm}"
+    padding: "0 8px"
+    height: "36px"
+---
 
-**Theme:** dark
+# Design System: Alessandro Bruno
 
-Altitude operates in a midnight editorial register: near-black canvas, off-white serif headlines (Libre Baskerville), and razor-thin secondary type (Inter). The serif-on-dark pairing is the signature — most AI finance tools lean on geometric sans-serifs; Altitude borrows from financial print (WSJ, FT) to signal authority and discretion. Mountain ridge linework and painterly landscape photography replace the usual gradient meshes and 3D renders, grounding the AI product in a sense of summit and scale. Surfaces are stratified by barely-perceptible gray steps (#111 → #181 → #1f → #26 → #32), with hairline borders doing the structural work that shadows do elsewhere. Color is almost entirely absent from the interface — when it appears, it reads as functional punctuation rather than decoration. Components are tight, rectangular (4–8px radii), and content-forward.
+Personal site of Alessandro Bruno, Systems & Product Engineer. This document is the visual source of truth for [alessandrobrunoh.it](https://alessandrobrunoh.it). It describes this site only: not a SaaS product, not a trading terminal, not a generic developer portfolio kit.
 
-## Tokens — Colors
+Canonical tokens live in `src/styles.css` (`:root` / `.dark` and the Tailwind `@theme` block). If prose and code disagree, the CSS wins.
 
-| Name | Value | Token | Role |
-|------|-------|-------|------|
-| Carbon Canvas | `#181818` | `--color-carbon-canvas` | Primary page background; the foundational dark surface that all sections sit on |
-| Obsidian | `#111111` | `--color-obsidian` | Deepest layer — footer, contrast blocks, shadow wells |
-| Graphite Card | `#1f1f1f` | `--color-graphite-card` | Card and input surfaces lifted one step above canvas |
-| Slate Elevated | `#262626` | `--color-slate-elevated` | Elevated surfaces — table rows, hover states, secondary panels |
-| Iron Peak | `#323232` | `--color-iron-peak` | Highest surface tier — dropdowns, popovers, selected list items |
-| Bone | `#eeeeee` | `--color-bone` | Primary text and hairline borders — the dominant foreground tone |
-| Ash | `#e4e4e4` | `--color-ash` | Secondary borders and card outlines |
-| Fog | `#a4a19b` | `--color-fog` | Muted helper text, icon strokes, disabled labels |
-| Smoke | `#5e5d59` | `--color-smoke` | Subtle dividers, badge backgrounds, low-emphasis text |
-| Pewter | `#4b4b4b` | `--color-pewter` | Deep borders, table separators |
-| Pure White | `#ffffff` | `--color-pure-white` | Icon glyphs, card backgrounds for light-section contrast blocks, max-emphasis text |
-| Voltage Blue | `#2b7fff` | `--color-voltage-blue` | Sole chromatic accent — inline link highlights, selection, active state within data-dense terminal views; appears as the only color in an otherwise achromatic system |
-| Mid Navy | `#1a365d` | `--color-mid-navy` | Decorative deep-blue tone used in heading borders and subtle heading tints — adds depth without breaking the monochromatic discipline |
+## 1. Overview
 
-## Tokens — Typography
+**Creative North Star: "The Quiet Journal"**
 
-### Libre Baskerville — Display headlines exclusively (hero, section openers). The serif choice on a dark canvas is the brand's most distinctive move — it borrows financial-print authority (FT, Barron's) and makes an AI product feel like a private journal rather than a dashboard. Always weight 400 or 500; never bold. Letter-spacing tightens at -0.025em to keep long phrases compact. · `--font-libre-baskerville`
-- **Substitute:** Source Serif Pro, Lora, Crimson Text
-- **Weights:** 400, 500
-- **Sizes:** 36px, 48px, 72px
-- **Line height:** 1.10, 1.15, 1.25
-- **Letter spacing:** -0.0250em
-- **Role:** Display headlines exclusively (hero, section openers). The serif choice on a dark canvas is the brand's most distinctive move — it borrows financial-print authority (FT, Barron's) and makes an AI product feel like a private journal rather than a dashboard. Always weight 400 or 500; never bold. Letter-spacing tightens at -0.025em to keep long phrases compact.
+A typeset lab notebook left open on a desk. Cool paper, ink that leans indigo, a last name underlined in a single stroke. The human voice is Fraunces (soft optical-size serif, never bold). The machine voice is DM Mono (indexes, keybinds, paths, chips). Color is almost absent: one indigo signal marks where to look, then gets out of the way.
 
-### Inter — All functional UI — body, nav, buttons, inputs, table cells, badges, captions. Weight 400 is the default; 500–600 for emphasis. The 8–11px range is used aggressively for data-dense terminal/table contexts, and the positive letter-spacing (0.025–0.05em) applies to small uppercase labels and badges to compensate for size. · `--font-inter`
-- **Substitute:** system-ui, -apple-system, Segoe UI
-- **Weights:** 400, 500, 600, 700
-- **Sizes:** 8px, 9px, 10px, 11px, 12px, 13px, 14px, 16px, 18px, 28px
-- **Line height:** 1.20, 1.25, 1.33, 1.38, 1.43, 1.50, 1.63
-- **Letter spacing:** -0.0250em, 0.0250em, 0.0500em
-- **Role:** All functional UI — body, nav, buttons, inputs, table cells, badges, captions. Weight 400 is the default; 500–600 for emphasis. The 8–11px range is used aggressively for data-dense terminal/table contexts, and the positive letter-spacing (0.025–0.05em) applies to small uppercase labels and badges to compensate for size.
+This is a long-form personal site, not a product. The page is a numbered journal (01 Intro through 09 Contact) with a sticky table of contents, not a marketing funnel. Light mode is the default reading light; dark mode is the same journal after the lamp is switched off, not a different brand. A faint paper grain sits on every surface.
 
-### Fira Code — Monospaced contexts — code blocks, query inputs, and data identifiers within the terminal-style product UI. The +0.1em tracking is signature for code labels and command strings. · `--font-fira-code`
-- **Substitute:** JetBrains Mono, IBM Plex Mono
-- **Weights:** 400, 600
-- **Sizes:** 10px, 14px, 16px
-- **Line height:** 1.43, 1.50
-- **Letter spacing:** 0.1000em
-- **Role:** Monospaced contexts — code blocks, query inputs, and data identifiers within the terminal-style product UI. The +0.1em tracking is signature for code labels and command strings.
+The system rejects: midnight-fintech editorial (Altitude, Bloomberg-on-a-landing-page), Inter/Baskerville dashboards, geometric-sans AI-tool chrome, neon-on-black "hacker" portfolios, glassmorphism as decoration, gradient meshes, 3D orbs, identical icon+heading card grids, and any accent besides the indigo signal.
 
-### Type Scale
+**Key Characteristics:**
 
-| Role | Size | Line Height | Letter Spacing | Token |
-|------|------|-------------|----------------|-------|
-| caption | 10px | 1.5 | 0.5px | `--text-caption` |
-| body | 14px | 1.5 | — | `--text-body` |
-| heading-sm | 18px | 1.43 | -0.45px | `--text-heading-sm` |
-| heading | 28px | 1.38 | -0.7px | `--text-heading` |
-| heading-lg | 36px | 1.15 | -0.9px | `--text-heading-lg` |
-| display | 72px | 1.1 | -1.8px | `--text-display` |
+- Light-first paper canvas; dark is a second lighting of the same hue (264), not a second identity.
+- Dual type: Fraunces for sentences, DM Mono for indexes and chrome.
+- One accent. Used as punctuation (numbers, underlines, focus, primary CTA), never as a wash.
+- Hairline structure: 1px `color-mix` borders do the work shadows do elsewhere. Lift only on hover and dialogs.
+- Numbered sections and a sticky TOC. The site reads top to bottom like a document.
+- Motion is scroll-tied and ease-out-quart. No bounce. `prefers-reduced-motion` kills choreography.
+- Bilingual EN/IT. Copy changes; the visual system does not.
 
-## Tokens — Spacing & Shapes
+**Page shell.** `max-w-6xl` centered. From `lg`: two columns, `15rem` sticky TOC + fluid main, `gap-16`, `px-6`, `py-12`. Sections divide with `border-t border-fg/10` and `pt-14`. A 2px accent scroll-progress bar is pinned to the top of the viewport.
 
-**Base unit:** 4px
+## 2. Colors
 
-**Density:** comfortable
+Tinted neutrals toward hue 264, plus one indigo signal. Every color is OKLCH. Never `#000` or `#fff`. Browser chrome approximations: light `#eceef4`, dark `#0b0c10`.
 
-### Spacing Scale
+### Primary
 
-| Name | Value | Token |
-|------|-------|-------|
-| 4 | 4px | `--spacing-4` |
-| 8 | 8px | `--spacing-8` |
-| 12 | 12px | `--spacing-12` |
-| 16 | 16px | `--spacing-16` |
-| 20 | 20px | `--spacing-20` |
-| 24 | 24px | `--spacing-24` |
-| 32 | 32px | `--spacing-32` |
-| 48 | 48px | `--spacing-48` |
-| 64 | 64px | `--spacing-64` |
-| 80 | 80px | `--spacing-80` |
-| 96 | 96px | `--spacing-96` |
-| 128 | 128px | `--spacing-128` |
-| 136 | 136px | `--spacing-136` |
-| 224 | 224px | `--spacing-224` |
+- **Indigo Signal** (`oklch(0.48 0.22 264)` light / `oklch(0.72 0.16 260)` dark): the only chromatic color. Section indexes (`01`), TOC active state, name underline, availability dot, primary CTA, focus ring, chart fills, hover arrows. On dark canvases the signal lightens and loses chroma so it still reads as a mark, not a neon.
 
-### Border Radius
+### Neutral
 
-| Element | Value |
-|---------|-------|
-| cards | 8px |
-| icons | 4px |
-| badges | 4px |
-| inputs | 4px |
-| buttons | 4px |
-| large_surfaces | 16px |
+- **Paper Canvas** (`oklch(0.96 0.008 264)` / dark `oklch(0.07 0.006 264)`): page background. Cool, slightly blue-gray paper, never warm cream, never pure white.
+- **Sheet** (`oklch(0.995 0.004 264)` / dark `oklch(0.13 0.01 264)`): cards, chips, dialogs, the command palette, TOC command trigger. One step above the canvas.
+- **Ink** (`oklch(0.24 0.03 264)` / dark `oklch(0.94 0.01 260)`): headlines, names, primary sentences.
+- **Graphite** (`oklch(0.48 0.03 264)` / dark `oklch(0.68 0.016 260)`): ledes, helper text, inactive nav, placeholders.
+- **On Signal** (`oklch(0.99 0.004 264)` / dark `oklch(0.12 0.02 264)`): text and icons sitting on the filled accent CTA.
+- **Overlay** (`color-mix(in oklch, var(--fg) 38%, transparent)` light / canvas 82% dark): dialog and palette scrim, then `backdrop-blur`.
 
-### Shadows
+Hairlines are not a named swatch. They are always `color-mix(in oklch, var(--fg) 10–15%, transparent)`. Hover borders mix the accent at ~40–55%.
 
-| Name | Value | Token |
-|------|-------|-------|
-| md | `rgba(51, 51, 51, 0.05) 0px 2px 15px 0px, rgba(51, 51, 51,...` | `--shadow-md` |
-| subtle | `oklab(0 0 0 / 0.2) 0px 0px 0px 1px, rgba(51, 51, 51, 0.05...` | `--shadow-subtle` |
-| subtle-2 | `oklab(0.999994 0.0000455678 0.0000200868 / 0.1) 0px 0px 0...` | `--shadow-subtle-2` |
-| subtle-3 | `oklab(0.95 0 0 / 0.1) 0px 0px 0px 1px` | `--shadow-subtle-3` |
-| subtle-4 | `rgb(232, 110, 88) 0px 0px 0px 2px, rgba(51, 51, 51, 0.05)...` | `--shadow-subtle-4` |
+### Named Rules
 
-### Layout
+**The One Signal Rule.** Indigo occupies well under 10% of any screen. If a layout needs a second hue (success green, error red, chart rainbow), the design has left this site. Status is weight, tracking, and a 6px dot, not a traffic-light palette. The only exception is the decorative editor-card chrome (fixed dark IDE frame with muted traffic-light dots), which is a picture of an editor, not UI chrome.
 
-- **Page max-width:** 1200px
-- **Section gap:** 80px
-- **Card padding:** 12px
-- **Element gap:** 8px
+**The Paper Rule.** Neutrals keep chroma 0.004–0.03 at hue 264. A grain overlay (`opacity` 0.03 light / 0.028 dark, `multiply` / `overlay`) is always on. Stripping the grain or flattening to `#ffffff` / `#000000` makes it a different product.
 
-## Components
+**The Theme Is Lighting Rule.** Dark mode remaps the same roles. Do not invent a dark-only accent, a dark-only font, or a dark-only layout. Theme change is a circular view-transition clip from the toggle, 500ms ease-out-quart.
 
-### Ghost Button
-**Role:** Primary CTA — used for 'Request a Demo' and navigation actions
+## 3. Typography
 
-Transparent background, 1px solid #eeeeee border, #eeeeee text at 14px Inter weight 500, 4px radius, 16px horizontal / 8px vertical padding. Hover lifts to #262626 background. The filled-inverse version (white bg, black text) is rare; the ghost is the default voice.
+**Display / Body Font:** Fraunces (`Iowan Old Style`, `Palatino Linotype`, `Palatino`, serif)
+**Label / Mono Font:** DM Mono (`ui-monospace`, `SFMono-Regular`, Menlo, Monaco, Consolas, monospace)
 
-### Navigation Link
-**Role:** Top nav items (Platform, Security, Blog)
+**Character:** A soft, optical-size old-style serif doing all the talking, paired with a narrow mono that numbers the pages. The pairing is the brand. There is no third family. There is no geometric sans.
 
-No background, no border. Inter 14px weight 400 in #eeeeee. Active state: 1px #aeaeae bottom border acting as a thin underline marker. Sits in a 64px-tall bar with the wordmark left and Login right.
+### Hierarchy
 
-### Workflow Tile
-**Role:** Feature card within the automated workflows grid
+- **Display** (Fraunces 300, `clamp(2.75rem, 4vw + 1.8rem, 5.5rem)`, line-height 0.95, tracking `-0.01em`, `opsz` 144, `SOFT` 0, `WONK` 0): the intro name only. Last name sits on its own line, italic, with the accent underline drawing in on load.
+- **Headline** (Fraunces 300, 1.75rem / 28px, line-height 1.15): section titles (`Experience`, `Projects`) and dialog titles. Never weight 600+ on these.
+- **Title** (Fraunces 400, 1.25rem / 20px, line-height 1.3): project card names, stacked layer names, in-card headings.
+- **Lede** (Fraunces 400, 1.125rem / 18px, line-height 1.55, `max-w-prose`): the sentence under a section head. Graphite, not Ink.
+- **Body** (Fraunces 400, 1rem / 16px, line-height 1.6): bio, role bullets, dialog copy. Cap line length at `max-w-prose` (~65ch). `text-wrap: pretty` on paragraphs, `balance` on headings.
+- **Small** (Fraunces 400, 0.875rem / 14px, line-height 1.55): secondary sentences on cards, education line, org lines.
+- **Label** (DM Mono 400, 0.75rem / 12px, tracking `0.08em`, line-height 1.4): section indexes (`01`), TOC numbers, chips, keybinds, availability, email CTAs, kbd, chart legends, "say hello". This is the machine voice. It is not for paragraphs.
 
-Off-white card (#e7e5e4 to #ffffff range) on the dark canvas, 8px radius, 24px padding. Centered icon (24px, 1.5px stroke) in #1a365d, label beneath in Inter 13px weight 500, #181818 text. Arranged in a 5-column grid with 12px gaps.
+### Named Rules
 
-### Terminal Window
-**Role:** Product screenshot / app frame overlay
+**The Dual Voice Rule.** If a human is speaking (name, bio, project story, thanks), it is Fraunces. If the site is indexing, tagging, or commanding (`⌘K`, `01`, `now`, `Rust`), it is DM Mono. Do not set body copy in mono. Do not set a section title in mono. Do not introduce Inter, Geist, or a second serif.
 
-Dark app chrome (#1f1f1f) with traffic-light dots (red/yellow/green) top-left, sidebar listing platform items in Inter 13px, and a main content area with Fira Code monospaced text. Rounded 8px on the container; the internal panes are square-cornered. Drops the heavy modal-level shadow when presented as a marketing screenshot.
+**The Light Display Rule.** Display and headline stay at weight 300. Fraunces at 600 or 700 on a hero name turns the journal into a poster. Italics are reserved for the last name and short pull-quotes (thesis line), not for emphasis inside body copy.
 
-### Serif Section Header
-**Role:** Section openers (e.g. 'Sherpa — Your AI Analyst', 'Automated Workflows')
+## 4. Elevation
 
-Libre Baskerville 48px weight 400, #eeeeee, line-height 1.15, letter-spacing -0.025em. No kicker label, no eyebrow — the serif does all the work. Subhead below in Inter 16px weight 400, #a4a19b.
+Flat at rest. Depth is a 1px hairline and a one-step surface shift (canvas → sheet). Shadows appear only as a reaction: hover lift, dialog, command palette. No ambient drop shadow on resting cards.
 
-### Hero Composition
-**Role:** Above-the-fold hero block
+A fixed paper-grain layer (`z-index: 20`, non-interactive) sits above the whole page. It is atmosphere, not a card treatment. Do not put grain on individual components.
 
-Full-viewport #181818 canvas. Centered stack: display headline (Libre Baskerville 72px, #eeeeee, ls -0.025em), single-line subhead (Inter 18px, #a4a19b), ghost CTA below. A continuous mountain ridge line in 1px #a4a19b runs full-width near the bottom — the only decorative graphic on the page.
+### Shadow Vocabulary
 
-### Input Field
-**Role:** Form inputs, search bars, query fields
+- **Hairline / `shadow-border`:** `0 0 0 1px color-mix(in oklch, var(--fg) 10%, transparent)`. Resting cards, chips, ghost buttons, the TOC command trigger, tool slots.
+- **Hairline hover / `shadow-border-hover`:** `0 0 0 1px color-mix(in oklch, var(--accent) 55%, transparent)`. Ghost controls when pointed at.
+- **Lift / `shadow-lift`:** accent ring + soft ink umbra (`0 12px 28px -16px` at 28% fg). Hover on project cards, work cards, signal cards, scroll-to-top. Always paired with a 2–4px translateY.
+- **Dialog / `shadow-dialog`:** hairline + deeper umbra (`0 24px 48px -24px` at 40% fg). Command palette and modal/sheet only.
+- **TOC inset:** `inset 2px 0 0 0 var(--accent)`. Reserved for an active rail mark; the live TOC uses a tinted fill instead (`bg-accent/10`). Do not combine both.
 
-Background #1f1f1f, 1px #323232 border, 4px radius, 12px padding, Inter 14px weight 400, #eeeeee text. Placeholder in #5e5d59. Focus ring: 2px #2b7fff outer glow.
+### Named Rules
 
-### Badge / Status Pill
-**Role:** Tags, status indicators, category labels
+**The Flat-Until-Lifted Rule.** If a surface is not hovered, focused, or modal, it has no drop shadow. A resting card with `box-shadow: 0 10px 40px rgba(0,0,0,.2)` is from another site.
 
-Background #5e5d59 or #323232, text Inter 11px weight 500 in #eeeeee, 4px radius, 6px 10px padding. Uppercase tracking +0.05em. No colored fill — status is always communicated through border weight or text, never hue.
+**The Hairline Is Structure Rule.** Dividers, cards, and chips are 1px mixes of ink, not 1px solid `#e5e5e5`. Hard gray hex borders look dead on this paper.
 
-### Data Table Row
-**Role:** Row within terminal-style data tables
+## 5. Components
 
-Background alternates between transparent and #262626; 1px #262626 bottom border; Inter 13px weight 400 in #eeeeee; 16px vertical padding. Header row uses Inter 11px weight 500 uppercase, tracking +0.05em, in #a4a19b.
+Chrome (nav, icon buttons, form-like controls) is slightly squared. Actions that commit (email me, copy, availability, back to top) are pills. That split is intentional.
 
-### Product Feature Split
-**Role:** Two-column section: copy left, product visual right
+### Buttons
 
-Max-width 1200px centered. Left column: 40% width, serif heading + body copy + text-link CTA ('Try Me →'). Right column: 60% width, product visual (terminal window over mountain landscape) with 8px container radius. Section gap 80px above and below.
+- **Shape:** primary/ghost actions are fully rounded pills (`9999px`). Chrome buttons (`[appButton]`, icon hits) are 4px (`rounded-sm`). Hit target ≥ 44px on icon-only controls (`size-11`).
+- **Primary:** Indigo Signal fill, On Signal text, DM Mono caption, 8×16px padding. Hover: fill becomes Ink and the pill nudges `-translate-y-0.5`. Used for the contact email and "Back to top".
+- **Ghost:** Sheet fill, Graphite text, hairline, same pill and type. Hover: Ink text. Used for Copy email / Get in touch.
+- **Chrome (`[appButton]` default/ghost/link):** Fraunces body, 4px radius, 10×16px, `min-h-11`. Primary chrome fills accent; ghost chrome is transparent + hairline; link is accent text, no padding, underline on hover. Active scale `0.96`.
+- **Focus:** `outline: 2px solid var(--accent); outline-offset: 2px`. Never a box-shadow ring in a second color.
+- **Icon buttons** (theme, CV download, palette, scroll-top): 36–44px, muted at rest, Ink or Signal on hover. Scroll-top is a 40px circle, Sheet fill, hairline, lift on hover.
 
-### Footer
-**Role:** Page footer
+### Chips
 
-Background #111111, 64px vertical padding. Wordmark, nav links, and legal in Inter 13px weight 400, #a4a19b. 1px #1f1f1f top border separates from main content.
+- **Keybind:** Sheet, Ink, 4px radius, hairline, DM Mono caption, 4×8px. Language/tag tokens on cards and role rows (`Rust`, `Tokio`).
+- **Availability:** Signal at 10% fill, Signal text, pill, 6px live dot on the left. "Open to backend and systems roles".
+- **Status (OSS):** no fill. Open = Signal text + Signal dot. Closed/merged = Graphite + faint ink dot. Do not paint these green/red.
+- **Featured / now:** Signal text, pill, 1px Signal border or 12% Signal fill. Roadmap "now" also pulses a 2.5s ring.
 
-### Image Card / Hero Visual
-**Role:** Photographic or illustrated visuals with rounded container
+### Cards / Containers
 
-16px radius, 1px #262626 border, #1f1f1f fallback background behind image. Mountain landscape photography (painterly, blue-gray, atmospheric) is the primary visual — no abstract gradients, no 3D renders.
+- **Project card (`simple-project-card`):** Sheet, 4px radius, 1px ink 12% border, 20px padding, min-height 16rem. Index in Signal mono top-left, year/stars top-right, Fraunces title, Graphite blurb, keybind + arrow footer. Hover: Signal 48% border, 8% Signal wash, `-translate-y-0.25rem`, lift shadow. Two columns from `sm`, one column on mobile.
+- **Work / orbit card:** 12px radius, slight rest rotation (`±0.25deg`) that flattens on hover, 2px Signal bar scaling in from the left, faint orbit rings. Same hover lift.
+- **Editor card:** a picture of an IDE, not a theme. Fixed dark frame `#282c33`, 6px radius, traffic-light dots, mono tabs. Allowed to ignore the paper palette because it is a screenshot-like object. Hover still uses the site Signal on the border.
+- **Pulse / chart frames:** Sheet, 12px radius, hairline, 20–24px padding. Charts inherit Signal; no Recharts default grid fill.
+- **End-of-stream banner:** Sheet at 60%, 16px radius, hairline, centered, live Signal ping. Closing beat of the page, not a footer widget.
 
-## Do's and Don'ts
+### Inputs / Fields
+
+The only persistent field is the command palette search: transparent, no border of its own, Fraunces body, Graphite placeholder, accent compass icon on the left, `ESC` kbd on the right. The chrome around it is the palette panel (16px radius, hairline, dialog shadow). Do not draw a Material outlined text field.
+
+### Navigation
+
+- **Sidebar TOC (from `lg`):** sticky under the name. Name is Fraunces subhead. Command trigger is a full-width Sheet row with compass + `⌘K`. Index label in Signal mono. Links: Fraunces small, 36px min height, mono number in a 20px slot. Active = `bg-accent/10` + Signal text. Hover = Sheet + Ink. Below: current work, IT/EN toggle, mail/GitHub. Language toggle is two mono captions; the active language is Signal.
+- **Mobile:** name + theme in the header row; TOC becomes a 2-column grid. No hamburger drawer as the primary pattern on the home page (a compact nav with menu exists for tighter headers).
+- **Skip link:** visually hidden until focused, then a Sheet chip at `top-4 left-4`.
+
+### Section Head
+
+Mono index (`02`) in Signal + Fraunces headline. A 2.75rem × 2px Signal bar draws in as the heading enters the viewport (`section-mark`). Optional Graphite mono kicker on the right (`timeline / decisions`, `selected work / 2024—now`).
+
+### Command Palette
+
+Fullscreen dim + blur overlay. Panel: `max-w-2xl`, 16px radius, Sheet, hairline, dialog shadow, ~12vh from the top. Groups: Navigation, Projects, Writing, Actions, System. Rows are Fraunces; shortcuts are DM Mono kbd. Selection = Signal tint. `⌘K` opens, `Escape` closes.
+
+### Dialog / Sheet
+
+Same overlay token. Mobile: bottom sheet, `rounded-t-xl`. From `sm`: centered modal, 16px radius, `min(36rem, calc(100vw - 2rem))`. Staggered fade-up of children. Close on overlay click and Escape.
+
+### Roadmap / Timeline
+
+Three columns from desktop: year (mono Graphite) | spine (1px ink line + numbered circle) | copy. Current role: filled Signal circle, "now" pill, pulse ring. Hover shifts copy 4–5px right and paints the pin Signal. Thesis sits as an italic Graphite blockquote under a hairline.
+
+### Stack Layers
+
+Hairline rows: index | name | Signal data-bar | pill tokens. Hover pads left 12px and tints Signal 5%. Tokens are Graphite pills that rise and ink-up on row hover. Caption under the list: "closer to the metal" → "closer to the person using it".
+
+### Intro Signature
+
+Company · role · location as a Sheet pill with hairline. Display name; last name italic with the load-in Signal underline. 64–80px avatar, 12px radius, 1px ink outline, slight scroll parallax. Bio in lede Graphite. Availability pill. Education + mailto in small / mono.
+
+## 6. Do's and Don'ts
 
 ### Do
-- Use Libre Baskerville weight 400 at 36–72px for all section and display headlines; never substitute a sans-serif for these.
-- Maintain the surface stack: #111 → #181 → #1f → #26 → #32, ascending by roughly 5–10% luminance steps.
-- Use 4px radius for all buttons, inputs, and badges; 8px for cards; 16px only for large image containers.
-- Keep body text in Inter 14px weight 400, #eeeeee, with #a4a19b for muted helper text and #5e5d59 for placeholders.
-- Use 8px element gaps and 12px card padding as the baseline; scale section rhythm in 24/32/64/80px steps.
-- Let the mountain ridge line graphic or landscape photography do the visual storytelling — no gradient meshes, no 3D orbs, no neon glows.
-- Communicate status through weight, border, and tracking rather than color; reserve #2b7fff for inline links and the focus ring only.
+
+- **Do** set every color in OKLCH, tinted toward hue 264, through `--canvas --surface --fg --muted --accent --on-accent`.
+- **Do** use Fraunces 300 for the name and section titles, Fraunces 400 for all other sentences, DM Mono caption (`0.08em`) for indexes, chips, and commands.
+- **Do** number every section (`01`–`09`) and keep the sticky TOC in sync with scroll.
+- **Do** keep resting surfaces flat: Sheet on Canvas, 1px `color-mix` hairline, 4–12px radius.
+- **Do** lift on hover only (`translateY(-0.25rem)` + `shadow-lift`) and focus with a 2px Signal outline offset 2px.
+- **Do** ease with `--ease-out-quart` (`cubic-bezier(0.23, 1, 0.32, 1)`). Durations: 150 / 250 / 400 / 500ms.
+- **Do** honor `prefers-reduced-motion`: no view-transition clip, no reveals, no chart draws, no underline animation, `scroll-behavior: auto`.
+- **Do** keep primary CTAs as Signal pills in DM Mono (email, back to top). Keep reading copy in Fraunces.
+- **Do** ship both light and dark from the same roles. Grain stays on.
+- **Do** write EN and IT as copy variants of one layout.
 
 ### Don't
-- Don't use bold weights (700) for headlines — Libre Baskerville at weight 400 is the voice; going heavier breaks the editorial register.
-- Don't introduce new accent colors — the system is monochromatic with one blue; adding green/red/yellow for semantic states breaks the discipline.
-- Don't use heavy drop shadows for cards or buttons; shadows here are 0.05 opacity whispers, not 0.3-opacity lifts.
-- Don't round corners above 16px — the rectilinear 4–8px language is a signature; pill shapes (9999px) would look foreign.
-- Don't use white (#ffffff) as body text — #eeeeee is softer and the right foreground tone against #181818.
-- Don't pair Inter with another sans-serif for headings; the Inter/Baskerville duality is the only pairing the system uses.
-- Don't apply gradients to UI surfaces — the one detected gradient is on a landscape image, not on any card or button.
 
-## Surfaces
+- **Don't** reuse Altitude, Ramp, Plaid, Linear, or Bloomberg as references. This is not a finance product, not a terminal, not a dark SaaS shell.
+- **Don't** introduce Inter, Libre Baskerville, Fira Code, Geist, or any third family.
+- **Don't** add a second accent (green success, red error, gold, cyan). Open/closed is a dot and a weight change.
+- **Don't** use `#000`, `#fff`, or untinted gray ramps. If it looks like Tailwind slate on white, it is wrong.
+- **Don't** put bold (700) on display type, or all-caps Fraunces headlines.
+- **Don't** use heavy drop shadows, glass cards as the default, gradient text, gradient meshes, 3D orbs, or mountain/landscape photography.
+- **Don't** use a colored `border-left` thicker than 1px as a stripe on cards or rows. Signal marks are indexes, underlines, 2px top bars that scale in, or 6px dots.
+- **Don't** build identical icon+heading+blurb grids. Project cards are uneven in content; stack is a list of layers; experience is a timeline.
+- **Don't** treat dark mode as a neon cyberpunk skin or a separate brand.
+- **Don't** animate layout properties (width, height, top, left). Transform, opacity, clip-path, stroke-dashoffset only.
+- **Don't** ship a floating marketing chatbot, a "Request a demo" ghost button, or a 5-column feature-tile grid. Those belong to other products.
 
-| Level | Name | Value | Purpose |
-|-------|------|-------|---------|
-| 0 | Obsidian | `#111111` | Deepest base — footer wells, contrast blocks beneath cards |
-| 1 | Carbon Canvas | `#181818` | Primary page background |
-| 2 | Graphite Card | `#1f1f1f` | Cards, inputs, contained surfaces |
-| 3 | Slate Elevated | `#262626` | Hover states, table rows, secondary panels |
-| 4 | Iron Peak | `#323232` | Top elevation — popovers, dropdowns, active selections |
-
-## Elevation
-
-- **Card:** `0px 2px 15px 0px rgba(51,51,51,0.05), 0px 1px 2px -1px rgba(51,51,51,0.05)`
-- **Button:** `0px 0px 0px 1px oklab(0 0 0 / 0.2), 0px 2px 15px 0px rgba(51,51,51,0.05), 0px 1px 2px -1px rgba(51,51,51,0.05)`
-- **Modal / Overlay:** `0px 0px 0px 1px oklab(0.999994 0.0000455678 0.0000200868 / 0.1), 0px 8px 24px 0px rgba(0,0,0,0.3), 0px 2px 8px 0px rgba(0,0,0,0.2)`
-
-## Imagery
-
-Photography is the dominant visual medium — specifically painterly, atmospheric mountain landscapes in muted blue-grays that evoke summit, scale, and distance. These appear as full-bleed or large contained images behind product terminal screenshots, creating a 'looking through a window at the product' effect. A continuous single-line mountain ridge SVG runs across the hero, drawn in 1px #a4a19b — a minimalist line-art counterpoint to the photographic sections. Icons are outline-style, 1.5px stroke, monochrome in #1a365d or #a4a19b, never filled. No 3D renders, no abstract gradient art, no stock-style lifestyle photography. The imagery vocabulary is: landscape photography + thin line-art + product terminal screenshots.
-
-## Layout
-
-Max-width 1200px centered, full-bleed dark canvas. Hero is a centered single-column stack (display headline → subhead → ghost CTA) with the mountain ridge line running full-width at the bottom. Product sections alternate between two patterns: (1) a dark product-visual-right layout (40% copy left, 60% terminal-over-landscape right) and (2) a dark copy-right layout with a light off-white workflow card grid on the left. Section gaps are generous — 80px vertical rhythm separates each band. Navigation is a single 64px-tall top bar with the wordmark left, three nav links center, Login right; no sticky behavior, no hamburger. The page flows seamlessly from dark to dark with one light-section interruption (the workflow grid) for contrast.
-
-## Agent Prompt Guide
-
-**Quick Color Reference**
-- text: #eeeeee
-- background: #181818
-- border: #262626
-- accent: #2b7fff
-- muted text: #a4a19b
-- primary action: no distinct CTA color
-
-**3-5 Example Component Prompts**
-
-No distinct primary action color was observed; use the extracted neutral button treatments instead of inventing a filled CTA color.
-
-2. **Serif section header + body**: Left-aligned Libre Baskerville 48px weight 400, #eeeeee, letter-spacing -1.2px. Subhead in Inter 16px weight 400, #a4a19b. Body copy in Inter 14px weight 400, #eeeeee, 1.5 line-height. 'Try Me →' text link in Inter 14px weight 500, #2b7fff.
-
-3. **Workflow tile card**: Off-white #e7e5e4 background, 8px radius, 24px padding, 1px #e4e4e4 border. Centered 24px outline icon in #1a365d. Label beneath in Inter 13px weight 500, #181818. Arranged in a 5-column grid with 12px gaps on the #181818 canvas.
-
-4. **Terminal window**: #1f1f1f background, 8px radius, 1px #262626 border. Top bar with three 10px traffic-light dots (red #ff5f57, yellow #febc20, green #28c840). Sidebar at 200px width with Inter 13px #eeeeee list items on #181818 background. Main pane with Fira Code 14px, #eeeeee text on #1f1f1f.
-
-5. **Data table row**: Full-width row, 16px vertical padding, 1px #262626 bottom border. Inter 13px weight 400, #eeeeee. Alternating row background: transparent and #262626. Header row above: Inter 11px weight 500 uppercase, +0.5px tracking, #a4a19b.
-
-## Similar Brands
-
-- **Ramp** — Same near-black canvas with generous serif/sans pairing, monochromatic discipline, and ghost-button CTAs — though Ramp is lighter and more playful.
-- **Plaid** — Dark-mode fintech surface with thin borders, hairline structural elements, and restrained color use; similar density and information-forward layout.
-- **Linear** — Dark dense UI with the same five-step gray surface stack, 4–8px corner radius vocabulary, and the same 'chromatic accent only where functionally necessary' rule.
-- **Bloomberg Terminal** — Shares the editorial-financial DNA — serif display, monospaced data, dark canvas, hairline grid lines, and zero tolerance for decorative color.
-
-## Quick Start
-
-### CSS Custom Properties
+### Agent quick reference
 
 ```css
 :root {
-  /* Colors */
-  --color-carbon-canvas: #181818;
-  --color-obsidian: #111111;
-  --color-graphite-card: #1f1f1f;
-  --color-slate-elevated: #262626;
-  --color-iron-peak: #323232;
-  --color-bone: #eeeeee;
-  --color-ash: #e4e4e4;
-  --color-fog: #a4a19b;
-  --color-smoke: #5e5d59;
-  --color-pewter: #4b4b4b;
-  --color-pure-white: #ffffff;
-  --color-voltage-blue: #2b7fff;
-  --color-mid-navy: #1a365d;
-
-  /* Typography — Font Families */
-  --font-libre-baskerville: 'Libre Baskerville', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-fira-code: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-
-  /* Typography — Scale */
-  --text-caption: 10px;
-  --leading-caption: 1.5;
-  --tracking-caption: 0.5px;
-  --text-body: 14px;
-  --leading-body: 1.5;
-  --text-heading-sm: 18px;
-  --leading-heading-sm: 1.43;
-  --tracking-heading-sm: -0.45px;
-  --text-heading: 28px;
-  --leading-heading: 1.38;
-  --tracking-heading: -0.7px;
-  --text-heading-lg: 36px;
-  --leading-heading-lg: 1.15;
-  --tracking-heading-lg: -0.9px;
-  --text-display: 72px;
-  --leading-display: 1.1;
-  --tracking-display: -1.8px;
-
-  /* Typography — Weights */
-  --font-weight-regular: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-
-  /* Spacing */
-  --spacing-unit: 4px;
-  --spacing-4: 4px;
-  --spacing-8: 8px;
-  --spacing-12: 12px;
-  --spacing-16: 16px;
-  --spacing-20: 20px;
-  --spacing-24: 24px;
-  --spacing-32: 32px;
-  --spacing-48: 48px;
-  --spacing-64: 64px;
-  --spacing-80: 80px;
-  --spacing-96: 96px;
-  --spacing-128: 128px;
-  --spacing-136: 136px;
-  --spacing-224: 224px;
-
-  /* Layout */
-  --page-max-width: 1200px;
-  --section-gap: 80px;
-  --card-padding: 12px;
-  --element-gap: 8px;
-
-  /* Border Radius */
-  --radius-md: 4px;
-  --radius-lg: 8px;
-  --radius-2xl: 16px;
-
-  /* Named Radii */
-  --radius-cards: 8px;
-  --radius-icons: 4px;
-  --radius-badges: 4px;
-  --radius-inputs: 4px;
-  --radius-buttons: 4px;
-  --radius-largesurfaces: 16px;
-
-  /* Shadows */
-  --shadow-md: rgba(51, 51, 51, 0.05) 0px 2px 15px 0px, rgba(51, 51, 51, 0.05) 0px 1px 2px -1px;
-  --shadow-subtle: oklab(0 0 0 / 0.2) 0px 0px 0px 1px, rgba(51, 51, 51, 0.05) 0px 2px 15px 0px, rgba(51, 51, 51, 0.05) 0px 1px 2px -1px;
-  --shadow-subtle-2: oklab(0.999994 0.0000455678 0.0000200868 / 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0.3) 0px 8px 24px 0px, rgba(0, 0, 0, 0.2) 0px 2px 8px 0px;
-  --shadow-subtle-3: oklab(0.95 0 0 / 0.1) 0px 0px 0px 1px;
-  --shadow-subtle-4: rgb(232, 110, 88) 0px 0px 0px 2px, rgba(51, 51, 51, 0.05) 0px 2px 15px 0px, rgba(51, 51, 51, 0.05) 0px 1px 2px -1px;
-
-  /* Surfaces */
-  --surface-obsidian: #111111;
-  --surface-carbon-canvas: #181818;
-  --surface-graphite-card: #1f1f1f;
-  --surface-slate-elevated: #262626;
-  --surface-iron-peak: #323232;
+  --canvas: oklch(0.96 0.008 264);
+  --surface: oklch(0.995 0.004 264);
+  --fg: oklch(0.24 0.03 264);
+  --muted: oklch(0.48 0.03 264);
+  --accent: oklch(0.48 0.22 264);
+  --on-accent: oklch(0.99 0.004 264);
+  --font-serif: "Fraunces", "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+  --font-mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+.dark {
+  --canvas: oklch(0.07 0.006 264);
+  --surface: oklch(0.13 0.01 264);
+  --fg: oklch(0.94 0.01 260);
+  --muted: oklch(0.68 0.016 260);
+  --accent: oklch(0.72 0.16 260);
+  --on-accent: oklch(0.12 0.02 264);
 }
 ```
 
-### Tailwind v4
-
-```css
-@theme {
-  /* Colors */
-  --color-carbon-canvas: #181818;
-  --color-obsidian: #111111;
-  --color-graphite-card: #1f1f1f;
-  --color-slate-elevated: #262626;
-  --color-iron-peak: #323232;
-  --color-bone: #eeeeee;
-  --color-ash: #e4e4e4;
-  --color-fog: #a4a19b;
-  --color-smoke: #5e5d59;
-  --color-pewter: #4b4b4b;
-  --color-pure-white: #ffffff;
-  --color-voltage-blue: #2b7fff;
-  --color-mid-navy: #1a365d;
-
-  /* Typography */
-  --font-libre-baskerville: 'Libre Baskerville', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-fira-code: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-
-  /* Typography — Scale */
-  --text-caption: 10px;
-  --leading-caption: 1.5;
-  --tracking-caption: 0.5px;
-  --text-body: 14px;
-  --leading-body: 1.5;
-  --text-heading-sm: 18px;
-  --leading-heading-sm: 1.43;
-  --tracking-heading-sm: -0.45px;
-  --text-heading: 28px;
-  --leading-heading: 1.38;
-  --tracking-heading: -0.7px;
-  --text-heading-lg: 36px;
-  --leading-heading-lg: 1.15;
-  --tracking-heading-lg: -0.9px;
-  --text-display: 72px;
-  --leading-display: 1.1;
-  --tracking-display: -1.8px;
-
-  /* Spacing */
-  --spacing-4: 4px;
-  --spacing-8: 8px;
-  --spacing-12: 12px;
-  --spacing-16: 16px;
-  --spacing-20: 20px;
-  --spacing-24: 24px;
-  --spacing-32: 32px;
-  --spacing-48: 48px;
-  --spacing-64: 64px;
-  --spacing-80: 80px;
-  --spacing-96: 96px;
-  --spacing-128: 128px;
-  --spacing-136: 136px;
-  --spacing-224: 224px;
-
-  /* Border Radius */
-  --radius-md: 4px;
-  --radius-lg: 8px;
-  --radius-2xl: 16px;
-
-  /* Shadows */
-  --shadow-md: rgba(51, 51, 51, 0.05) 0px 2px 15px 0px, rgba(51, 51, 51, 0.05) 0px 1px 2px -1px;
-  --shadow-subtle: oklab(0 0 0 / 0.2) 0px 0px 0px 1px, rgba(51, 51, 51, 0.05) 0px 2px 15px 0px, rgba(51, 51, 51, 0.05) 0px 1px 2px -1px;
-  --shadow-subtle-2: oklab(0.999994 0.0000455678 0.0000200868 / 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0.3) 0px 8px 24px 0px, rgba(0, 0, 0, 0.2) 0px 2px 8px 0px;
-  --shadow-subtle-3: oklab(0.95 0 0 / 0.1) 0px 0px 0px 1px;
-  --shadow-subtle-4: rgb(232, 110, 88) 0px 0px 0px 2px, rgba(51, 51, 51, 0.05) 0px 2px 15px 0px, rgba(51, 51, 51, 0.05) 0px 1px 2px -1px;
-}
-```
+Tailwind tokens already bound in `@theme`: `bg-canvas`, `bg-surface`, `text-fg`, `text-muted`, `text-accent`, `bg-accent`, `text-on-accent`, `font-serif`, `font-mono`, `font-display`, `text-heading`, `text-heading-sm`, `text-lede`, `text-body`, `text-small`, `text-caption`, `tracking-mono`, `rounded-sm|md|lg|xl|full`, `shadow-border`, `shadow-lift`, `shadow-dialog`.
