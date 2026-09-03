@@ -1,7 +1,8 @@
-import { Component, computed, signal } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, OnDestroy, computed, inject, signal } from "@angular/core";
 import { CHART, indexFromFraction, plotHeight, xAt, yAt } from "./pulse-chart.util";
-import { PULSE } from "../lib/site";
+import { GITHUB_STATS } from "../lib/github-stats";
 
+const SERIES = GITHUB_STATS.series;
 const DOMAIN_MAX = 100;
 const GRID_TICKS = [0, 25, 50, 75, 100];
 
@@ -13,7 +14,7 @@ function pathFor(values: readonly number[], count: number) {
   selector: "app-language-chart",
   standalone: true,
   template: `
-    <div class="relative h-full w-full" (mousemove)="onMove($event)" (mouseleave)="hoverIndex.set(null)">
+    <div class="chart-stage relative h-full w-full" [class.is-visible]="isVisible()" (mousemove)="onMove($event)" (mouseleave)="hoverIndex.set(null)">
       <svg [attr.viewBox]="viewBox" preserveAspectRatio="none" class="h-full w-full">
         @for (tick of ticks; track tick) {
           <line
@@ -30,17 +31,7 @@ function pathFor(values: readonly number[], count: number) {
           }}</text>
         }
 
-        <line
-          class="chart-now-line"
-          [attr.x1]="nowX()"
-          [attr.x2]="nowX()"
-          [attr.y1]="chart.padTop"
-          [attr.y2]="chart.padTop + plotH"
-          stroke="var(--accent)"
-          stroke-opacity="0.45"
-          stroke-dasharray="2 6"
-        />
-
+        <path class="chart-line chart-line-soft" [attr.d]="otherPath" fill="none" stroke="var(--fg)" stroke-opacity="0.2" stroke-width="1.5" stroke-dasharray="3 3" />
         <path class="chart-line chart-line-soft" [attr.d]="javaPath" fill="none" stroke="var(--fg)" stroke-opacity="0.35" stroke-width="1.5" />
         <path class="chart-line chart-line-muted" [attr.d]="typescriptPath" fill="none" stroke="var(--muted)" stroke-width="1.5" />
         <path class="chart-line chart-line-accent" [attr.d]="rustPath" fill="none" stroke="var(--accent)" stroke-width="2" />
@@ -70,18 +61,19 @@ function pathFor(values: readonly number[], count: number) {
         >
           <p class="font-mono text-caption tracking-mono text-accent">{{ series[i].q }}{{ series[i].q === now ? " · now" : "" }}</p>
           <ul class="mt-1 space-y-0.5">
-            <li class="font-serif text-small tabular-nums text-fg">Java <span class="text-muted">{{ series[i].java }}</span></li>
-            <li class="font-serif text-small tabular-nums text-fg">TypeScript <span class="text-muted">{{ series[i].typescript }}</span></li>
-            <li class="font-serif text-small tabular-nums text-fg">Rust <span class="text-muted">{{ series[i].rust }}</span></li>
+            <li class="font-serif text-small tabular-nums text-fg">Other <span class="text-muted">{{ series[i].other }}%</span></li>
+            <li class="font-serif text-small tabular-nums text-fg">Java <span class="text-muted">{{ series[i].java }}%</span></li>
+            <li class="font-serif text-small tabular-nums text-fg">TypeScript <span class="text-muted">{{ series[i].typescript }}%</span></li>
+            <li class="font-serif text-small tabular-nums text-fg">Rust <span class="text-muted">{{ series[i].rust }}%</span></li>
           </ul>
         </div>
       }
     </div>
   `,
 })
-export class LanguageChartComponent {
-  protected readonly series = PULSE.series;
-  protected readonly now = PULSE.now;
+export class LanguageChartComponent implements AfterViewInit, OnDestroy {
+  protected readonly series = SERIES;
+  protected readonly now = GITHUB_STATS.now;
   protected readonly chart = CHART;
   protected readonly plotH = plotHeight;
   protected readonly domainMax = DOMAIN_MAX;
@@ -90,6 +82,10 @@ export class LanguageChartComponent {
   protected readonly xAt = xAt;
   protected readonly yAt = yAt;
 
+  protected readonly otherPath = pathFor(
+    this.series.map((r) => r.other),
+    this.series.length,
+  );
   protected readonly javaPath = pathFor(
     this.series.map((r) => r.java),
     this.series.length,
@@ -104,14 +100,35 @@ export class LanguageChartComponent {
   );
 
   hoverIndex = signal<number | null>(null);
+  isVisible = signal(false);
+  private readonly host = inject(ElementRef<HTMLElement>);
+  private observer: IntersectionObserver | null = null;
   hoverLeftPct = computed(() => {
     const i = this.hoverIndex();
     if (i === null) return 0;
     return (xAt(i, this.series.length) / CHART.width) * 100;
   });
 
-  private nowIndex = this.series.findIndex((row) => row.q === PULSE.now);
-  nowX = computed(() => xAt(this.nowIndex, this.series.length));
+  ngAfterViewInit() {
+    if (!("IntersectionObserver" in window)) {
+      this.isVisible.set(true);
+      return;
+    }
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          this.isVisible.set(true);
+          this.observer?.disconnect();
+        }
+      },
+      { threshold: 0.2 },
+    );
+    this.observer.observe(this.host.nativeElement);
+  }
+
+  ngOnDestroy() {
+    this.observer?.disconnect();
+  }
 
   onMove(event: MouseEvent) {
     const el = event.currentTarget as HTMLElement;

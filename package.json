@@ -6,7 +6,9 @@
     "start": "vite --host 0.0.0.0 --port 8080",
     "dev": "vite --host 0.0.0.0 --port 8080",
     "build": "vite build",
-    "preview": "vite preview --host 127.0.0.1 --port 8081"
+    "preview": "vite preview --host 127.0.0.1 --port 8081",
+    "sync:github": "node scripts/sync-github.mjs",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit"
   },
   "dependencies": {
     "@analogjs/platform": "^2.7.0",

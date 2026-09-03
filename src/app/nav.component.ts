@@ -13,6 +13,14 @@ import { cn } from "../lib/utils";
       <div class="mx-auto flex h-14 max-w-5xl items-center justify-between gap-4 px-4 sm:px-6">
         <a href="#intro" class="shrink-0 font-serif text-body italic text-fg tracking-ui">{{ profile.name }}</a>
         <div class="flex items-center gap-1">
+          <button
+            type="button"
+            (click)="openPalette()"
+            class="inline-flex size-11 items-center justify-center text-muted transition-colors duration-150 hover:text-fg cursor-pointer"
+            aria-label="Open Command Palette"
+          >
+            <svg appIcon="compass" class="size-4"></svg>
+          </button>
           <app-theme-toggle />
           <a
             [href]="profile.github"
@@ -86,5 +94,9 @@ export class NavComponent {
   @HostListener("window:keydown", ["$event"])
   onKeydown(event: KeyboardEvent) {
     if (this.open() && event.key === "Escape") this.open.set(false);
+  }
+
+  openPalette() {
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true, bubbles: true }));
   }
 }

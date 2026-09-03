@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, computed, inject, input, signal } from "@angular/core";
+import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 
 import { KeybindComponent } from "./keybind.component";
@@ -41,6 +42,35 @@ import type { TocItem } from "../lib/site.types";
                   <h3 id="detail" class="mt-8 font-display text-body text-fg">{{ sectionLabels[2] }}</h3>
                   <p class="mt-3">{{ p.body[2] }}</p>
                 </section>
+                @if (p.body[3]; as note) {
+                  <section id="notes" class="scroll-mt-8 border-t border-fg/10 pt-8">
+                    <h2 class="font-display text-subhead text-fg">Field note</h2>
+                    <p class="mt-3">{{ note }}</p>
+                  </section>
+                }
+                @if (p.slug === 'publishing-a-crate-without-an-audience') {
+                  <section class="article-visual article-chart mt-10 rounded-md border border-fg/10 bg-surface p-4 font-mono text-caption tracking-mono text-muted" aria-label="API adoption chart">
+                    <div class="flex items-center justify-between border-b border-fg/10 pb-3"><span class="text-accent">adoption / first 8 weeks</span><span>ducklake-orm</span></div>
+                    <div class="mt-5 flex h-32 items-end gap-2">
+                      @for (height of [18, 26, 31, 46, 52, 68, 78, 94]; track height; let i = $index) {
+                        <div class="article-chart-bar" [style.height.%]="height" [style.animation-delay.ms]="i * 70"><span>{{ i + 1 }}</span></div>
+                      }
+                    </div>
+                    <p class="mt-3 text-fg/55">The useful signal was not raw downloads. It was the moment examples started looking like real applications.</p>
+                  </section>
+                } @else if (p.slug === 'what-i-got-wrong-about-event-buses') {
+                  <pre class="article-code mt-10 overflow-x-auto rounded-md p-4 font-mono text-small leading-6" aria-label="Event processing code example"><code><span class="code-muted">// delivered is not processed</span>
+<span class="code-keyword">let</span> message = stream.read().<span class="code-function">await</span>?;
+<span class="code-keyword">if</span> (worker.handle(&amp;message).<span class="code-function">await</span>?) &#123;
+  stream.<span class="code-function">ack</span>(message.id).<span class="code-function">await</span>?;
+&#125;</code></pre>
+                  <div class="article-callout mt-4 rounded-md border border-accent/20 bg-accent/5 p-4 font-serif text-small text-muted">The acknowledgement belongs after the side effect, not after the read. That one line is where delivery becomes a system you can reason about.</div>
+                } @else {
+                  <section class="article-diff mt-10 overflow-hidden rounded-md border border-fg/10 bg-surface font-mono text-caption tracking-mono" aria-label="Pull request diff">
+                    <div class="flex items-center justify-between border-b border-fg/10 px-4 py-3"><span class="text-accent">extensions/jdl · pull request</span><span class="text-muted">+18 −4</span></div>
+                    <div class="space-y-1 px-4 py-4 text-small leading-6"><p><span class="mr-3 text-fg/35">@@</span><span class="text-muted">grammar fixture / parser recovery</span></p><p><span class="mr-3 text-[#65b891]">+</span><span class="text-fg">add fixture for nested entity declarations</span></p><p><span class="mr-3 text-[#d77d8a]">−</span><span class="text-fg/60">skip malformed input silently</span></p><p><span class="mr-3 text-[#65b891]">+</span><span class="text-fg">assert diagnostic points to the token</span></p></div>
+                  </section>
+                }
               </div>
             </article>
           </main>
@@ -61,6 +91,7 @@ export class BlogPostComponent implements AfterViewInit, OnDestroy {
   protected readonly ui = UI;
   private observer: IntersectionObserver | null = null;
   private router = inject(Router);
+  private readonly title = inject(Title);
 
   post = computed(() => {
     lang();
@@ -90,6 +121,8 @@ export class BlogPostComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+    const current = this.post();
+    this.title.setTitle(current ? `${current.title} · Alessandro Bruno` : "Post not found · Alessandro Bruno");
     const headings = ["article-title", "context", "practice", "detail"]
       .map((id) => document.getElementById(id))
       .filter((heading): heading is HTMLElement => heading !== null);

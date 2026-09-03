@@ -24,3 +24,13 @@ export function yAt(value: number, domainMax: number) {
 export function indexFromFraction(fraction: number, count: number) {
   return Math.max(0, Math.min(count - 1, Math.round(fraction * (count - 1))));
 }
+
+/** Rounds a peak up to a readable axis maximum (100, 250, 500, 1000, …). */
+export function niceTicks(peak: number) {
+  const magnitude = 10 ** Math.floor(Math.log10(Math.max(peak, 1)));
+  for (const step of [1, 2, 2.5, 5, 10]) {
+    const candidate = step * magnitude;
+    if (candidate >= peak) return candidate;
+  }
+  return magnitude * 10;
+}

@@ -9,10 +9,15 @@ export interface Profile {
   location: string;
   github: string;
   website: string;
+  email: string;
+  /** X / Twitter handle without the leading @. Omit to hide the link. */
+  x?: string;
   avatar: string;
   company: { name: string; href: string };
 
   bio: string;
+  /** What kind of work I am open to — the one line a recruiter looks for. */
+  availability: string;
 }
 
 export interface TocItem {
@@ -42,6 +47,8 @@ export interface Education {
   native: string;
   dates: string;
   thesis: string;
+  /** Path to the thesis PDF in /public. Omit until the file is there. */
+  thesisHref?: string;
 }
 
 export type ContributionStatus = "Open" | "Merged" | "Published";
@@ -59,6 +66,10 @@ export interface Project {
   name: string;
   blurb: string;
   href: string;
+  /** Live deployment, if the project has one. */
+  demo?: string;
+  /** Real star count, wired from GITHUB_STATS at the data layer. */
+  stars?: number;
   lang: string;
   meta: string;
   featured: boolean;
@@ -72,7 +83,10 @@ export interface Project {
 export interface StackGroup {
   name: string;
   level: string;
+  /** The tools I would defend in an interview — kept short on purpose. */
   items: string;
+  /** Comma-separated "also worked with", rendered quieter than `items`. */
+  also?: string;
 }
 
 export interface Stack {
@@ -83,6 +97,7 @@ export interface FutureProject {
   id: string;
   name: string;
   blurb: string;
+  /** Empty while the repository does not exist yet — the card renders unlinked. */
   href: string;
   lang: string;
   meta: string;
@@ -111,24 +126,10 @@ export interface PulseKpi {
   hint: string;
 }
 
-export interface PulseSeriesRow {
-  q: string;
-  rust: number;
-  typescript: number;
-  java: number;
-  commits: number;
-  forecast: boolean;
-}
-
 export interface PulsePhase {
   era: string;
   title: string;
   body: string;
-}
-
-export interface PulseMilestone {
-  q: string;
-  label: string;
 }
 
 export interface PulseHiringPoint {
@@ -142,10 +143,7 @@ export interface Pulse {
   note: string;
   forHiringManagers: { title: string; points: PulseHiringPoint[] };
   kpis: PulseKpi[];
-  series: PulseSeriesRow[];
-  now: string;
   phases: PulsePhase[];
-  milestones: PulseMilestone[];
 }
 
 export type MarkName = "grok" | "zed" | "delta" | "gitbutler";
@@ -162,9 +160,6 @@ export interface Tool {
 export interface UiStrings {
   skipToContent: string;
   tocIndex: string;
-  tocNow: string;
-  tocBased: string;
-  tocLanguage: string;
   tocCurrentWork: string;
   tocLanguages: string;
   tocContact: string;
@@ -177,19 +172,19 @@ export interface UiStrings {
     blog: string;
     stack: string;
     futureProjects: string;
+    contact: string;
   };
-  openLabel: string;
-  viewOnGithub: string;
-  whatIllLearn: string;
-  readDraft: string;
   backToBlog: string;
   postNotFound: string;
   close: string;
   toggleTheme: string;
   openMenu: string;
   closeMenu: string;
-  dailyTools: string;
-  dailyToolsSub: string;
+  contactLede: string;
+  emailLabel: string;
+  copyEmail: string;
+  copiedEmail: string;
+  readThesis: string;
 }
 
 export interface SiteData {
