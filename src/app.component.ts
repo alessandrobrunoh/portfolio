@@ -1,6 +1,7 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { CommandPaletteComponent } from "./app/command-palette.component";
+import { initTheme } from "./lib/theme";
 
 @Component({
   selector: "app-root",
@@ -11,4 +12,8 @@ import { CommandPaletteComponent } from "./app/command-palette.component";
     <app-command-palette />
   `,
 })
-export class AppComponent {}
+export class AppComponent implements OnInit {
+  ngOnInit() {
+    initTheme();
+  }
+}

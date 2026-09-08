@@ -20,6 +20,7 @@ import {
   lang,
   setLanguage,
 } from "../lib/site";
+import { setThemePreference, toggleThemeOverride } from "../lib/theme";
 
 export interface PaletteItem {
   id: string;
@@ -324,10 +325,22 @@ export class CommandPaletteComponent implements OnInit {
         subtitle: "Dark / Light mode",
         shortcut: "Theme",
         action: () => {
-          document.documentElement.classList.toggle("dark");
+          toggleThemeOverride();
           const dark = document.documentElement.classList.contains("dark");
-          localStorage.setItem("theme", dark ? "dark" : "light");
           this.systemMessage.set(`Theme switched to ${dark ? "Dark" : "Light"}`);
+        },
+      },
+      {
+        id: "act-theme-auto",
+        category: "Actions",
+        title: isIt ? "Tema automatico (UTC)" : "Automatic theme (UTC)",
+        subtitle: isIt ? "Chiaro 06:00–20:00 UTC, poi scuro" : "Light 06:00–20:00 UTC, then dark",
+        shortcut: "Auto",
+        action: () => {
+          setThemePreference("auto");
+          this.systemMessage.set(
+            isIt ? "Tema automatico attivo (orario UTC)" : "Automatic theme enabled (UTC schedule)",
+          );
         },
       },
       {
