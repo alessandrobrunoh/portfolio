@@ -1282,11 +1282,108 @@
   filter: blur(0);
 }
 
-.dark .theme-moon {
-  scale: 0.25;
-  opacity: 0;
-  filter: blur(4px);
-}
+	.dark .theme-moon {
+	  scale: 0.25;
+	  opacity: 0;
+	  filter: blur(4px);
+	}
+
+	.theme-clock {
+	  position: relative;
+	  overflow: visible;
+	  cursor: pointer;
+	  transition:
+	    transform var(--motion-fast) var(--ease-out-quart),
+	    box-shadow var(--motion-fast) var(--ease-out-quart),
+	    color var(--motion-quick) var(--ease-out-quart);
+	}
+
+	.theme-clock:is(:hover, :focus-visible) {
+	  transform: translateY(-0.15rem);
+	  box-shadow: var(--shadow-lift);
+	}
+
+	.theme-clock-day {
+	  transition: filter var(--motion-fast) var(--ease-out-quart);
+	}
+
+	.theme-clock:is(:hover, :focus-visible) .theme-clock-day {
+	  filter: drop-shadow(0 0 5px color-mix(in oklch, var(--accent) 70%, transparent));
+	}
+
+	.theme-clock-marker {
+	  transition: scale var(--motion-fast) var(--ease-icon), filter var(--motion-fast) var(--ease-icon);
+	}
+
+	.theme-clock:is(:hover, :focus-visible) .theme-clock-marker {
+	  scale: 1.18;
+	  filter: drop-shadow(0 0 6px color-mix(in oklch, var(--accent) 55%, transparent));
+	}
+
+	.theme-clock-ghost {
+	  position: absolute;
+	  left: var(--tc-now-x);
+	  top: var(--tc-now-y);
+	  translate: -50% -50%;
+	  opacity: 0;
+	  scale: 0.4;
+	  filter: blur(4px);
+	  color: var(--accent);
+	  pointer-events: none;
+	  transition:
+	    left var(--motion-emphasis) var(--ease-out-quart),
+	    top var(--motion-emphasis) var(--ease-out-quart),
+	    opacity var(--motion-fast) var(--ease-icon),
+	    scale var(--motion-fast) var(--ease-icon),
+	    filter var(--motion-fast) var(--ease-icon);
+	}
+
+	.theme-clock:is(:hover, :focus-visible) .theme-clock-ghost {
+	  left: var(--tc-to-x);
+	  top: var(--tc-to-y);
+	  opacity: 1;
+	  scale: 1;
+	  filter: blur(0);
+	}
+
+	.theme-clock-hint {
+	  display: grid;
+	}
+
+	.theme-clock-hint > * {
+	  grid-area: 1 / 1;
+	  transition: opacity var(--motion-fast) var(--ease-out-quart), transform var(--motion-fast) var(--ease-out-quart);
+	}
+
+	.theme-clock-hint-action {
+	  opacity: 0;
+	  transform: translateY(0.2rem);
+	  color: var(--accent);
+	}
+
+	.theme-clock:is(:hover, :focus-visible) .theme-clock-hint-clock {
+	  opacity: 0;
+	  transform: translateY(-0.2rem);
+	}
+
+	.theme-clock:is(:hover, :focus-visible) .theme-clock-hint-action {
+	  opacity: 1;
+	  transform: translateY(0);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+	  .theme-clock,
+	  .theme-clock-day,
+	  .theme-clock-marker,
+	  .theme-clock-ghost,
+	  .theme-clock-hint > * {
+	    transition: none;
+	  }
+
+	  .theme-clock:is(:hover, :focus-visible) {
+	    transform: none;
+	  }
+	}
 
 .dialog-overlay[data-state="open"] {
   animation: overlay-in var(--motion-fast) var(--ease-out-quart) both;
