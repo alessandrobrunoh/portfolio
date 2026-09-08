@@ -2,6 +2,7 @@ export type ThemePreference = "light" | "dark" | "auto";
 export type ResolvedTheme = "light" | "dark";
 
 export const THEME_STORAGE_KEY = "theme";
+export const THEME_CHANGE_EVENT = "portfolio:theme-change";
 
 /** Light mode from 06:00 UTC (inclusive) until 20:00 UTC (exclusive). */
 export const LIGHT_START_HOUR_UTC = 6;
@@ -18,6 +19,26 @@ export function scheduledTheme(date = new Date()): ResolvedTheme {
   return hour >= LIGHT_START_HOUR_UTC && hour < DARK_START_HOUR_UTC ? "light" : "dark";
 }
 
+/** Fraction of the UTC day in `[0, 1)`, including minutes/seconds. */
+export function utcDayFraction(date = new Date()): number {
+  const ms =
+    date.getUTCHours() * 3_600_000 +
+    date.getUTCMinutes() * 60_000 +
+    date.getUTCSeconds() * 1_000 +
+    date.getUTCMilliseconds();
+  return ms / 86_400_000;
+}
+
+export function formatUtcClock(date = new Date()): string {
+  const hours = String(date.getUTCHours()).padStart(2, "0");
+  const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+  return `${hours}:${minutes} UTC`;
+}
+
+export function schedulePhase(date = new Date()): "day" | "night" {
+  return scheduledTheme(date) === "light" ? "day" : "night";
+}
+
 export function getThemePreference(): ThemePreference {
   try {
     const value = localStorage.getItem(THEME_STORAGE_KEY);
@@ -26,6 +47,10 @@ export function getThemePreference(): ThemePreference {
     // private mode / SSR
   }
   return "auto";
+}
+
+export function isManualThemePreference(preference = getThemePreference()): boolean {
+  return preference !== "auto";
 }
 
 export function resolveTheme(preference = getThemePreference()): ResolvedTheme {
@@ -43,6 +68,11 @@ export function applyResolvedTheme(resolved: ResolvedTheme) {
   syncThemeColor(resolved);
 }
 
+function notifyThemeChange() {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
+}
+
 export function setThemePreference(preference: ThemePreference) {
   try {
     localStorage.setItem(THEME_STORAGE_KEY, preference);
@@ -51,12 +81,31 @@ export function setThemePreference(preference: ThemePreference) {
   }
   applyResolvedTheme(resolveTheme(preference));
   scheduleThemeRefresh();
+  notifyThemeChange();
 }
 
 /** Flip the visible theme and lock it as an explicit override. */
 export function toggleThemeOverride() {
   const next: ResolvedTheme = document.documentElement.classList.contains("dark") ? "light" : "dark";
   setThemePreference(next);
+}
+
+export function toggleThemeFromPointer(event: MouseEvent) {
+  const root = document.documentElement;
+  const x = event.clientX;
+  const y = event.clientY;
+  const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+  root.style.setProperty("--vt-x", `${x}px`);
+  root.style.setProperty("--vt-y", `${y}px`);
+  root.style.setProperty("--vt-r", `${Math.ceil(radius)}px`);
+
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const doc = document as Document & { startViewTransition?: (cb: () => void) => void };
+  if (!reduced && typeof doc.startViewTransition === "function") {
+    doc.startViewTransition(toggleThemeOverride);
+    return;
+  }
+  toggleThemeOverride();
 }
 
 export function msUntilNextThemeBoundary(date = new Date()): number {
@@ -85,6 +134,7 @@ export function scheduleThemeRefresh() {
 
   refreshTimer = setTimeout(() => {
     applyResolvedTheme(scheduledTheme());
+    notifyThemeChange();
     scheduleThemeRefresh();
   }, msUntilNextThemeBoundary());
 }
@@ -100,6 +150,7 @@ export function initTheme() {
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState !== "visible" || getThemePreference() !== "auto") return;
     applyResolvedTheme(scheduledTheme());
+    notifyThemeChange();
     scheduleThemeRefresh();
   });
 }

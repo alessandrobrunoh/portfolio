@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { IconComponent } from "./icon.component";
 import { UI } from "../lib/site";
-import { toggleThemeOverride } from "../lib/theme";
+import { toggleThemeFromPointer } from "../lib/theme";
 
 @Component({
   selector: "app-theme-toggle",
@@ -25,20 +25,6 @@ export class ThemeToggleComponent {
   protected readonly ui = UI;
 
   toggle(event: MouseEvent) {
-    const root = document.documentElement;
-    const x = event.clientX;
-    const y = event.clientY;
-    const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
-    root.style.setProperty("--vt-x", `${x}px`);
-    root.style.setProperty("--vt-y", `${y}px`);
-    root.style.setProperty("--vt-r", `${Math.ceil(radius)}px`);
-
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const doc = document as Document & { startViewTransition?: (cb: () => void) => void };
-    if (!reduced && typeof doc.startViewTransition === "function") {
-      doc.startViewTransition(toggleThemeOverride);
-      return;
-    }
-    toggleThemeOverride();
+    toggleThemeFromPointer(event);
   }
 }

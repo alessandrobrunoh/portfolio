@@ -1,6 +1,6 @@
 import { ApplicationRef, Component, inject, input } from "@angular/core";
 import { IconComponent } from "./icon.component";
-import { ThemeToggleComponent } from "./theme-toggle.component";
+import { ThemeClockComponent } from "./theme-clock.component";
 import { PROFILE, TOC, UI, lang, setLanguage, type Lang } from "../lib/site";
 import type { TocItem } from "../lib/site.types";
 import { cn } from "../lib/utils";
@@ -8,14 +8,15 @@ import { cn } from "../lib/utils";
 @Component({
   selector: "app-toc",
   standalone: true,
-  imports: [IconComponent, ThemeToggleComponent],
+  imports: [IconComponent, ThemeClockComponent],
   template: `
     <aside class="block lg:min-h-full">
       <div class="lg:sticky lg:top-8">
         <div class="flex items-start justify-between gap-4 lg:block">
           <a href="/#intro" class="font-display text-subhead text-fg transition-colors hover:text-accent">{{ profile.name }}</a>
-          <app-theme-toggle />
         </div>
+
+        <app-theme-clock />
 
         <!-- Command Palette Trigger -->
         <button
