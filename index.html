@@ -63,7 +63,15 @@
     <script>
       (function () {
         try {
-          if (localStorage.getItem("theme") === "dark") document.documentElement.classList.add("dark");
+          var pref = localStorage.getItem("theme");
+          var dark;
+          if (pref === "dark") dark = true;
+          else if (pref === "light") dark = false;
+          else {
+            var hour = new Date().getUTCHours();
+            dark = !(hour >= 6 && hour < 20);
+          }
+          if (dark) document.documentElement.classList.add("dark");
         } catch (e) {}
       })();
     </script>

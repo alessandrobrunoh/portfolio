@@ -1,21 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { IconComponent } from "./icon.component";
 import { UI } from "../lib/site";
-
-const LIGHT = "#eceef4";
-const DARK = "#0b0c10";
-
-function syncThemeColor() {
-  const dark = document.documentElement.classList.contains("dark");
-  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? DARK : LIGHT);
-}
-
-function applyTheme() {
-  document.documentElement.classList.toggle("dark");
-  const dark = document.documentElement.classList.contains("dark");
-  localStorage.setItem("theme", dark ? "dark" : "light");
-  syncThemeColor();
-}
+import { toggleThemeOverride } from "../lib/theme";
 
 @Component({
   selector: "app-theme-toggle",
@@ -35,12 +21,8 @@ function applyTheme() {
     </button>
   `,
 })
-export class ThemeToggleComponent implements OnInit {
+export class ThemeToggleComponent {
   protected readonly ui = UI;
-
-  ngOnInit() {
-    syncThemeColor();
-  }
 
   toggle(event: MouseEvent) {
     const root = document.documentElement;
@@ -54,9 +36,9 @@ export class ThemeToggleComponent implements OnInit {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const doc = document as Document & { startViewTransition?: (cb: () => void) => void };
     if (!reduced && typeof doc.startViewTransition === "function") {
-      doc.startViewTransition(applyTheme);
+      doc.startViewTransition(toggleThemeOverride);
       return;
     }
-    applyTheme();
+    toggleThemeOverride();
   }
 }
