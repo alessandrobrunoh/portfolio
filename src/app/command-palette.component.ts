@@ -39,17 +39,17 @@ export interface PaletteItem {
   template: `
     @if (isOpen()) {
       <div
-        class="dialog-overlay fixed inset-0 z-[90] bg-black/60 backdrop-blur-md"
+        class="dialog-overlay fixed inset-0 z-[90] bg-overlay backdrop-blur-sm"
         data-state="open"
         (click)="close()"
       ></div>
 
       <div
-        class="dialog-panel fixed inset-x-4 top-[12vh] z-[95] mx-auto flex max-h-[75vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-fg/15 bg-surface text-fg shadow-dialog"
+        class="dialog-panel fixed inset-x-4 top-[12vh] z-[95] mx-auto flex max-h-[75vh] w-auto max-w-2xl flex-col overflow-hidden rounded-md border border-fg/15 bg-surface text-fg shadow-dialog"
         data-state="open"
         role="dialog"
         aria-modal="true"
-        aria-label="Command Palette"
+        [attr.aria-label]="lang() === 'it' ? 'Palette dei comandi' : 'Command palette'"
       >
         <!-- Search Input Header -->
         <div class="flex items-center gap-3 border-b border-fg/10 px-4 py-3.5 sm:px-5">
@@ -57,20 +57,22 @@ export interface PaletteItem {
           <input
             #searchInput
             type="text"
-            [placeholder]="lang() === 'it' ? 'Cerca sezioni, progetti, note o comandi (es. ping, theme)...' : 'Search sections, projects, notes or commands (e.g. ping, theme)...'"
+            [attr.aria-label]="lang() === 'it' ? 'Cerca nella palette dei comandi' : 'Search commands'"
+            [placeholder]="lang() === 'it' ? 'Cerca nel sito…' : 'Search this site…'"
             [value]="query()"
             (input)="onQueryChange($event)"
             (keydown)="onInputKeydown($event)"
-            class="w-full bg-transparent font-serif text-body text-fg placeholder:text-muted focus:outline-none"
+            class="w-full bg-transparent font-serif text-body text-fg placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             autocomplete="off"
             spellcheck="false"
           />
           <button
             type="button"
             (click)="close()"
-            class="rounded px-1.5 py-0.5 font-mono text-caption text-muted hover:bg-fg/5 hover:text-fg"
+            class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-sm text-muted transition-colors hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            [attr.aria-label]="lang() === 'it' ? 'Chiudi la palette dei comandi' : 'Close command palette'"
           >
-            ESC
+            <kbd class="rounded-sm bg-surface px-2 py-1 font-mono text-caption tracking-mono text-fg shadow-border">ESC</kbd>
           </button>
         </div>
 
@@ -90,8 +92,8 @@ export interface PaletteItem {
           } @else {
             @for (group of groupedResults(); track group.category) {
               <div class="mb-3 last:mb-0">
-                <p class="px-3 py-1 font-mono text-[0.68rem] tracking-mono uppercase text-muted">
-                  {{ group.category }}
+                <p class="px-3 py-1 font-mono text-caption tracking-mono uppercase text-muted">
+                  {{ categoryLabel(group.category) }}
                 </p>
                 <div class="space-y-0.5">
                   @for (item of group.items; track item.id; let i = $index) {
@@ -105,30 +107,31 @@ export interface PaletteItem {
                           ? 'bg-accent/12 text-accent'
                           : 'text-fg hover:bg-fg/5'
                       "
-                      class="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left transition-colors cursor-pointer"
+                      class="group flex w-full items-center justify-between gap-3 rounded-sm px-3 py-2 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
                       <div class="flex items-center gap-3 min-w-0">
-                        <span class="font-mono text-caption tracking-mono opacity-60">
-                          {{ item.shortcut || '→' }}
-                        </span>
+                        @if (item.shortcut) {
+                          <kbd class="shrink-0 rounded-sm bg-surface px-2 py-1 font-mono text-caption tracking-mono text-muted shadow-border">
+                            {{ item.shortcut }}
+                          </kbd>
+                        }
                         <div class="min-w-0">
-                          <span class="block truncate font-serif text-small font-medium">
+                          <span class="block truncate font-serif text-small">
                             {{ item.title }}
                           </span>
                           @if (item.subtitle) {
-                            <span class="block truncate font-mono text-[0.68rem] tracking-mono text-muted">
+                            <span class="block truncate font-serif text-small text-muted">
                               {{ item.subtitle }}
                             </span>
                           }
                         </div>
                       </div>
 
-                      <div class="flex items-center gap-2 shrink-0">
-                        <span class="font-mono text-[0.65rem] tracking-mono text-muted">
-                          {{ item.category }}
-                        </span>
-                        <svg appIcon="arrow-right" class="size-3.5 opacity-50"></svg>
-                      </div>
+                      <svg
+                        appIcon="arrow-right"
+                        class="size-3.5 shrink-0 text-accent opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+                        [class.opacity-100]="selectedIndex() === getItemIndex(item)"
+                      ></svg>
                     </button>
                   }
                 </div>
@@ -138,15 +141,17 @@ export interface PaletteItem {
         </div>
 
         <!-- Footer Shortcuts -->
-        <div class="flex flex-wrap items-center justify-between gap-2 border-t border-fg/10 bg-surface/50 px-4 py-2.5 font-mono text-[0.68rem] tracking-mono text-muted sm:px-5">
+        <div class="flex flex-wrap items-center gap-4 border-t border-fg/10 bg-surface/50 px-4 py-2.5 font-mono text-caption tracking-mono text-muted sm:px-5">
           <div class="flex items-center gap-3">
-            <span><kbd class="rounded bg-fg/10 px-1 py-0.5">↑</kbd> <kbd class="rounded bg-fg/10 px-1 py-0.5">↓</kbd> {{ lang() === 'it' ? 'naviga' : 'navigate' }}</span>
-            <span><kbd class="rounded bg-fg/10 px-1 py-0.5">↵</kbd> {{ lang() === 'it' ? 'seleziona' : 'select' }}</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span>Alessandro Bruno Portfolio</span>
-            <span>·</span>
-            <span class="text-accent">Systems & Product</span>
+            <span>
+              <kbd class="rounded-sm bg-surface px-2 py-1 text-fg shadow-border">↑</kbd>
+              <kbd class="rounded-sm bg-surface px-2 py-1 text-fg shadow-border">↓</kbd>
+              {{ lang() === 'it' ? 'naviga' : 'navigate' }}
+            </span>
+            <span>
+              <kbd class="rounded-sm bg-surface px-2 py-1 text-fg shadow-border">↵</kbd>
+              {{ lang() === 'it' ? 'seleziona' : 'select' }}
+            </span>
           </div>
         </div>
       </div>
@@ -246,6 +251,20 @@ export class CommandPaletteComponent implements OnInit {
 
   getItemIndex(target: PaletteItem): number {
     return this.filteredItems().findIndex((i) => i.id === target.id);
+  }
+
+  categoryLabel(category: PaletteItem["category"]): string {
+    if (this.lang() !== "it") return category;
+
+    const labels: Record<PaletteItem["category"], string> = {
+      Navigation: "Navigazione",
+      Projects: "Progetti",
+      Writing: "Scritti",
+      Actions: "Azioni",
+      System: "Sistema",
+    };
+
+    return labels[category];
   }
 
   private allItems = computed<PaletteItem[]>(() => {
@@ -448,7 +467,7 @@ export class CommandPaletteComponent implements OnInit {
     return all.filter((item) => {
       const matchTitle = item.title.toLowerCase().includes(q);
       const matchSub = item.subtitle?.toLowerCase().includes(q) ?? false;
-      const matchCategory = item.category.toLowerCase().includes(q);
+      const matchCategory = this.categoryLabel(item.category).toLowerCase().includes(q);
       const matchShortcut = item.shortcut?.toLowerCase().includes(q) ?? false;
       return matchTitle || matchSub || matchCategory || matchShortcut;
     });
