@@ -14,7 +14,7 @@ import { CONTRIBUTIONS, UI, lang } from "../lib/site";
         <span class="mb-8 font-mono text-caption tracking-mono text-muted">{{ lang() === 'it' ? 'lavoro pubblico' : 'public work' }} / {{ contributions.length }}</span>
       </div>
       <p class="mb-5 max-w-prose font-serif text-body text-muted">
-        {{ lang() === 'it' ? 'Contributi a progetti open source, con il loro stato reale su GitHub.' : 'Contributions to open-source projects, with their real status on GitHub.' }}
+        {{ lang() === 'it' ? 'Contributi a progetti open source e crate pubblicati, con il loro stato reale.' : 'Contributions to open-source projects and published crates, with their real status.' }}
       </p>
       <div class="issue-list overflow-hidden rounded-md border border-fg/10 bg-surface/50">
         <div class="issue-group-header flex items-center justify-between px-3 py-2.5 font-mono text-caption tracking-mono text-muted">
@@ -28,7 +28,7 @@ import { CONTRIBUTIONS, UI, lang } from "../lib/site";
                 <span class="issue-checkbox" aria-hidden="true"></span>
                 <div class="flex items-center gap-2 min-w-0">
                   <span class="issue-status-icon" [class.issue-status-open]="c.status === 'Open'" [class.issue-status-merged]="c.status === 'Merged'" aria-hidden="true">{{ c.status === 'Open' ? '!' : '✓' }}</span>
-                  <span class="truncate font-mono text-caption tracking-mono text-muted">{{ c.href.includes('/pull/') ? 'PR #' + c.href.split('/pull/')[1] : 'Repo' }}</span>
+                  <span class="truncate font-mono text-caption tracking-mono text-muted">{{ c.href.includes('/pull/') ? 'PR #' + c.href.split('/pull/')[1] : c.status === 'Published' ? 'Crate' : 'Repo' }}</span>
                 </div>
                 <div class="min-w-0">
                   <p class="truncate font-serif text-small font-medium text-fg group-hover:text-accent">{{ c.title }}</p>

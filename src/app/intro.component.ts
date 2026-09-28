@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { IconComponent } from "./icon.component";
 
-import { GITHUB_STATS } from "../lib/github-stats";
 import { CONTRIBUTIONS, EDUCATION, PROFILE, UI, lang } from "../lib/site";
 
 const [FIRST_NAME, LAST_NAME] = PROFILE.name.split(" ");
@@ -74,25 +73,27 @@ const [FIRST_NAME, LAST_NAME] = PROFILE.name.split(" ");
         {{ profile.availability }}
       </p>
 
-      <!-- Proof, not adjectives: every figure comes from GitHub (npm run sync:github) or a merged PR. -->
+      <!-- Proof, not adjectives: each fact matches the CV and links to its source. -->
       <dl class="intro-proof stagger-in mt-10">
         <div>
-          <dt>{{ lang() === 'it' ? 'Contributi GitHub' : 'GitHub contributions' }}</dt>
-          <dd>{{ stats.lastYearContributions.toLocaleString('en-US') }}</dd>
-          <dd class="note">{{ lang() === 'it' ? 'negli ultimi 12 mesi' : 'in the last 12 months' }}</dd>
+          <dt>{{ lang() === 'it' ? 'Rust in produzione' : 'Production Rust' }}</dt>
+          <dd>{{ lang() === 'it' ? '1+ anno' : '1+ year' }}</dd>
+          <dd class="note">{{ lang() === 'it' ? 'servizi event-driven in ' : 'event-driven services at ' }}{{ profile.company.name }}</dd>
         </div>
         @if (merged; as m) {
           <div>
             <dt>Open source</dt>
             <dd><a [href]="m.href" target="_blank" rel="noreferrer">{{ lang() === 'it' ? 'Accettato in Zed' : 'Merged into Zed' }}</a></dd>
-            <dd class="note">{{ m.title }}</dd>
+            <dd class="note">{{ m.title }} · PR #{{ m.href.split('/pull/')[1] }}</dd>
           </div>
         }
-        <div>
-          <dt>{{ lang() === 'it' ? 'Repository pubblici' : 'Public repositories' }}</dt>
-          <dd>{{ stats.publicRepos }}</dd>
-          <dd class="note">Rust, TypeScript, Java</dd>
-        </div>
+        @if (published; as c) {
+          <div>
+            <dt>{{ lang() === 'it' ? 'Crate pubblicato' : 'Published crate' }}</dt>
+            <dd><a [href]="c.href" target="_blank" rel="noreferrer">{{ c.title }}</a></dd>
+            <dd class="note">{{ lang() === 'it' ? 'ORM Rust su crates.io' : 'Rust ORM on crates.io' }}</dd>
+          </div>
+        }
       </dl>
 
       <p class="stagger-in mt-10 max-w-prose font-serif text-lede text-muted">{{ profile.bio }}</p>
@@ -119,9 +120,11 @@ export class IntroComponent {
   protected readonly education = EDUCATION;
   protected readonly ui = UI;
   protected readonly lang = lang;
-  protected readonly stats = GITHUB_STATS;
   protected get merged() {
     return CONTRIBUTIONS.find((c) => c.status === "Merged");
+  }
+  protected get published() {
+    return CONTRIBUTIONS.find((c) => c.status === "Published");
   }
   protected readonly firstName = FIRST_NAME;
   protected readonly lastName = LAST_NAME;
