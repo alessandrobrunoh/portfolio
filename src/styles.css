@@ -1257,37 +1257,6 @@
   animation-delay: 400ms;
 }
 
-.theme-sun,
-.theme-moon {
-  transition-property: opacity, filter, scale;
-  transition-duration: 300ms;
-  transition-timing-function: var(--ease-icon);
-}
-
-.theme-sun {
-  scale: 0.25;
-  opacity: 0;
-  filter: blur(4px);
-}
-
-.theme-moon {
-  scale: 1;
-  opacity: 1;
-  filter: blur(0);
-}
-
-.dark .theme-sun {
-  scale: 1;
-  opacity: 1;
-  filter: blur(0);
-}
-
-	.dark .theme-moon {
-	  scale: 0.25;
-	  opacity: 0;
-	  filter: blur(4px);
-	}
-
 	.theme-toggle-button {
 	  border-radius: var(--radius-full);
 	  transition: color var(--motion-fast) var(--ease-out-quart);
@@ -1448,6 +1417,9 @@
 	  opacity: 0.9;
 	}
 
+	/* Theme clock: a small UTC sky. The dial is the UTC day, the hairline at y 40 is the horizon,
+	   and the body lighting the page (sun = light, moon = dark) sits at the current UTC time.
+	   Everything that moves keys off html.dark, so it starts in the same style pass as the theme flip. */
 	.theme-clock {
 	  position: relative;
 	  overflow: visible;
@@ -1463,47 +1435,91 @@
 	  box-shadow: var(--shadow-lift);
 	}
 
-	.theme-clock-day {
-	  transition: filter var(--motion-fast) var(--ease-out-quart);
+	.theme-clock:focus-visible {
+	  outline: 2px solid var(--accent);
+	  outline-offset: 2px;
 	}
 
-	.theme-clock:is(:hover, :focus-visible) .theme-clock-day {
-	  filter: drop-shadow(0 0 5px color-mix(in oklch, var(--accent) 70%, transparent));
+	.theme-clock-sky {
+	  transition: transform var(--motion-quick) var(--ease-out-quart);
 	}
 
-	.theme-clock-marker {
-	  transition: scale var(--motion-fast) var(--ease-icon), filter var(--motion-fast) var(--ease-icon);
+	.theme-clock:active .theme-clock-sky {
+	  transform: scale(0.96);
 	}
 
-	.theme-clock:is(:hover, :focus-visible) .theme-clock-marker {
-	  scale: 1.18;
-	  filter: drop-shadow(0 0 6px color-mix(in oklch, var(--accent) 55%, transparent));
-	}
-
+	/* Bodies are drawn centred on their anchor <g>, so the SVG default origin is the body centre.
+	   State rules below set only longhands, so the reduced-motion and instant `transition: none` win. */
+	.theme-clock-orb,
 	.theme-clock-ghost {
-	  position: absolute;
-	  left: var(--tc-now-x);
-	  top: var(--tc-now-y);
-	  translate: -50% -50%;
-	  opacity: 0;
-	  scale: 0.4;
-	  filter: blur(4px);
-	  color: var(--accent);
-	  pointer-events: none;
-	  transition:
-	    left var(--motion-emphasis) var(--ease-out-quart),
-	    top var(--motion-emphasis) var(--ease-out-quart),
-	    opacity var(--motion-fast) var(--ease-icon),
-	    scale var(--motion-fast) var(--ease-icon),
-	    filter var(--motion-fast) var(--ease-icon);
+	  transform-box: view-box;
+	  transform-origin: 0 0;
+	  transition-property: transform, opacity;
+	  transition-timing-function: var(--ease-out-quart);
 	}
 
-	.theme-clock:is(:hover, :focus-visible) .theme-clock-ghost {
-	  left: var(--tc-to-x);
-	  top: var(--tc-to-y);
+	/* Lit: at the current time. It rises up its column 150ms after the switch, once the other has set. */
+	.theme-clock-orb-sun,
+	.dark .theme-clock-orb-moon {
 	  opacity: 1;
-	  scale: 1;
-	  filter: blur(0);
+	  transform: none;
+	  transition-duration: var(--motion-emphasis), var(--motion-quick);
+	  transition-delay: var(--motion-quick), var(--motion-quick);
+	}
+
+	/* Unlit: sets straight down behind the horizon and waits 48 units under the slot, opaque until gone. */
+	.theme-clock-orb-moon,
+	.dark .theme-clock-orb-sun {
+	  opacity: 0;
+	  transform: translateY(48px) scale(0.6);
+	  transition-duration: var(--motion-slow), var(--motion-quick);
+	  transition-delay: 0ms, var(--motion-fast);
+	}
+
+	/* Slot below the horizon: swap in place, so nothing shows through the slot under the hairline. */
+	:root:not(.dark) .theme-clock.is-low .theme-clock-orb-moon,
+	.dark .theme-clock.is-low .theme-clock-orb-sun {
+	  transform: scale(0.6);
+	}
+
+	/* Preview: the other body rises out of the horizon over its flank (sun: morning side, moon: evening side). */
+	.theme-clock-ghost {
+	  opacity: 0;
+	  transform: translateY(24px) scale(0.6);
+	  transition-duration: var(--motion-fast), var(--motion-quick);
+	}
+
+	:root:not(.dark) .theme-clock:focus-visible:not(.is-committed) .theme-clock-ghost-moon,
+	.dark .theme-clock:focus-visible:not(.is-committed) .theme-clock-ghost-sun {
+	  opacity: 0.55;
+	  transform: scale(0.8);
+	  transition-duration: var(--motion-slow), var(--motion-fast);
+	}
+
+	/* Night sky: three Ink points, out one by one after sunset, gone together at dawn. No twinkle. */
+	.theme-clock-stars circle {
+	  fill: currentColor;
+	  opacity: 0;
+	  transition: opacity var(--motion-quick) var(--ease-out-quart);
+	}
+
+	.dark .theme-clock-stars circle {
+	  opacity: 1;
+	  transition-duration: var(--motion-slow);
+	  transition-delay: 200ms;
+	}
+
+	.dark .theme-clock-stars circle:nth-child(2) {
+	  transition-delay: 280ms;
+	}
+
+	.dark .theme-clock-stars circle:nth-child(3) {
+	  transition-delay: 360ms;
+	}
+
+	/* Tab catch-up: jump to the new time and theme, never replay the swap. */
+	.theme-clock-instant :is(.theme-clock-orb, .theme-clock-ghost, .theme-clock-stars circle) {
+	  transition: none;
 	}
 
 	.theme-clock-hint {
@@ -1521,21 +1537,42 @@
 	  color: var(--accent);
 	}
 
-	.theme-clock:is(:hover, :focus-visible) .theme-clock-hint-clock {
+	.theme-clock:focus-visible:not(.is-committed) .theme-clock-hint-clock {
 	  opacity: 0;
 	  transform: translateY(-0.2rem);
 	}
 
-	.theme-clock:is(:hover, :focus-visible) .theme-clock-hint-action {
+	.theme-clock:focus-visible:not(.is-committed) .theme-clock-hint-action {
 	  opacity: 1;
 	  transform: translateY(0);
 	}
 
+	/* Pointer preview only where hover is real: a tap never leaves a sticky preview behind. */
+	@media (hover: hover) {
+	  :root:not(.dark) .theme-clock:hover:not(.is-committed) .theme-clock-ghost-moon,
+	  .dark .theme-clock:hover:not(.is-committed) .theme-clock-ghost-sun {
+	    opacity: 0.55;
+	    transform: scale(0.8);
+	    transition-duration: var(--motion-slow), var(--motion-fast);
+	  }
+
+	  .theme-clock:hover:not(.is-committed) .theme-clock-hint-clock {
+	    opacity: 0;
+	    transform: translateY(-0.2rem);
+	  }
+
+	  .theme-clock:hover:not(.is-committed) .theme-clock-hint-action {
+	    opacity: 1;
+	    transform: translateY(0);
+	  }
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 	  .theme-clock,
-	  .theme-clock-day,
-	  .theme-clock-marker,
+	  .theme-clock-sky,
+	  .theme-clock-orb,
 	  .theme-clock-ghost,
+	  .theme-clock-stars circle,
 	  .theme-clock-hint > *,
 	  .theme-toggle-button,
 	  .theme-toggle-scene,
@@ -1545,7 +1582,8 @@
 	    transition: none;
 	  }
 
-	  .theme-clock:is(:hover, :focus-visible) {
+	  .theme-clock:is(:hover, :focus-visible),
+	  .theme-clock:active .theme-clock-sky {
 	    transform: none;
 	  }
 
