@@ -11,12 +11,22 @@ import { toggleThemeFromPointer } from "../lib/theme";
     <button
       type="button"
       (click)="toggle($event)"
-      class="relative inline-flex size-11 shrink-0 items-center justify-center text-muted transition-colors duration-150 hover:text-fg"
+      class="theme-toggle-button relative inline-flex size-11 shrink-0 items-center justify-center text-muted transition-colors duration-200 hover:text-fg"
       [attr.aria-label]="ui.toggleTheme"
     >
-      <span class="relative block size-4 overflow-hidden">
-        <svg appIcon="sun" class="theme-sun absolute inset-0 size-4"></svg>
-        <svg appIcon="moon" class="theme-moon size-4"></svg>
+      <span class="theme-toggle-scene" aria-hidden="true">
+        <svg viewBox="0 0 40 30" class="theme-toggle-sky">
+          <path class="theme-toggle-trajectory" d="M 4 23 A 16 16 0 0 1 36 23" />
+          <path class="theme-toggle-ground" d="M 2 24 Q 11 19 20 24 T 38 24 V 30 H 2 Z" />
+          <path class="theme-toggle-horizon" d="M 2 24 H 38" />
+        </svg>
+        <svg appIcon="sun" class="theme-toggle-orb theme-toggle-sun"></svg>
+        <svg appIcon="moon" class="theme-toggle-orb theme-toggle-moon"></svg>
+        <span class="theme-toggle-stars">
+          <i></i>
+          <i></i>
+          <i></i>
+        </span>
       </span>
     </button>
   `,
