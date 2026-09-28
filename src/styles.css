@@ -569,6 +569,34 @@
   .simple-card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
   .simple-project-card { position: relative; display: flex; min-height: 16rem; flex-direction: column; padding: 1.25rem; border: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); border-radius: var(--radius-sm); background: var(--surface); transition: background-color var(--motion-fast) var(--ease-out-quart), border-color var(--motion-fast) var(--ease-out-quart), transform var(--motion-fast) var(--ease-out-quart), box-shadow var(--motion-fast) var(--ease-out-quart); }
   .simple-project-card:hover, .simple-project-card:focus-visible { border-color: color-mix(in oklch, var(--accent) 48%, transparent); background: color-mix(in oklch, var(--surface) 92%, var(--accent)); transform: translateY(-0.25rem); box-shadow: var(--shadow-lift); }
+  /* The first project leads the section: full row, body copy, highlights. */
+  .project-lead-slot { grid-column: 1 / -1; }
+  .project-lead { min-height: 0; padding: 1.5rem; border-color: color-mix(in oklch, var(--accent) 30%, transparent); }
+  .project-lead::before { content: ""; position: absolute; left: -1px; right: -1px; top: -1px; height: 2px; border-radius: var(--radius-sm) var(--radius-sm) 0 0; background: var(--accent); transform-origin: left; transform: scaleX(0.18); transition: transform var(--motion-slow) var(--ease-out-quart); }
+  .project-lead:hover::before, .project-lead:focus-visible::before { transform: scaleX(1); }
+  .project-lead-body { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 2rem; align-items: end; margin-top: 2.5rem; }
+  .project-lead-highlights { display: flex; flex-direction: column; border-top: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); }
+  .project-lead-highlights li { padding: 0.6rem 0; border-bottom: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); font-family: var(--font-serif); font-size: var(--text-small); color: var(--muted); transition: color var(--motion-fast) var(--ease-out-quart); }
+  .project-lead:hover .project-lead-highlights li { color: var(--fg); }
+
+  /* Contact: a statement on the left, a hairline "contact sheet" on the right. Each row is one channel. */
+  .contact-grid { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr); gap: 3rem; align-items: start; }
+  .contact-sheet { border-top: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); }
+  .contact-row { position: relative; display: grid; grid-template-columns: 4rem minmax(0, 1fr) auto; gap: 1rem; align-items: center; min-height: 3.5rem; padding: 0.5rem 0.5rem 0.5rem 0; border-bottom: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); transition: background-color var(--motion-fast) var(--ease-out-quart); }
+  .contact-row:has(a.contact-value:hover), .contact-row:has(a.contact-value:focus-visible) { background: color-mix(in oklch, var(--accent) 5%, transparent); }
+  .contact-label { font-family: var(--font-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-mono); color: var(--accent); }
+  .contact-value { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-serif); font-size: var(--text-body); color: var(--fg); transition: color var(--motion-fast) var(--ease-out-quart); }
+  a.contact-value::after { content: ""; position: absolute; inset: 0; }
+  a.contact-value:hover, a.contact-value:focus-visible { color: var(--accent); outline: none; }
+  .contact-row:has(a.contact-value:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .contact-icon { width: 1rem; height: 1rem; color: var(--muted); transition: color var(--motion-fast) var(--ease-out-quart), transform var(--motion-fast) var(--ease-out-quart); }
+  .contact-row:has(a.contact-value:hover) .contact-icon { color: var(--accent); transform: translate(0.125rem, -0.125rem); }
+  .contact-action { position: relative; z-index: 1; min-height: 2.25rem; padding: 0 0.75rem; border: 1px solid color-mix(in oklch, var(--fg) 15%, transparent); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-mono); color: var(--muted); cursor: pointer; transition: color var(--motion-fast) var(--ease-out-quart), border-color var(--motion-fast) var(--ease-out-quart); }
+  .contact-action:hover { color: var(--fg); border-color: color-mix(in oklch, var(--accent) 40%, transparent); }
+  .contact-action:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .contact-pulse { animation: contact-pulse 2.4s var(--ease-out-quart) infinite; }
+  @media (max-width: 767px) { .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+  @media (prefers-reduced-motion: reduce) { .contact-pulse { animation: none; opacity: 0; } }
   
   .carousel-mask {
     scrollbar-width: none;
@@ -610,7 +638,7 @@
     transform: scale(1.08) rotate(-2deg);
     transition: transform var(--motion-fast) var(--ease-out-quart);
   }
-  @media (max-width: 639px) { .simple-card-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 639px) { .simple-card-grid { grid-template-columns: 1fr; } .project-lead-body { grid-template-columns: 1fr; gap: 1.25rem; margin-top: 1.5rem; } }
 
   .editor-card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
   .editor-card-grid-future .editor-card { --editor-accent: var(--muted); }
@@ -732,30 +760,23 @@
   .roadmap-row:hover .roadmap-copy { transform: translateX(0.3rem); }
   .roadmap-now { padding: 0.25rem 0.5rem; border-radius: 999px; background: color-mix(in oklch, var(--accent) 12%, transparent); font-family: var(--font-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-mono); color: var(--accent); }
 
-  .stack-layers { border-top: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); }
-  .stack-layer { position: relative; display: grid; grid-template-columns: 3.5rem 12rem minmax(5rem, 10rem) minmax(0, 1fr); gap: 1.25rem; align-items: center; padding: 1.25rem 0; border-bottom: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); transition: background-color var(--motion-fast) var(--ease-out-quart), padding-left var(--motion-fast) var(--ease-out-quart); }
-  .stack-layer:hover { padding-left: 0.75rem; background: color-mix(in oklch, var(--accent) 5%, transparent); }
-  .stack-layer-index { font-family: var(--font-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-mono); color: var(--accent); }
-  .stack-layer-name { display: flex; flex-direction: column; gap: 0.25rem; }
-  .stack-layer-track { height: 0.35rem; overflow: hidden; border-radius: 999px; background: color-mix(in oklch, var(--fg) 10%, transparent); }
-  .stack-layer-track span { display: block; height: 100%; border-radius: inherit; background: var(--accent); transform-origin: left; animation: data-rise 900ms var(--ease-out-quart) both; }
-  .stack-layer:nth-child(2) .stack-layer-track span { animation-delay: 80ms; opacity: .8; }
-  .stack-layer:nth-child(3) .stack-layer-track span { animation-delay: 160ms; opacity: .65; }
-  .stack-layer:nth-child(4) .stack-layer-track span { animation-delay: 240ms; opacity: .5; }
-  .stack-layer-items { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-  .stack-layer-items li { padding: 0.25rem 0.45rem; border: 1px solid color-mix(in oklch, var(--fg) 13%, transparent); border-radius: 999px; font-family: var(--font-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-mono); color: var(--muted); transition: color var(--motion-fast) var(--ease-out-quart), border-color var(--motion-fast) var(--ease-out-quart), transform var(--motion-fast) var(--ease-out-quart); }
-  .stack-layer:hover .stack-layer-items li { color: var(--fg); border-color: color-mix(in oklch, var(--accent) 35%, transparent); transform: translateY(-0.15rem); }
-  /* Second row of the layer grid, aligned under the primary tools. */
-  .stack-layer-also { grid-column: 4 / -1; margin-top: 0.5rem; opacity: 0.75; }
+  /* Stack: four layers as a quiet bento. No skill bars — the level is a word, the tools carry the weight. */
+  .stack-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+  .stack-card { position: relative; display: flex; flex-direction: column; padding: 1.25rem; border: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); border-radius: var(--radius-sm); transition: border-color var(--motion-fast) var(--ease-out-quart), background-color var(--motion-fast) var(--ease-out-quart); }
+  .stack-card:hover { border-color: color-mix(in oklch, var(--accent) 40%, transparent); background: color-mix(in oklch, var(--accent) 4%, transparent); }
+  .stack-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; font-family: var(--font-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-mono); }
+  .stack-level { padding: 0.15rem 0.45rem; border: 1px solid color-mix(in oklch, var(--fg) 14%, transparent); border-radius: var(--radius-sm); color: var(--muted); }
+  .stack-primary { display: flex; flex-wrap: wrap; gap: 0.375rem; margin-top: 1rem; }
+  .stack-primary li { padding: 0.3rem 0.55rem; border-radius: var(--radius-sm); background: color-mix(in oklch, var(--fg) 6%, transparent); font-family: var(--font-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-mono); color: var(--fg); transition: background-color var(--motion-fast) var(--ease-out-quart), color var(--motion-fast) var(--ease-out-quart); }
+  .stack-card:hover .stack-primary li { background: color-mix(in oklch, var(--accent) 10%, transparent); }
+  .stack-also { margin-top: auto; padding-top: 1.25rem; font-family: var(--font-serif); font-size: var(--text-small); color: var(--muted); }
+  .stack-also span { display: block; margin-bottom: 0.25rem; font-family: var(--font-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-mono); color: color-mix(in oklch, var(--muted) 80%, transparent); }
 
   @media (max-width: 639px) {
     .project-rail-link, .future-field-item { grid-template-columns: 2.5rem minmax(0, 1fr) 1.5rem; gap: 0.75rem; }
     .future-field-tags { grid-column: 2 / -1; justify-content: flex-start; }
     .roadmap-row { grid-template-columns: 4rem 2.5rem minmax(0, 1fr); gap: 0.6rem; }
-    .stack-layer { grid-template-columns: 2.5rem minmax(0, 1fr); gap: 0.75rem; }
-    .stack-layer-track { grid-column: 2; }
-    .stack-layer-items { grid-column: 2 / -1; }
-    .stack-layer-also { grid-column: 2 / -1; }
+    .stack-grid { grid-template-columns: 1fr; }
   }
 
   .project-panel {
@@ -1661,4 +1682,9 @@
   ::view-transition-new(root) {
     animation: none !important;
   }
+}
+
+@keyframes contact-pulse {
+  0% { transform: scale(1); opacity: 0.55; }
+  70%, 100% { transform: scale(2.8); opacity: 0; }
 }

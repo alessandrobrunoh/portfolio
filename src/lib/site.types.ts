@@ -146,7 +146,7 @@ export interface Pulse {
   phases: PulsePhase[];
 }
 
-export type MarkName = "grok" | "zed" | "delta" | "gitbutler";
+export type MarkName = "openai" | "zed" | "delta" | "gitbutler";
 
 export interface Tool {
   name: string;

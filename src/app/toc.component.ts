@@ -13,7 +13,12 @@ import { cn } from "../lib/utils";
     <aside class="block lg:min-h-full">
       <div class="lg:sticky lg:top-8">
         <div class="flex items-start justify-between gap-4 lg:block">
-          <a href="/#intro" class="font-display text-subhead text-fg transition-colors hover:text-accent">{{ profile.name }}</a>
+          <a
+            href="/#intro"
+            [attr.aria-label]="profile.name"
+            class="inline-block font-display text-heading-sm leading-none tracking-tight text-fg transition-colors hover:text-accent"
+            >ab<span class="text-accent">.</span></a
+          >
         </div>
 
         <app-theme-clock />

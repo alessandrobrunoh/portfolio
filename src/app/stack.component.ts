@@ -14,18 +14,21 @@ import { STACK } from "../lib/site";
       </div>
       <p class="mb-10 max-w-prose font-serif text-lede text-muted">The tools I would defend in an interview, not everything I have ever opened. A stack is useful when every layer makes the next one more expressive.</p>
 
-      <div class="stack-layers">
+      <div class="stack-grid">
         @for (g of groups; track g.name; let i = $index) {
-          <article class="stack-layer group" [attr.data-tooltip]="'Explore the ' + g.name + ' layer'">
-            <div class="stack-layer-index">0{{ i + 1 }}</div>
-            <div class="stack-layer-name"><h3 class="font-display text-heading-sm text-fg transition-colors group-hover:text-accent">{{ g.name }}</h3>@if (g.level) { <span class="font-mono text-caption tracking-mono text-muted">{{ g.level }}</span> }</div>
-            <div class="stack-layer-track" aria-hidden="true"><span [style.width.%]="100 - i * 14"></span></div>
-            <ul class="stack-layer-items">@for (item of g.items.split(' · '); track item) { <li>{{ item }}</li> }</ul>
-            @if (g.also) { <p class="stack-layer-also font-serif text-caption text-muted">also worked with: {{ g.also }}</p> }
+          <article class="stack-card reveal-on-scroll">
+            <div class="stack-card-head">
+              <span class="text-accent">0{{ i + 1 }}</span>
+              @if (g.level) { <span class="stack-level">{{ g.level }}</span> }
+            </div>
+            <h3 class="mt-6 font-display text-heading-sm text-fg">{{ g.name }}</h3>
+            <ul class="stack-primary" [attr.aria-label]="g.name + ' tools'">
+              @for (item of g.items.split(' · '); track item) { <li>{{ item }}</li> }
+            </ul>
+            @if (g.also) { <p class="stack-also"><span>Also</span>{{ g.also }}</p> }
           </article>
         }
       </div>
-      <div class="mt-5 flex flex-wrap justify-between gap-3 font-mono text-caption tracking-mono text-muted"><span>closer to the metal</span><span class="text-accent">closer to the person using it →</span></div>
     </section>
   `,
 })

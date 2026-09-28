@@ -11,8 +11,6 @@ import {
 import { Router } from "@angular/router";
 import { IconComponent } from "./icon.component";
 import {
-  BLOG,
-  FUTURE_PROJECTS,
   PROFILE,
   PROJECTS,
   TOC,
@@ -307,35 +305,9 @@ export class CommandPaletteComponent implements OnInit {
       });
     }
 
-    // Future projects
-    for (const p of FUTURE_PROJECTS) {
-      items.push({
-        id: `future-${p.id}`,
-        category: "Projects",
-        title: `${p.name} [Exploring]`,
-        subtitle: `${p.stack.join(" · ")} · ${p.blurb}`,
-        action: () => {
-          this.close();
-          this.router.navigate(["/projects", p.id]);
-        },
-      });
-    }
 
-    // 3. Blog Writing items
-    for (const b of BLOG) {
-      items.push({
-        id: `blog-${b.slug}`,
-        category: "Writing",
-        title: b.title,
-        subtitle: `${b.subtitle} · ${b.status}`,
-        action: () => {
-          this.close();
-          this.router.navigate(["/blog", b.slug]);
-        },
-      });
-    }
 
-    // 4. Actions
+    // 3. Actions
     items.push(
       {
         id: "act-theme",
@@ -411,7 +383,7 @@ export class CommandPaletteComponent implements OnInit {
       }
     );
 
-    // 5. System & Terminal Commands
+    // 4. System & Terminal Commands
     items.push(
       {
         id: "sys-ping",

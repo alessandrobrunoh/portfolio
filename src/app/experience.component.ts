@@ -25,7 +25,7 @@ const ROADMAP: RoadmapStep[] = [
   template: `
     <section id="experience" class="scroll-mt-20 border-t border-fg/10 pt-14">
       <div class="flex flex-wrap items-end justify-between gap-4">
-        <app-section-head n="02" title="Experience" />
+        <app-section-head n="03" title="Experience" />
         <span class="mb-8 font-mono text-caption tracking-mono text-muted">timeline / decisions</span>
       </div>
       <p class="mb-10 max-w-prose font-serif text-lede text-muted">{{ company.summary }}</p>

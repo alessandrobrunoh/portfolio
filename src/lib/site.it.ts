@@ -23,14 +23,11 @@ export const IT: SiteData = {
 
   TOC: [
     { n: "01", href: "#intro", label: "Intro" },
-    { n: "02", href: "#experience", label: "Esperienza" },
-    { n: "03", href: "#projects", label: "Progetti" },
+    { n: "02", href: "#projects", label: "Progetti" },
+    { n: "03", href: "#experience", label: "Esperienza" },
     { n: "04", href: "#oss", label: "Open Source" },
     { n: "05", href: "#stack", label: "Stack" },
-    { n: "06", href: "#pulse", label: "Attività" },
-    { n: "07", href: "#exploring", label: "Esplorazioni" },
-    { n: "08", href: "#blog", label: "Scritti" },
-    { n: "09", href: "#contact", label: "Contatti" },
+    { n: "06", href: "#contact", label: "Contatti" },
   ],
 
   COMPANY: {
@@ -394,7 +391,7 @@ export const IT: SiteData = {
   },
 
   TOOLS: [
-    { name: "xAI", product: "Grok", href: "https://x.ai", mark: "grok" },
+    { name: "OpenAI", product: "GPT 6 Sol", href: "https://openai.com", mark: "openai" },
     { name: "Zed", product: "IDE", href: "https://zed.dev", mark: "zed" },
     { name: "Delta", product: "IDE Agente", href: "https://delta.dev", mark: "delta" },
     { name: "GitButler", product: "Client Git", href: "https://gitbutler.com", mark: "gitbutler" },
