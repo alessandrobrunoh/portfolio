@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from "@angular/common";
 import { PLATFORM_ID } from "@angular/core";
 import { AfterViewInit, Component, OnDestroy, computed, inject, input, signal } from "@angular/core";
-import { Title } from "@angular/platform-browser";
+import { Meta, Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { IconComponent } from "./icon.component";
 import { KeybindComponent } from "./keybind.component";
@@ -10,6 +10,16 @@ import { FUTURE_PROJECTS, PROJECTS, UI } from "../lib/site";
 import { loadGithubProjectStats, type GithubProjectStats } from "../lib/github-project";
 import type { TocItem } from "../lib/site.types";
 
+/** Tags a project page overrides; restored on leave so the home keeps its own card. */
+const PAGE_META = [
+  'name="description"',
+  'property="og:title"',
+  'property="og:description"',
+  'property="og:url"',
+  'name="twitter:title"',
+  'name="twitter:description"',
+];
+
 @Component({
   selector: "app-project-page",
   standalone: true,
@@ -17,22 +27,7 @@ import type { TocItem } from "../lib/site.types";
   template: `
     <div class="min-h-dvh bg-canvas">
       <div class="scroll-progress" aria-hidden="true"></div>
-      @if (loading()) {
-        <div class="project-loading mx-auto grid min-h-dvh max-w-6xl gap-10 px-4 py-8 sm:px-6 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-16 lg:py-12" aria-busy="true" aria-label="Loading project context">
-          <aside class="hidden lg:block">
-            <div class="skeleton skeleton-logo h-5 w-32"></div>
-            <div class="mt-10 space-y-3"><div class="skeleton h-3 w-16"></div><div class="skeleton h-8 w-full"></div><div class="skeleton h-8 w-4/5"></div><div class="skeleton h-8 w-3/5"></div></div>
-            <div class="mt-12 space-y-4 border-t border-fg/10 pt-6"><div class="skeleton h-3 w-24"></div><div class="skeleton h-3 w-28"></div><div class="skeleton h-3 w-20"></div></div>
-          </aside>
-          <main class="min-w-0">
-            <div class="flex justify-between border-b border-fg/10 pb-4"><div class="skeleton h-3 w-32"></div><div class="skeleton h-3 w-24"></div></div>
-            <div class="mt-12 max-w-3xl"><div class="skeleton h-3 w-20"></div><div class="skeleton mt-5 h-16 w-4/5"></div><div class="skeleton mt-7 h-4 w-full"></div><div class="skeleton mt-3 h-4 w-11/12"></div><div class="skeleton mt-3 h-4 w-3/4"></div></div>
-            <div class="mt-14 grid gap-3 sm:grid-cols-3"><div class="skeleton h-28 rounded-md"></div><div class="skeleton h-28 rounded-md"></div><div class="skeleton h-28 rounded-md"></div></div>
-            <div class="mt-10 space-y-3"><div class="skeleton h-4 w-full"></div><div class="skeleton h-4 w-5/6"></div><div class="skeleton h-4 w-2/3"></div></div>
-            <p class="mt-8 font-mono text-caption tracking-mono text-muted">Syncing repository context</p>
-          </main>
-        </div>
-      } @else if (project(); as p) {
+      @if (project(); as p) {
         <div class="mx-auto grid max-w-6xl gap-10 px-4 py-8 sm:px-6 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-16 lg:py-12">
           <app-toc [items]="headings" [active]="active()" />
           <main id="overview" class="min-w-0">
@@ -48,6 +43,21 @@ import type { TocItem } from "../lib/site.types";
                 <p class="font-mono text-caption tracking-mono text-accent">{{ p.lang }} <span class="text-fg/20">·</span> {{ p.year }}</p>
                 <h1 id="project-title" class="mt-3 font-display text-heading-sm text-fg sm:text-heading">{{ p.name }}</h1>
                 <p class="mt-6 max-w-prose font-serif text-lede text-muted">{{ p.blurb }}</p>
+                <div class="mt-6 flex flex-wrap items-center gap-2">
+                  @if (p.href) {
+                    <a [href]="p.href" target="_blank" rel="noreferrer" class="inline-flex min-h-11 items-center gap-2 rounded-sm bg-accent px-4 font-mono text-caption tracking-mono text-on-accent transition-[background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+                      <svg appIcon="github" class="size-3.5"></svg>
+                      Source code
+                    </a>
+                  }
+                  @if (demo(); as demoUrl) {
+                    <a [href]="demoUrl" target="_blank" rel="noreferrer" class="inline-flex min-h-11 items-center gap-2 rounded-sm border border-fg/15 px-4 font-mono text-caption tracking-mono text-fg transition-colors duration-150 hover:border-accent/40 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+                      Live demo
+                      <svg appIcon="arrow-up-right" class="size-3.5"></svg>
+                    </a>
+                  }
+                  <span class="font-mono text-caption tracking-mono text-muted">{{ p.stack.join(' · ') }}</span>
+                </div>
 
                 <section id="story" class="scroll-mt-8 mt-14">
                   <p class="font-mono text-caption tracking-mono text-accent">README / overview</p>
@@ -253,6 +263,8 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
   protected readonly active = signal("#overview");
   private readonly platformId = inject(PLATFORM_ID);
   private readonly title = inject(Title);
+  private readonly meta = inject(Meta);
+  private readonly previousMeta = new Map<string, string>();
   private router = inject(Router);
   private observer: IntersectionObserver | null = null;
   private timeout: ReturnType<typeof setTimeout> | null = null;
@@ -267,22 +279,40 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
   ];
 
   project = computed(() => [...PROJECTS, ...FUTURE_PROJECTS].find((item) => item.id === this.id()));
+  /** Only shipped projects can have a live deployment. */
+  protected readonly demo = computed(() => {
+    const current = this.project();
+    return current && "demo" in current ? current.demo : undefined;
+  });
 
   ngOnInit() {
     if (!isPlatformBrowser(this.platformId)) return;
     const current = this.project();
     this.title.setTitle(current ? `${current.name} · Alessandro Bruno` : "Project not found · Alessandro Bruno");
     if (!current) return;
+    for (const sel of PAGE_META) {
+      const tag = this.meta.getTag(sel);
+      if (tag) this.previousMeta.set(sel, tag.content);
+    }
+    const description = `${current.name}: ${current.blurb}`;
+    const url = `https://alessandrobrunoh.it/projects/${current.id}`;
+    this.meta.updateTag({ name: "description", content: description });
+    this.meta.updateTag({ property: "og:title", content: `${current.name} · Alessandro Bruno` });
+    this.meta.updateTag({ property: "og:description", content: description });
+    this.meta.updateTag({ property: "og:url", content: url });
+    this.meta.updateTag({ name: "twitter:title", content: `${current.name} · Alessandro Bruno` });
+    this.meta.updateTag({ name: "twitter:description", content: description });
+    // The page renders from static data at once; GitHub stats fill in when (and if) they arrive.
     this.loading.set(true);
-    this.timeout = setTimeout(() => {
-      this.loading.set(false);
-      setTimeout(() => this.setupObserver(), 0);
-    }, 6500);
+    this.timeout = setTimeout(() => this.loading.set(false), 6500);
     loadGithubProjectStats(current.href)
       .then((stats) => {
         if (!this.loading()) return;
         this.stats.set(stats);
         this.loading.set(false);
+        // Metrics and diff sections appear now: observe them too.
+        this.observer?.disconnect();
+        this.observer = null;
         setTimeout(() => this.setupObserver(), 0);
       })
       .catch(() => this.loading.set(false));
@@ -313,6 +343,8 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.observer?.disconnect();
     if (this.timeout) clearTimeout(this.timeout);
+    // Hand the home page back its own description and share card.
+    for (const [sel, content] of this.previousMeta) this.meta.updateTag({ content }, sel);
   }
 
   formatDate(iso: string) {
