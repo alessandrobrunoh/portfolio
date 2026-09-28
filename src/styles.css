@@ -564,11 +564,21 @@
   .issue-status-open { background: color-mix(in oklch, var(--accent) 18%, transparent); color: var(--accent); }
   .issue-status-merged { background: color-mix(in oklch, #55a878 18%, transparent); color: #3e9465; }
   .issue-tag { display: inline-flex; align-items: center; gap: 0.3rem; border: 1px solid color-mix(in oklch, var(--fg) 13%, transparent); border-radius: 999px; padding: 0.22rem 0.48rem; color: var(--muted); font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.03em; white-space: nowrap; }
-  .issue-tag-accent::before { content: ""; width: 0.38rem; height: 0.38rem; border-radius: 50%; background: var(--accent); }
 
   .simple-card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
   .simple-project-card { position: relative; display: flex; min-height: 16rem; flex-direction: column; padding: 1.25rem; border: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); border-radius: var(--radius-sm); background: var(--surface); transition: background-color var(--motion-fast) var(--ease-out-quart), border-color var(--motion-fast) var(--ease-out-quart), transform var(--motion-fast) var(--ease-out-quart), box-shadow var(--motion-fast) var(--ease-out-quart); }
   .simple-project-card:hover, .simple-project-card:focus-visible { border-color: color-mix(in oklch, var(--accent) 48%, transparent); background: color-mix(in oklch, var(--surface) 92%, var(--accent)); transform: translateY(-0.25rem); box-shadow: var(--shadow-lift); }
+  /* Intro proof strip: three facts in a hairline row. */
+  .intro-proof { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); border-bottom: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); }
+  .intro-proof > div { padding: 1rem 1rem 1rem 0; }
+  .intro-proof > div + div { padding-left: 1rem; border-left: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); }
+  .intro-proof dt { font-family: var(--font-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-mono); color: var(--accent); }
+  .intro-proof dd { margin-top: 0.35rem; font-family: var(--font-display); font-size: var(--text-heading-sm); line-height: 1.1; color: var(--fg); }
+  .intro-proof dd a { transition: color var(--motion-fast) var(--ease-out-quart); }
+  .intro-proof dd a:hover { color: var(--accent); }
+  .intro-proof dd.note { margin-top: 0.25rem; font-family: var(--font-serif); font-size: var(--text-small); color: var(--muted); }
+  @media (max-width: 639px) { .intro-proof { grid-template-columns: 1fr; } .intro-proof > div + div { padding-left: 0; border-left: 0; border-top: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); } }
+
   /* The first project leads the section: full row, body copy, highlights. */
   .project-lead-slot { grid-column: 1 / -1; }
   .project-lead { min-height: 0; padding: 1.5rem; border-color: color-mix(in oklch, var(--accent) 30%, transparent); }

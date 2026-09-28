@@ -10,6 +10,7 @@ export const IT: SiteData = {
     name: "Alessandro Bruno",
     role: "Systems & Product Engineer",
     shortRole: "Systems · Product · Open Source",
+    headline: "Backend in Rust, sistemi event-driven e strumenti per sviluppatori, dal modello di dominio alla produzione.",
     location: "Italia",
     github: "https://github.com/alessandrobrunoh",
     website: "https://alessandrobrunoh.it",

@@ -6,6 +6,8 @@ export interface Profile {
   name: string;
   role: string;
   shortRole: string;
+  /** One line after the role: what I build, in recruiter terms. */
+  headline: string;
   location: string;
   github: string;
   website: string;
