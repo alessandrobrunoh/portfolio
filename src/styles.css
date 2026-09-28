@@ -589,24 +589,29 @@
   .project-lead-highlights li { padding: 0.6rem 0; border-bottom: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); font-family: var(--font-serif); font-size: var(--text-small); color: var(--muted); transition: color var(--motion-fast) var(--ease-out-quart); }
   .project-lead:hover .project-lead-highlights li { color: var(--fg); }
 
-  /* Contact: a statement on the left, a hairline "contact sheet" on the right. Each row is one channel. */
-  .contact-grid { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr); gap: 3rem; align-items: start; }
-  .contact-sheet { border-top: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); }
-  .contact-row { position: relative; display: grid; grid-template-columns: 4rem minmax(0, 1fr) auto; gap: 1rem; align-items: center; min-height: 3.5rem; padding: 0.5rem 0.5rem 0.5rem 0; border-bottom: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); transition: background-color var(--motion-fast) var(--ease-out-quart); }
-  .contact-row:has(a.contact-value:hover), .contact-row:has(a.contact-value:focus-visible) { background: color-mix(in oklch, var(--accent) 5%, transparent); }
-  .contact-label { font-family: var(--font-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-mono); color: var(--accent); }
-  .contact-value { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-serif); font-size: var(--text-body); color: var(--fg); transition: color var(--motion-fast) var(--ease-out-quart); }
-  a.contact-value::after { content: ""; position: absolute; inset: 0; }
-  a.contact-value:hover, a.contact-value:focus-visible { color: var(--accent); outline: none; }
-  .contact-row:has(a.contact-value:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .contact-icon { width: 1rem; height: 1rem; color: var(--muted); transition: color var(--motion-fast) var(--ease-out-quart), transform var(--motion-fast) var(--ease-out-quart); }
-  .contact-row:has(a.contact-value:hover) .contact-icon { color: var(--accent); transform: translate(0.125rem, -0.125rem); }
-  .contact-action { position: relative; z-index: 1; min-height: 2.25rem; padding: 0 0.75rem; border: 1px solid color-mix(in oklch, var(--fg) 15%, transparent); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-mono); color: var(--muted); cursor: pointer; transition: color var(--motion-fast) var(--ease-out-quart), border-color var(--motion-fast) var(--ease-out-quart); }
-  .contact-action:hover { color: var(--fg); border-color: color-mix(in oklch, var(--accent) 40%, transparent); }
-  .contact-action:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .contact-pulse { animation: contact-pulse 2.4s var(--ease-out-quart) infinite; }
-  @media (max-width: 767px) { .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
-  @media (prefers-reduced-motion: reduce) { .contact-pulse { animation: none; opacity: 0; } }
+  /* Contact: one statement, the address as the call to action, then plain facts. Full contrast, reading sizes. */
+  .contact-mail { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; margin-top: 2.5rem; padding: 1.25rem 0; border-top: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); border-bottom: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); }
+  .contact-mail-link { display: inline-flex; min-width: 0; align-items: center; gap: 0.75rem; font-family: var(--font-display); font-size: clamp(1.125rem, 4.6vw, 2.5rem); line-height: 1.15; letter-spacing: -0.01em; color: var(--fg); overflow-wrap: anywhere; transition: color var(--motion-fast) var(--ease-out-quart); }
+  .contact-mail-link:hover, .contact-mail-link:focus-visible { color: var(--accent); }
+  .contact-mail-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: var(--radius-sm); }
+  .contact-mail-arrow { width: 1.5rem; height: 1.5rem; flex-shrink: 0; color: var(--accent); transition: transform var(--motion-fast) var(--ease-out-quart); }
+  .contact-mail-link:hover .contact-mail-arrow { transform: translate(0.2rem, -0.2rem); }
+  .contact-copy { min-height: 2.75rem; padding: 0 1rem; border: 1px solid color-mix(in oklch, var(--fg) 18%, transparent); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-mono); color: var(--fg); cursor: pointer; transition: border-color var(--motion-fast) var(--ease-out-quart), color var(--motion-fast) var(--ease-out-quart); }
+  .contact-copy:hover { border-color: color-mix(in oklch, var(--accent) 45%, transparent); color: var(--accent); }
+  .contact-copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .contact-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem 2rem; margin-top: 1.75rem; }
+  .contact-facts dt { font-family: var(--font-mono); font-size: var(--text-caption); letter-spacing: var(--tracking-mono); color: var(--accent); }
+  .contact-facts dd { margin-top: 0.5rem; font-family: var(--font-serif); font-size: var(--text-body); line-height: 1.55; color: var(--fg); }
+  .contact-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--fg); text-decoration: underline; text-decoration-color: color-mix(in oklch, var(--fg) 25%, transparent); text-underline-offset: 0.25em; transition: color var(--motion-fast) var(--ease-out-quart), text-decoration-color var(--motion-fast) var(--ease-out-quart); }
+  .contact-link:hover { color: var(--accent); text-decoration-color: var(--accent); }
+  @media (max-width: 767px) { .contact-facts { grid-template-columns: 1fr; } }
+
+  /* End of stream: sign-off with the mark, one line of thanks, the CV as the last action. */
+  .end-card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 1.5rem 2rem; align-items: center; margin: 4rem 0 3rem; padding: 1.75rem 2rem; border: 1px solid color-mix(in oklch, var(--fg) 12%, transparent); border-radius: var(--radius-sm); }
+  .end-mark { font-family: var(--font-display); font-size: 4.5rem; font-weight: 300; line-height: 0.8; letter-spacing: -0.04em; color: var(--fg); }
+  .end-mark span { color: var(--accent); }
+  .end-actions { display: flex; flex-direction: column; gap: 0.5rem; }
+  @media (max-width: 767px) { .end-card { grid-template-columns: 1fr; padding: 1.5rem; } .end-mark { font-size: 3.5rem; } .end-actions { flex-direction: row; flex-wrap: wrap; } }
   
   .carousel-mask {
     scrollbar-width: none;
@@ -1386,9 +1391,4 @@
   ::view-transition-new(root) {
     animation: none !important;
   }
-}
-
-@keyframes contact-pulse {
-  0% { transform: scale(1); opacity: 0.55; }
-  70%, 100% { transform: scale(2.8); opacity: 0; }
 }

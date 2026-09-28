@@ -11,9 +11,10 @@ import { PROFILE, lang } from "../lib/site";
     <footer>
       <app-tools />
 
-      <!-- End of page / Sei arrivato alla fine -->
-      <div class="reveal-card mt-16 mb-12 grid gap-6 rounded-sm border border-fg/12 p-6 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end sm:p-8">
-        <div>
+      <!-- End of page: a sign-off, not a second contact form. Email lives in Contact right above. -->
+      <div class="end-card reveal-card">
+        <p class="end-mark" aria-hidden="true">ab<span>.</span></p>
+        <div class="min-w-0">
           <p class="inline-flex items-center gap-2 font-mono text-caption tracking-mono text-accent">
             <span class="size-1.5 rounded-full bg-accent" aria-hidden="true"></span>
             {{ lang() === 'it' ? 'Sei arrivato alla fine' : 'End of stream' }}
@@ -21,27 +22,27 @@ import { PROFILE, lang } from "../lib/site";
           <p class="mt-3 font-display text-heading-sm text-fg">
             {{ lang() === 'it' ? 'Grazie per aver letto fino a qui.' : 'Thanks for reading all the way down.' }}
           </p>
-          <p class="mt-2 max-w-prose font-serif text-small text-muted">
+          <p class="mt-2 max-w-prose font-serif text-body text-fg/75">
             {{
               lang() === 'it'
-                ? 'Hai visto i progetti, l’architettura e il codice. Se vuoi scambiare due chiacchiere o collaborare su sistemi e backend:'
-                : 'You’ve seen the systems, trajectory, and code. If you’d like to talk backend, event streams, or collaborate:'
+                ? 'Se quello che hai visto somiglia a ciò che serve al tuo team, il CV ha la versione in una pagina.'
+                : 'If this looks like what your team needs, the CV has the one-page version.'
             }}
           </p>
         </div>
-
-        <div class="flex flex-wrap items-center gap-2">
+        <div class="end-actions">
           <a
-            [href]="'mailto:' + profile.email"
+            href="/alessandro-bruno-cv.pdf"
+            download
             class="inline-flex min-h-11 items-center gap-2 rounded-sm bg-accent px-4 font-mono text-caption tracking-mono text-on-accent transition-[background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
-            <svg appIcon="mail" class="size-3.5"></svg>
-            <span>{{ lang() === 'it' ? 'Scrivimi' : 'Get in touch' }}</span>
+            <svg appIcon="download" class="size-3.5"></svg>
+            <span>{{ lang() === 'it' ? 'Scarica il CV' : 'Download CV' }}</span>
           </a>
           <button
             type="button"
             (click)="scrollToTop()"
-            class="group inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-sm border border-fg/15 px-4 font-mono text-caption tracking-mono text-muted transition-colors duration-150 hover:border-accent/40 hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            class="group inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-sm border border-fg/15 px-4 font-mono text-caption tracking-mono text-fg/80 transition-colors duration-150 hover:border-accent/40 hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             <svg appIcon="arrow-up" class="size-3.5 transition-transform duration-200 group-hover:-translate-y-0.5"></svg>
             <span>{{ lang() === 'it' ? 'Torna in cima' : 'Back to top' }}</span>
