@@ -1160,76 +1160,6 @@
   }
 }
 
-@keyframes overlay-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes overlay-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes dialog-in {
-  from {
-    opacity: 0;
-    transform: scale(0.96) translateY(10px);
-    filter: blur(4px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-    filter: blur(0);
-  }
-}
-
-@keyframes dialog-out {
-  from {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-    filter: blur(0);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.96) translateY(8px);
-    filter: blur(4px);
-  }
-}
-
-@keyframes dialog-in-sheet {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-    filter: blur(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-  }
-}
-
-@keyframes dialog-out-sheet {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(12px);
-    filter: blur(4px);
-  }
-}
-
 .stagger-in {
   opacity: 0;
   animation: fade-up 600ms var(--ease-out-quart) forwards;
@@ -1249,33 +1179,6 @@
 }
 .stagger-in:nth-child(5) {
   animation-delay: 440ms;
-}
-
-.dialog-panel[data-state="open"] .dialog-stagger > * {
-  opacity: 0;
-  animation: fade-up var(--motion-slow) var(--ease-out-quart) forwards;
-}
-
-.dialog-panel[data-state="open"] .dialog-stagger > *:nth-child(1) {
-  animation-delay: 40ms;
-}
-.dialog-panel[data-state="open"] .dialog-stagger > *:nth-child(2) {
-  animation-delay: 100ms;
-}
-.dialog-panel[data-state="open"] .dialog-stagger > *:nth-child(3) {
-  animation-delay: 160ms;
-}
-.dialog-panel[data-state="open"] .dialog-stagger > *:nth-child(4) {
-  animation-delay: 220ms;
-}
-.dialog-panel[data-state="open"] .dialog-stagger > *:nth-child(5) {
-  animation-delay: 280ms;
-}
-.dialog-panel[data-state="open"] .dialog-stagger > *:nth-child(6) {
-  animation-delay: 340ms;
-}
-.dialog-panel[data-state="open"] .dialog-stagger > *:nth-child(7) {
-  animation-delay: 400ms;
 }
 
 	/* Theme clock: a small UTC sky. The dial is the UTC day, the hairline at y 40 is the horizon,
@@ -1444,32 +1347,6 @@
 	  }
 	}
 
-.dialog-overlay[data-state="open"] {
-  animation: overlay-in var(--motion-fast) var(--ease-out-quart) both;
-}
-
-.dialog-overlay[data-state="closed"] {
-  animation: overlay-out var(--motion-quick) ease-in both;
-}
-
-.dialog-panel[data-state="open"] {
-  animation: dialog-in-sheet var(--motion-fast) var(--ease-out-quart) both;
-}
-
-.dialog-panel[data-state="closed"] {
-  animation: dialog-out-sheet var(--motion-quick) ease-in both;
-}
-
-@media (min-width: 640px) {
-  .dialog-panel[data-state="open"] {
-    animation-name: dialog-in;
-  }
-
-  .dialog-panel[data-state="closed"] {
-    animation-name: dialog-out;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -1488,10 +1365,7 @@
   .scroll-progress,
   .section-mark::after,
   .avatar-shift,
-  .name-underline::after,
-  .dialog-overlay,
-  .dialog-panel,
-  .dialog-panel .dialog-stagger > * {
+  .name-underline::after {
     animation: none !important;
     opacity: 1 !important;
     filter: none !important;

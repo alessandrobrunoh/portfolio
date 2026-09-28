@@ -283,7 +283,7 @@ export class ThemeClockComponent implements OnInit {
       this.shownTheme = next;
       this.announce(next, this.pendingManual || isManualThemePreference());
       this.pendingManual = false;
-      // Click, palette or 06:00/20:00 flip under the pointer or keyboard focus: no reverse preview yet.
+      // Click or 06:00/20:00 flip under the pointer or keyboard focus: no reverse preview yet.
       if (this.button()?.nativeElement.matches(":hover, :focus-visible")) this.commit();
     };
     document.addEventListener("visibilitychange", onVisible);

@@ -22,18 +22,6 @@ import { cn } from "../lib/utils";
 
         <app-theme-clock />
 
-        <!-- Command Palette Trigger -->
-        <button
-          type="button"
-          (click)="openPalette()"
-          class="mt-4 flex w-full items-center justify-between gap-2 rounded-md bg-surface px-3 py-2 font-mono text-caption tracking-mono text-muted shadow-border transition-all duration-150 hover:text-fg hover:border-accent/40 cursor-pointer group"
-        >
-          <span class="inline-flex items-center gap-2">
-            <svg appIcon="compass" class="size-3.5 text-accent transition-transform duration-200 group-hover:rotate-45"></svg>
-            <span>{{ lang() === 'it' ? 'Comandi / Cerca' : 'Commands / Search' }}</span>
-          </span>
-          <kbd class="rounded bg-fg/10 px-1.5 py-0.5 text-[0.65rem] text-fg/75">⌘K</kbd>
-        </button>
 
         <p class="mt-6 font-mono text-caption tracking-mono text-accent">{{ ui.tocIndex }}</p>
         <nav aria-label="On this page" class="mt-4 grid grid-cols-2 gap-x-3 gap-y-1 lg:flex lg:flex-col">
@@ -97,9 +85,5 @@ export class TocComponent {
   setLang(next: Lang) {
     setLanguage(next);
     this.appRef.tick();
-  }
-
-  openPalette() {
-    window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true, bubbles: true }));
   }
 }

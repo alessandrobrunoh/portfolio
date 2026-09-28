@@ -52,6 +52,6 @@ export class ProjectsComponent {
   protected readonly projects = PROJECTS;
   protected readonly ui = UI;
   protected readonly lang = lang;
-  /** The home page shows a short list; every project keeps its own page and palette entry. */
+  /** The home page shows a short list; every project keeps its own page. */
   protected readonly maxProjects = 5;
 }
