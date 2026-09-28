@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "vite --host 0.0.0.0 --port 8080",
-    "dev": "vite --host 0.0.0.0 --port 8080",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1 --port 8081",
     "sync:github": "node scripts/sync-github.mjs",
