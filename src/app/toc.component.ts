@@ -15,9 +15,8 @@ import { cn } from "../lib/utils";
         <div class="flex items-start justify-between gap-4 lg:block">
           <a
             href="/#intro"
-            [attr.aria-label]="profile.name"
             class="inline-block font-display text-heading-sm leading-none tracking-tight text-fg transition-colors hover:text-accent"
-            >ab<span class="text-accent">.</span></a
+            >ab<span class="text-accent">.</span><span class="sr-only"> {{ profile.name }}</span></a
           >
         </div>
 
@@ -55,7 +54,8 @@ import { cn } from "../lib/utils";
         </nav>
 
         <dl class="mt-8 space-y-4 border-t border-fg/10 pt-6">
-          <div>
+          <!-- On mobile the intro already carries company, role and contacts. -->
+          <div class="hidden lg:block">
             <dt class="font-mono text-caption tracking-mono text-accent">{{ ui.tocCurrentWork }}</dt>
             <dd class="mt-1 font-serif text-small text-fg">
               <a [href]="profile.company.href" target="_blank" rel="noreferrer" class="hover:text-accent">{{ profile.company.name }}</a>
@@ -65,12 +65,12 @@ import { cn } from "../lib/utils";
           <div>
             <dt class="font-mono text-caption tracking-mono text-accent">{{ ui.tocLanguages }}</dt>
             <dd class="mt-1 flex items-center gap-3 font-mono text-caption tracking-mono">
-              <button type="button" (click)="setLang('it')" [class]="lang() === 'it' ? 'text-accent' : 'text-muted hover:text-fg'" [attr.aria-pressed]="lang() === 'it'">{{ lang() === 'it' ? 'Italian' : 'IT' }}</button>
+              <button type="button" (click)="setLang('it')" [class]="lang() === 'it' ? 'text-accent' : 'text-muted hover:text-fg'" [attr.aria-pressed]="lang() === 'it'">{{ lang() === 'it' ? 'Italiano' : 'IT' }}</button>
               <span class="text-fg/20">·</span>
               <button type="button" (click)="setLang('en')" [class]="lang() === 'en' ? 'text-accent' : 'text-muted hover:text-fg'" [attr.aria-pressed]="lang() === 'en'">{{ lang() === 'en' ? 'English' : 'EN' }}</button>
             </dd>
           </div>
-          <div>
+          <div class="hidden lg:block">
             <dt class="font-mono text-caption tracking-mono text-accent">{{ ui.tocContact }}</dt>
             <dd class="mt-1 flex flex-wrap gap-x-3 gap-y-1 font-mono text-caption tracking-mono">
               <a [href]="'mailto:' + profile.email" class="text-muted hover:text-accent">Email</a>
