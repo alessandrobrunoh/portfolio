@@ -14,7 +14,7 @@ export const EN: SiteData = {
     x: "",
     avatar: "/avatar.jpg",
     company: { name: "Luna S.r.l.", href: "https://lunapartner.it" },
-    bio: "Rust backend engineer based in Bologna. For over a year I have worked on production event-driven microservices at Luna S.r.l.: async consumers on Valkey Streams, payloads on S3, and traces and logs through OpenTelemetry into Grafana, Loki and Tempo — all shipped through senior code review. My B.Sc. thesis, PETRA, is an event-driven platform for real-time asynchronous telemetry. Outside work I build tools one layer down: ducklake-orm, a Rust ORM published on crates.io; Mnemosyne, a semantic history for source code built on Tree-sitter; and JDL language support merged into Zed.",
+    bio: "Rust backend engineer based in Bologna. For over a year I have worked on production event-driven microservices at Luna S.r.l.: async consumers on Valkey Streams, payloads on S3, and traces and logs through OpenTelemetry into Grafana, Loki and Tempo — all shipped through senior code review. My B.Sc. thesis, PETRA, is an event-driven platform for real-time asynchronous telemetry. Outside work I build tools one layer down: ducklake-orm, a Rust ORM published on crates.io, and Mnemosyne, a semantic history for source code built on Tree-sitter.",
     availability: "Open to Rust and backend roles — remote or hybrid in Italy, available with notice. EU citizen.",
   },
 
@@ -72,11 +72,11 @@ export const EN: SiteData = {
 
   CONTRIBUTIONS: [
     {
-      status: "Merged",
-      title: "JDL language support",
-      repo: "zed-industries/extensions",
-      href: "https://github.com/zed-industries/extensions/pull/3339",
-      note: "Tree-sitter grammar and editor extension, now in the official marketplace.",
+      status: "Published",
+      title: "ducklake-orm",
+      repo: "crates.io",
+      href: "https://crates.io/crates/ducklake-orm",
+      note: "Rust ORM with derive macros, query builders, pooling, migrations and DuckLake time travel.",
     },
     {
       status: "Open",
@@ -86,11 +86,11 @@ export const EN: SiteData = {
       note: "Add or remove forwards on remote sessions without reconnecting.",
     },
     {
-      status: "Published",
-      title: "ducklake-orm",
-      repo: "crates.io",
-      href: "https://crates.io/crates/ducklake-orm",
-      note: "Rust ORM with derive macros, query builders, pooling, migrations and DuckLake time travel.",
+      status: "Merged",
+      title: "JDL syntax highlighting",
+      repo: "zed-industries/extensions",
+      href: "https://github.com/zed-industries/extensions/pull/3339",
+      note: "A small editor extension.",
     },
   ],
 

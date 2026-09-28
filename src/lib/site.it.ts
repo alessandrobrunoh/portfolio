@@ -18,7 +18,7 @@ export const IT: SiteData = {
     x: "",
     avatar: "/avatar.jpg",
     company: { name: "Luna S.r.l.", href: "https://lunapartner.it" },
-    bio: "Backend engineer Rust a Bologna. Da oltre un anno lavoro su microservizi event-driven in produzione in Luna S.r.l.: consumer asincroni su Valkey Streams, payload su S3, trace e log con OpenTelemetry verso Grafana, Loki e Tempo — tutto passato da code review senior. La mia tesi triennale, PETRA, è una piattaforma event-driven per la telemetria asincrona in tempo reale. Fuori dal lavoro costruisco strumenti un livello più in basso: ducklake-orm, un ORM Rust pubblicato su crates.io; Mnemosyne, una cronologia semantica del codice basata su Tree-sitter; e il supporto al linguaggio JDL, accettato in Zed.",
+    bio: "Backend engineer Rust a Bologna. Da oltre un anno lavoro su microservizi event-driven in produzione in Luna S.r.l.: consumer asincroni su Valkey Streams, payload su S3, trace e log con OpenTelemetry verso Grafana, Loki e Tempo — tutto passato da code review senior. La mia tesi triennale, PETRA, è una piattaforma event-driven per la telemetria asincrona in tempo reale. Fuori dal lavoro costruisco strumenti un livello più in basso: ducklake-orm, un ORM Rust pubblicato su crates.io, e Mnemosyne, una cronologia semantica del codice basata su Tree-sitter.",
     availability: "Disponibile per ruoli Rust e backend — da remoto o ibrido in Italia, con preavviso. Cittadino UE.",
   },
 
@@ -76,11 +76,11 @@ export const IT: SiteData = {
 
   CONTRIBUTIONS: [
     {
-      status: "Merged",
-      title: "Supporto al linguaggio JDL",
-      repo: "zed-industries/extensions",
-      href: "https://github.com/zed-industries/extensions/pull/3339",
-      note: "Grammatica Tree-sitter ed estensione per l'editor, ora nel marketplace ufficiale.",
+      status: "Published",
+      title: "ducklake-orm",
+      repo: "crates.io",
+      href: "https://crates.io/crates/ducklake-orm",
+      note: "ORM Rust con derive macro, query builder, pooling, migrazioni e time travel di DuckLake.",
     },
     {
       status: "Open",
@@ -90,11 +90,11 @@ export const IT: SiteData = {
       note: "Aggiungere o rimuovere forward nelle sessioni remote senza riconnettersi.",
     },
     {
-      status: "Published",
-      title: "ducklake-orm",
-      repo: "crates.io",
-      href: "https://crates.io/crates/ducklake-orm",
-      note: "ORM Rust con derive macro, query builder, pooling, migrazioni e time travel di DuckLake.",
+      status: "Merged",
+      title: "Evidenziazione sintassi JDL",
+      repo: "zed-industries/extensions",
+      href: "https://github.com/zed-industries/extensions/pull/3339",
+      note: "Una piccola estensione per l'editor.",
     },
   ],
 

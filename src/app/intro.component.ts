@@ -80,13 +80,6 @@ const [FIRST_NAME, LAST_NAME] = PROFILE.name.split(" ");
           <dd>{{ lang() === 'it' ? '1+ anno' : '1+ year' }}</dd>
           <dd class="note">{{ lang() === 'it' ? 'servizi event-driven in ' : 'event-driven services at ' }}{{ profile.company.name }}</dd>
         </div>
-        @if (merged; as m) {
-          <div>
-            <dt>Open source</dt>
-            <dd><a [href]="m.href" target="_blank" rel="noreferrer">{{ lang() === 'it' ? 'Accettato in Zed' : 'Merged into Zed' }}</a></dd>
-            <dd class="note">{{ m.title }} · PR #{{ m.href.split('/pull/')[1] }}</dd>
-          </div>
-        }
         @if (published; as c) {
           <div>
             <dt>{{ lang() === 'it' ? 'Crate pubblicato' : 'Published crate' }}</dt>
@@ -94,6 +87,11 @@ const [FIRST_NAME, LAST_NAME] = PROFILE.name.split(" ");
             <dd class="note">{{ lang() === 'it' ? 'ORM Rust su crates.io' : 'Rust ORM on crates.io' }}</dd>
           </div>
         }
+        <div>
+          <dt>{{ lang() === 'it' ? 'Tesi' : 'Thesis' }}</dt>
+          <dd>PETRA</dd>
+          <dd class="note">{{ lang() === 'it' ? 'telemetria event-driven in tempo reale' : 'real-time event-driven telemetry' }}</dd>
+        </div>
       </dl>
 
       <p class="stagger-in mt-10 max-w-prose font-serif text-lede text-muted">{{ profile.bio }}</p>
@@ -120,9 +118,6 @@ export class IntroComponent {
   protected readonly education = EDUCATION;
   protected readonly ui = UI;
   protected readonly lang = lang;
-  protected get merged() {
-    return CONTRIBUTIONS.find((c) => c.status === "Merged");
-  }
   protected get published() {
     return CONTRIBUTIONS.find((c) => c.status === "Published");
   }
