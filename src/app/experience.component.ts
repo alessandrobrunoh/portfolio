@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { KeybindComponent } from "./keybind.component";
 import { SectionHeadComponent } from "./section-head.component";
-import { COMPANY, EDUCATION, ROLES } from "../lib/site";
+import { COMPANY, EDUCATION, ROLES, UI, lang } from "../lib/site";
 
 type RoadmapStep = {
   era: string;
@@ -25,8 +25,8 @@ const ROADMAP: RoadmapStep[] = [
   template: `
     <section id="experience" class="scroll-mt-20 border-t border-fg/10 pt-14">
       <div class="flex flex-wrap items-end justify-between gap-4">
-        <app-section-head n="03" title="Experience" />
-        <span class="mb-8 font-mono text-caption tracking-mono text-muted">timeline / decisions</span>
+        <app-section-head n="03" [title]="ui.sectionTitles.experience" />
+        <span class="mb-8 font-mono text-caption tracking-mono text-muted">{{ lang() === 'it' ? 'percorso / decisioni' : 'timeline / decisions' }}</span>
       </div>
       <p class="mb-10 max-w-prose font-serif text-lede text-muted">{{ company.summary }}</p>
 
@@ -53,5 +53,7 @@ const ROADMAP: RoadmapStep[] = [
 })
 export class ExperienceComponent {
   protected readonly company = COMPANY;
+  protected readonly ui = UI;
+  protected readonly lang = lang;
   protected readonly roadmap = ROADMAP;
 }
