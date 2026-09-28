@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { IconComponent } from "./icon.component";
 
-import { EDUCATION, PROFILE, UI } from "../lib/site";
+import { CONTRIBUTIONS, EDUCATION, PROFILE, UI, lang } from "../lib/site";
 
 const [FIRST_NAME, LAST_NAME] = PROFILE.name.split(" ");
 
@@ -20,16 +20,6 @@ const [FIRST_NAME, LAST_NAME] = PROFILE.name.split(" ");
           <span class="text-fg/20">·</span>
           <span class="font-mono text-caption tracking-mono text-muted">{{ profile.location }}</span>
         </div>
-        <a
-          href="/alessandro-bruno-cv.pdf"
-          download
-          data-tooltip="Download CV"
-          aria-label="Download CV"
-          class="inline-flex size-9 shrink-0 items-center justify-center rounded-md bg-surface text-muted shadow-border transition-[color,transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:text-accent hover:shadow-lift focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        >
-          <svg appIcon="download" class="size-4"></svg>
-          <span class="sr-only">Download CV</span>
-        </a>
       </div>
 
       <div class="stagger-in mt-5 flex items-end gap-5">
@@ -46,22 +36,68 @@ const [FIRST_NAME, LAST_NAME] = PROFILE.name.split(" ");
         />
       </div>
 
-      <p class="stagger-in mt-8 max-w-prose font-serif text-lede text-muted">{{ profile.bio }}</p>
+      <p class="stagger-in mt-8 max-w-2xl font-display text-subhead text-fg sm:text-heading-sm">
+        {{ profile.role }}<span class="text-accent">.</span>
+        <span class="text-muted">&#32;{{ profile.headline }}</span>
+      </p>
 
-      <p class="stagger-in mt-5 inline-flex items-center gap-2 rounded-full bg-accent/10 px-3 py-1.5 font-mono text-caption tracking-mono text-accent">
+      <div class="stagger-in mt-6 flex flex-wrap items-center gap-2">
+        <a
+          [href]="'mailto:' + profile.email"
+          class="group inline-flex min-h-11 items-center gap-2 rounded-sm bg-accent px-4 font-mono text-caption tracking-mono text-on-accent transition-[background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          <svg appIcon="mail" class="size-3.5"></svg>
+          {{ lang() === 'it' ? 'Scrivimi' : 'Email me' }}
+        </a>
+        <a
+          href="/alessandro-bruno-cv.pdf"
+          download
+          class="inline-flex min-h-11 items-center gap-2 rounded-sm border border-fg/15 px-4 font-mono text-caption tracking-mono text-fg transition-colors duration-150 hover:border-accent/40 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          <svg appIcon="download" class="size-3.5"></svg>
+          {{ lang() === 'it' ? 'Scarica il CV' : 'Download CV' }}
+        </a>
+        <a
+          [href]="profile.github"
+          target="_blank"
+          rel="noreferrer"
+          class="inline-flex min-h-11 items-center gap-2 rounded-sm px-3 font-mono text-caption tracking-mono text-muted transition-colors duration-150 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          <svg appIcon="github" class="size-3.5"></svg>
+          GitHub
+        </a>
+      </div>
+
+      <p class="stagger-in mt-5 inline-flex items-center gap-2 rounded-sm border border-accent/25 px-3 py-1.5 font-mono text-caption tracking-mono text-accent">
         <span class="size-1.5 rounded-full bg-accent" aria-hidden="true"></span>
         {{ profile.availability }}
       </p>
 
+      <!-- Proof, not adjectives: each fact matches the CV and links to its source. -->
+      <dl class="intro-proof stagger-in mt-10">
+        <div>
+          <dt>{{ lang() === 'it' ? 'Rust in produzione' : 'Production Rust' }}</dt>
+          <dd>{{ lang() === 'it' ? '1+ anno' : '1+ year' }}</dd>
+          <dd class="note">{{ lang() === 'it' ? 'servizi event-driven in ' : 'event-driven services at ' }}{{ profile.company.name }}</dd>
+        </div>
+        @if (published; as c) {
+          <div>
+            <dt>{{ lang() === 'it' ? 'Crate pubblicato' : 'Published crate' }}</dt>
+            <dd><a [href]="c.href" target="_blank" rel="noreferrer">{{ c.title }}</a></dd>
+            <dd class="note">{{ lang() === 'it' ? 'ORM Rust su crates.io' : 'Rust ORM on crates.io' }}</dd>
+          </div>
+        }
+        <div>
+          <dt>{{ lang() === 'it' ? 'Tesi' : 'Thesis' }}</dt>
+          <dd>PETRA</dd>
+          <dd class="note">{{ lang() === 'it' ? 'telemetria event-driven in tempo reale' : 'real-time event-driven telemetry' }}</dd>
+        </div>
+      </dl>
+
+      <p class="stagger-in mt-10 max-w-prose font-serif text-lede text-muted">{{ profile.bio }}</p>
+
       <div class="stagger-in mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
         <p class="font-serif text-small text-muted">{{ education.degree }} · {{ education.school }}, 2026</p>
-        <a
-          [href]="'mailto:' + profile.email"
-          class="inline-flex items-center gap-2 font-mono text-caption tracking-mono text-muted transition-colors duration-150 hover:text-accent"
-        >
-          <svg appIcon="mail" class="size-3.5"></svg>
-          {{ profile.email }}
-        </a>
         @if (education.thesisHref) {
           <a
             [href]="education.thesisHref"
@@ -81,6 +117,10 @@ export class IntroComponent {
   protected readonly profile = PROFILE;
   protected readonly education = EDUCATION;
   protected readonly ui = UI;
+  protected readonly lang = lang;
+  protected get published() {
+    return CONTRIBUTIONS.find((c) => c.status === "Published");
+  }
   protected readonly firstName = FIRST_NAME;
   protected readonly lastName = LAST_NAME;
 }

@@ -1,7 +1,7 @@
-import { Component } from "@angular/core";
+import { Component, computed } from "@angular/core";
 import { KeybindComponent } from "./keybind.component";
 import { SectionHeadComponent } from "./section-head.component";
-import { COMPANY, EDUCATION, ROLES } from "../lib/site";
+import { COMPANY, EDUCATION, ROLES, UI, lang } from "../lib/site";
 
 type RoadmapStep = {
   era: string;
@@ -13,10 +13,13 @@ type RoadmapStep = {
   current: boolean;
 };
 
-const ROADMAP: RoadmapStep[] = [
-  { era: EDUCATION.dates, title: EDUCATION.school, org: `${EDUCATION.degree} · ${EDUCATION.native}`, note: EDUCATION.thesis, current: false },
-  ...ROLES.slice().reverse().map((role) => ({ era: role.dates, title: role.title, org: `${COMPANY.name} · ${COMPANY.location}`, bullets: role.bullets, tags: role.tags, current: role.current })),
-];
+/** Built from the live (language-switched) data, so it must be read after every setLanguage. */
+function buildRoadmap(): RoadmapStep[] {
+  return [
+    { era: EDUCATION.dates, title: EDUCATION.school, org: `${EDUCATION.degree} · ${EDUCATION.native}`, note: EDUCATION.thesis, current: false },
+    ...ROLES.slice().reverse().map((role) => ({ era: role.dates, title: role.title, org: `${COMPANY.name} · ${COMPANY.location}`, bullets: role.bullets, tags: role.tags, current: role.current })),
+  ];
+}
 
 @Component({
   selector: "app-experience",
@@ -25,13 +28,13 @@ const ROADMAP: RoadmapStep[] = [
   template: `
     <section id="experience" class="scroll-mt-20 border-t border-fg/10 pt-14">
       <div class="flex flex-wrap items-end justify-between gap-4">
-        <app-section-head n="02" title="Experience" />
-        <span class="mb-8 font-mono text-caption tracking-mono text-muted">timeline / decisions</span>
+        <app-section-head n="03" [title]="ui.sectionTitles.experience" />
+        <span class="mb-8 font-mono text-caption tracking-mono text-muted">{{ lang() === 'it' ? 'percorso / decisioni' : 'timeline / decisions' }}</span>
       </div>
       <p class="mb-10 max-w-prose font-serif text-lede text-muted">{{ company.summary }}</p>
 
       <ol class="roadmap-list">
-        @for (step of roadmap; track step.title; let i = $index) {
+        @for (step of roadmap(); track step.title; let i = $index) {
           <li class="roadmap-row reveal-row" [class.roadmap-row-current]="step.current">
             <div class="roadmap-year" [attr.data-tooltip]="step.current ? 'Current position' : 'Milestone'">{{ step.era }}</div>
             <div class="roadmap-spine" aria-hidden="true"><span>{{ (i + 1).toString().padStart(2, '0') }}</span></div>
@@ -53,5 +56,11 @@ const ROADMAP: RoadmapStep[] = [
 })
 export class ExperienceComponent {
   protected readonly company = COMPANY;
-  protected readonly roadmap = ROADMAP;
+  protected readonly ui = UI;
+  protected readonly lang = lang;
+  // lang() is the dependency: setLanguage mutates the data in place, then flips the signal.
+  protected readonly roadmap = computed(() => {
+    lang();
+    return buildRoadmap();
+  });
 }

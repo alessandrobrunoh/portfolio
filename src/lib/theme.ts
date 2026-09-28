@@ -92,8 +92,11 @@ export function toggleThemeOverride() {
 
 export function toggleThemeFromPointer(event: MouseEvent) {
   const root = document.documentElement;
-  const x = event.clientX;
-  const y = event.clientY;
+  const bounds =
+    event.currentTarget instanceof Element ? event.currentTarget.getBoundingClientRect() : null;
+  const hasPointerPosition = event.detail > 0;
+  const x = hasPointerPosition ? event.clientX : (bounds?.left ?? 0) + (bounds?.width ?? 0) / 2;
+  const y = hasPointerPosition ? event.clientY : (bounds?.top ?? 0) + (bounds?.height ?? 0) / 2;
   const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
   root.style.setProperty("--vt-x", `${x}px`);
   root.style.setProperty("--vt-y", `${y}px`);

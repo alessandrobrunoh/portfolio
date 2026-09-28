@@ -13,23 +13,15 @@ import { cn } from "../lib/utils";
     <aside class="block lg:min-h-full">
       <div class="lg:sticky lg:top-8">
         <div class="flex items-start justify-between gap-4 lg:block">
-          <a href="/#intro" class="font-display text-subhead text-fg transition-colors hover:text-accent">{{ profile.name }}</a>
+          <a
+            href="/#intro"
+            class="inline-block font-display text-heading-sm leading-none tracking-tight text-fg transition-colors hover:text-accent"
+            >ab<span class="text-accent">.</span><span class="sr-only"> {{ profile.name }}</span></a
+          >
         </div>
 
         <app-theme-clock />
 
-        <!-- Command Palette Trigger -->
-        <button
-          type="button"
-          (click)="openPalette()"
-          class="mt-4 flex w-full items-center justify-between gap-2 rounded-md bg-surface px-3 py-2 font-mono text-caption tracking-mono text-muted shadow-border transition-all duration-150 hover:text-fg hover:border-accent/40 cursor-pointer group"
-        >
-          <span class="inline-flex items-center gap-2">
-            <svg appIcon="compass" class="size-3.5 text-accent transition-transform duration-200 group-hover:rotate-45"></svg>
-            <span>{{ lang() === 'it' ? 'Comandi / Cerca' : 'Commands / Search' }}</span>
-          </span>
-          <kbd class="rounded bg-fg/10 px-1.5 py-0.5 text-[0.65rem] text-fg/75">⌘K</kbd>
-        </button>
 
         <p class="mt-6 font-mono text-caption tracking-mono text-accent">{{ ui.tocIndex }}</p>
         <nav aria-label="On this page" class="mt-4 grid grid-cols-2 gap-x-3 gap-y-1 lg:flex lg:flex-col">
@@ -50,7 +42,8 @@ import { cn } from "../lib/utils";
         </nav>
 
         <dl class="mt-8 space-y-4 border-t border-fg/10 pt-6">
-          <div>
+          <!-- On mobile the intro already carries company, role and contacts. -->
+          <div class="hidden lg:block">
             <dt class="font-mono text-caption tracking-mono text-accent">{{ ui.tocCurrentWork }}</dt>
             <dd class="mt-1 font-serif text-small text-fg">
               <a [href]="profile.company.href" target="_blank" rel="noreferrer" class="hover:text-accent">{{ profile.company.name }}</a>
@@ -60,12 +53,12 @@ import { cn } from "../lib/utils";
           <div>
             <dt class="font-mono text-caption tracking-mono text-accent">{{ ui.tocLanguages }}</dt>
             <dd class="mt-1 flex items-center gap-3 font-mono text-caption tracking-mono">
-              <button type="button" (click)="setLang('it')" [class]="lang() === 'it' ? 'text-accent' : 'text-muted hover:text-fg'" [attr.aria-pressed]="lang() === 'it'">{{ lang() === 'it' ? 'Italian' : 'IT' }}</button>
+              <button type="button" (click)="setLang('it')" [class]="lang() === 'it' ? 'text-accent' : 'text-muted hover:text-fg'" [attr.aria-pressed]="lang() === 'it'">{{ lang() === 'it' ? 'Italiano' : 'IT' }}</button>
               <span class="text-fg/20">·</span>
               <button type="button" (click)="setLang('en')" [class]="lang() === 'en' ? 'text-accent' : 'text-muted hover:text-fg'" [attr.aria-pressed]="lang() === 'en'">{{ lang() === 'en' ? 'English' : 'EN' }}</button>
             </dd>
           </div>
-          <div>
+          <div class="hidden lg:block">
             <dt class="font-mono text-caption tracking-mono text-accent">{{ ui.tocContact }}</dt>
             <dd class="mt-1 flex flex-wrap gap-x-3 gap-y-1 font-mono text-caption tracking-mono">
               <a [href]="'mailto:' + profile.email" class="text-muted hover:text-accent">Email</a>
@@ -92,9 +85,5 @@ export class TocComponent {
   setLang(next: Lang) {
     setLanguage(next);
     this.appRef.tick();
-  }
-
-  openPalette() {
-    window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true, bubbles: true }));
   }
 }

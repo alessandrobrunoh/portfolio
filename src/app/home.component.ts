@@ -1,15 +1,12 @@
 import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, inject, signal } from "@angular/core";
 import { Title } from "@angular/platform-browser";
-import { BlogComponent } from "./blog.component";
 import { ContactComponent } from "./contact.component";
 import { ExperienceComponent } from "./experience.component";
 import { FooterComponent } from "./footer.component";
-import { FutureProjectsComponent } from "./future-projects.component";
 import { IconComponent } from "./icon.component";
 import { IntroComponent } from "./intro.component";
 import { OpenSourceComponent } from "./open-source.component";
 import { ProjectsComponent } from "./projects.component";
-import { PulseComponent } from "./pulse.component";
 import { StackComponent } from "./stack.component";
 import { TocComponent } from "./toc.component";
 import { TOC, UI } from "../lib/site";
@@ -18,16 +15,13 @@ import { TOC, UI } from "../lib/site";
   selector: "app-home",
   standalone: true,
   imports: [
-    BlogComponent,
     ContactComponent,
     ExperienceComponent,
     FooterComponent,
-    FutureProjectsComponent,
     IconComponent,
     IntroComponent,
     OpenSourceComponent,
     ProjectsComponent,
-    PulseComponent,
     StackComponent,
     TocComponent,
   ],
@@ -44,13 +38,10 @@ import { TOC, UI } from "../lib/site";
         <app-toc [active]="active()" />
         <main>
           <app-intro />
-          <app-experience />
           <app-projects />
+          <app-experience />
           <app-open-source />
           <app-stack />
-          <app-pulse />
-          <app-future-projects />
-          <app-blog />
           <app-contact />
           <app-footer />
         </main>
@@ -95,7 +86,7 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.title.setTitle("Alessandro Bruno — Systems & Product Engineer");
+    this.title.setTitle("Alessandro Bruno — Software Engineer, Rust / Backend");
     const ids = TOC.map((item) => item.href.slice(1));
     const els = ids.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => el !== null);
     if (els.length === 0) return;

@@ -161,11 +161,11 @@ Tinted neutrals toward hue 264, plus one indigo signal. Every color is OKLCH. Ne
 ### Neutral
 
 - **Paper Canvas** (`oklch(0.96 0.008 264)` / dark `oklch(0.07 0.006 264)`): page background. Cool, slightly blue-gray paper, never warm cream, never pure white.
-- **Sheet** (`oklch(0.995 0.004 264)` / dark `oklch(0.13 0.01 264)`): cards, chips, dialogs, the command palette, TOC command trigger. One step above the canvas.
+- **Sheet** (`oklch(0.995 0.004 264)` / dark `oklch(0.13 0.01 264)`): cards, chips, dialogs. One step above the canvas.
 - **Ink** (`oklch(0.24 0.03 264)` / dark `oklch(0.94 0.01 260)`): headlines, names, primary sentences.
 - **Graphite** (`oklch(0.48 0.03 264)` / dark `oklch(0.68 0.016 260)`): ledes, helper text, inactive nav, placeholders.
 - **On Signal** (`oklch(0.99 0.004 264)` / dark `oklch(0.12 0.02 264)`): text and icons sitting on the filled accent CTA.
-- **Overlay** (`color-mix(in oklch, var(--fg) 38%, transparent)` light / canvas 82% dark): dialog and palette scrim, then `backdrop-blur`.
+- **Overlay** (`color-mix(in oklch, var(--fg) 38%, transparent)` light / canvas 82% dark): dialog scrim, then `backdrop-blur`.
 
 Hairlines are not a named swatch. They are always `color-mix(in oklch, var(--fg) 10–15%, transparent)`. Hover borders mix the accent at ~40–55%.
 
@@ -196,13 +196,13 @@ Hairlines are not a named swatch. They are always `color-mix(in oklch, var(--fg)
 
 ### Named Rules
 
-**The Dual Voice Rule.** If a human is speaking (name, bio, project story, thanks), it is Fraunces. If the site is indexing, tagging, or commanding (`⌘K`, `01`, `now`, `Rust`), it is DM Mono. Do not set body copy in mono. Do not set a section title in mono. Do not introduce Inter, Geist, or a second serif.
+**The Dual Voice Rule.** If a human is speaking (name, bio, project story, thanks), it is Fraunces. If the site is indexing, tagging, or commanding (`01`, `now`, `Rust`), it is DM Mono. Do not set body copy in mono. Do not set a section title in mono. Do not introduce Inter, Geist, or a second serif.
 
 **The Light Display Rule.** Display and headline stay at weight 300. Fraunces at 600 or 700 on a hero name turns the journal into a poster. Italics are reserved for the last name and short pull-quotes (thesis line), not for emphasis inside body copy.
 
 ## 4. Elevation
 
-Flat at rest. Depth is a 1px hairline and a one-step surface shift (canvas → sheet). Shadows appear only as a reaction: hover lift, dialog, command palette. No ambient drop shadow on resting cards.
+Flat at rest. Depth is a 1px hairline and a one-step surface shift (canvas → sheet). Shadows appear only as a reaction: hover lift, dialog. No ambient drop shadow on resting cards.
 
 A fixed paper-grain layer (`z-index: 20`, non-interactive) sits above the whole page. It is atmosphere, not a card treatment. Do not put grain on individual components.
 
@@ -211,7 +211,7 @@ A fixed paper-grain layer (`z-index: 20`, non-interactive) sits above the whole 
 - **Hairline / `shadow-border`:** `0 0 0 1px color-mix(in oklch, var(--fg) 10%, transparent)`. Resting cards, chips, ghost buttons, the TOC command trigger, tool slots.
 - **Hairline hover / `shadow-border-hover`:** `0 0 0 1px color-mix(in oklch, var(--accent) 55%, transparent)`. Ghost controls when pointed at.
 - **Lift / `shadow-lift`:** accent ring + soft ink umbra (`0 12px 28px -16px` at 28% fg). Hover on project cards, work cards, signal cards, scroll-to-top. Always paired with a 2–4px translateY.
-- **Dialog / `shadow-dialog`:** hairline + deeper umbra (`0 24px 48px -24px` at 40% fg). Command palette and modal/sheet only.
+- **Dialog / `shadow-dialog`:** hairline + deeper umbra (`0 24px 48px -24px` at 40% fg). Modal/sheet only.
 - **TOC inset:** `inset 2px 0 0 0 var(--accent)`. Reserved for an active rail mark; the live TOC uses a tinted fill instead (`bg-accent/10`). Do not combine both.
 
 ### Named Rules
@@ -231,7 +231,7 @@ Chrome (nav, icon buttons, form-like controls) is slightly squared. Actions that
 - **Ghost:** Sheet fill, Graphite text, hairline, same pill and type. Hover: Ink text. Used for Copy email / Get in touch.
 - **Chrome (`[appButton]` default/ghost/link):** Fraunces body, 4px radius, 10×16px, `min-h-11`. Primary chrome fills accent; ghost chrome is transparent + hairline; link is accent text, no padding, underline on hover. Active scale `0.96`.
 - **Focus:** `outline: 2px solid var(--accent); outline-offset: 2px`. Never a box-shadow ring in a second color.
-- **Icon buttons** (theme, CV download, palette, scroll-top): 36–44px, muted at rest, Ink or Signal on hover. Scroll-top is a 40px circle, Sheet fill, hairline, lift on hover.
+- **Icon buttons** (theme, CV download, scroll-top): 36–44px, muted at rest, Ink or Signal on hover. Scroll-top is a 40px circle, Sheet fill, hairline, lift on hover.
 
 ### Chips
 
@@ -250,21 +250,17 @@ Chrome (nav, icon buttons, form-like controls) is slightly squared. Actions that
 
 ### Inputs / Fields
 
-The only persistent field is the command palette search: transparent, no border of its own, Fraunces body, Graphite placeholder, accent compass icon on the left, `ESC` kbd on the right. The chrome around it is the palette panel (16px radius, hairline, dialog shadow). Do not draw a Material outlined text field.
+The site has no persistent text fields. If one is ever added: transparent, no border of its own, Fraunces body, Graphite placeholder. Do not draw a Material outlined text field.
 
 ### Navigation
 
-- **Sidebar TOC (from `lg`):** sticky under the name. Name is Fraunces subhead. Command trigger is a full-width Sheet row with compass + `⌘K`. Index label in Signal mono. Links: Fraunces small, 36px min height, mono number in a 20px slot. Active = `bg-accent/10` + Signal text. Hover = Sheet + Ink. Below: current work, IT/EN toggle, mail/GitHub. Language toggle is two mono captions; the active language is Signal.
+- **Sidebar TOC (from `lg`):** sticky under the name. Name is Fraunces subhead. Index label in Signal mono. Links: Fraunces small, 36px min height, mono number in a 20px slot. Active = `bg-accent/10` + Signal text. Hover = Sheet + Ink. Below: current work, IT/EN toggle, mail/GitHub. Language toggle is two mono captions; the active language is Signal.
 - **Mobile:** name + theme in the header row; TOC becomes a 2-column grid. No hamburger drawer as the primary pattern on the home page (a compact nav with menu exists for tighter headers).
 - **Skip link:** visually hidden until focused, then a Sheet chip at `top-4 left-4`.
 
 ### Section Head
 
 Mono index (`02`) in Signal + Fraunces headline. A 2.75rem × 2px Signal bar draws in as the heading enters the viewport (`section-mark`). Optional Graphite mono kicker on the right (`timeline / decisions`, `selected work / 2024—now`).
-
-### Command Palette
-
-Fullscreen dim + blur overlay. Panel: `max-w-2xl`, 16px radius, Sheet, hairline, dialog shadow, ~12vh from the top. Groups: Navigation, Projects, Writing, Actions, System. Rows are Fraunces; shortcuts are DM Mono kbd. Selection = Signal tint. `⌘K` opens, `Escape` closes.
 
 ### Dialog / Sheet
 

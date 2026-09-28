@@ -6,6 +6,8 @@ export interface Profile {
   name: string;
   role: string;
   shortRole: string;
+  /** One line after the role: what I build, in recruiter terms. */
+  headline: string;
   location: string;
   github: string;
   website: string;
@@ -146,7 +148,7 @@ export interface Pulse {
   phases: PulsePhase[];
 }
 
-export type MarkName = "grok" | "zed" | "delta" | "gitbutler";
+export type MarkName = "openai" | "zed" | "delta" | "gitbutler";
 
 export interface Tool {
   name: string;
