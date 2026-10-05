@@ -23,8 +23,8 @@ import {
 } from "../lib/theme";
 
 /*
- * Sky geometry, in viewBox units (0 0 160 48 drawn at 0.525 px/unit in the 84x36 box;
- * "meet" leaves 10.29 painted units above y=0 and below y=48).
+ * Sky geometry, in viewBox units (0 0 160 48 drawn in a 7:3 box, 65x28 at 0.408 px/unit in the
+ * nav; "meet" leaves 10.29 painted units above y=0 and below y=48).
  * - Dial: centre (CX, CY), radius R = the UTC day, 00:00 left to 24:00 right.
  * - Horizon: 1px hairline at y = CY, x 6..154. The sky clip is y <= CY plus the slot circle.
  * - Slot: circle r 12.5 at the current UTC time (glyph radius 11 + 1.5 air). It cuts the dial
@@ -87,13 +87,13 @@ function domTheme(): ResolvedTheme {
       (pointerleave)="release()"
       (focus)="release()"
       (blur)="release()"
-      class="theme-clock mt-3 flex w-full items-center gap-2.5 rounded-md bg-surface px-2.5 py-2 text-left shadow-border"
+      class="theme-clock flex h-9 items-center gap-2 rounded-lg border border-line px-1.5 text-left"
       [class.is-committed]="committed()"
       [class.is-low]="isLow()"
       [attr.aria-label]="ariaLabel()"
       [attr.data-tooltip]="tooltip()"
     >
-      <span class="theme-clock-sky relative block h-9 w-[5.25rem] shrink-0" aria-hidden="true">
+      <span class="theme-clock-sky relative block h-7 w-[4.0833rem] shrink-0" aria-hidden="true">
         <svg viewBox="0 0 160 48" class="absolute inset-0 size-full text-fg">
           <defs>
             <clipPath [attr.id]="skyId">
@@ -162,9 +162,9 @@ function domTheme(): ResolvedTheme {
           />
         </svg>
       </span>
-      <span class="theme-clock-hint min-w-0 font-mono text-caption tracking-mono" aria-hidden="true">
-        <span class="theme-clock-hint-clock truncate text-muted">{{ clock() }}</span>
-        <span class="theme-clock-hint-action truncate">{{ actionHint() }}</span>
+      <span class="theme-clock-hint hidden shrink-0 whitespace-nowrap pr-1.5 font-mono text-[0.6875rem] xl:grid" aria-hidden="true">
+        <span class="theme-clock-hint-clock text-muted">{{ clock() }}</span>
+        <span class="theme-clock-hint-action">{{ actionHint() }}</span>
       </span>
     </button>
     <span class="sr-only" role="status">{{ announcement() }}</span>

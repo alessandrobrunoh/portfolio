@@ -3,6 +3,7 @@ import { Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 
 import { KeybindComponent } from "./keybind.component";
+import { SiteNavComponent } from "./site-nav.component";
 import { TocComponent } from "./toc.component";
 import { BLOG, PROFILE, UI, lang } from "../lib/site";
 import type { TocItem } from "../lib/site.types";
@@ -10,65 +11,62 @@ import type { TocItem } from "../lib/site.types";
 @Component({
   selector: "app-blog-post",
   standalone: true,
-  imports: [KeybindComponent, TocComponent],
+  imports: [KeybindComponent, SiteNavComponent, TocComponent],
   template: `
     <div class="min-h-dvh bg-canvas">
       <div class="scroll-progress" aria-hidden="true"></div>
+      <app-site-nav [home]="false" />
       @if (post(); as p) {
-        <div class="mx-auto grid max-w-6xl gap-10 px-4 py-8 sm:px-6 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-16 lg:py-12">
+        <div class="container-x page-shell">
           <app-toc [items]="headingToc()" [active]="active()" />
           <main id="article" class="min-w-0">
-            <a
-              href="/"
-              (click)="goBack($event)"
-              class="inline-flex items-center gap-2 font-mono text-caption tracking-mono text-muted transition-colors duration-150 hover:text-fg"
-            >
+            <a href="/" (click)="goBack($event)" class="inline-flex min-h-9 items-center gap-2 meta-mono transition-colors duration-150 hover:text-fg">
               {{ ui.backToBlog }}
             </a>
 
             <article class="mt-8 max-w-3xl">
-              <p class="stagger-in font-mono text-caption tracking-mono text-accent">{{ p.subtitle }}</p>
-              <h1 id="article-title" class="stagger-in mt-2 font-display text-heading-sm text-fg sm:text-heading">{{ p.title }}</h1>
-              <app-keybind class="stagger-in mt-4 inline-flex">{{ p.status }}</app-keybind>
+              <p class="stagger-in eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>{{ p.subtitle }}</p>
+              <h1 id="article-title" class="stagger-in mt-5 scroll-mt-24 text-heading font-medium tracking-display text-fg">{{ p.title }}<span class="brand-dot" aria-hidden="true">.</span></h1>
+              <app-keybind class="stagger-in mt-5 inline-flex">{{ p.status }}</app-keybind>
 
-              <div class="stagger-in mt-10 max-w-prose space-y-8 font-serif text-lede text-muted">
-                <section id="context" class="scroll-mt-8">
-                  <h2 class="font-display text-subhead text-fg">{{ sectionLabels[0] }}</h2>
+              <div class="stagger-in mt-12 max-w-prose space-y-10 text-lede text-muted">
+                <section id="context" class="scroll-mt-24">
+                  <h2 class="text-title font-medium tracking-tight text-fg">{{ sectionLabels[0] }}</h2>
                   <p class="mt-3">{{ p.body[0] }}</p>
                 </section>
-                <section id="practice" class="scroll-mt-8">
-                  <h2 class="font-display text-subhead text-fg">{{ sectionLabels[1] }}</h2>
+                <section id="practice" class="scroll-mt-24">
+                  <h2 class="text-title font-medium tracking-tight text-fg">{{ sectionLabels[1] }}</h2>
                   <p class="mt-3">{{ p.body[1] }}</p>
-                  <h3 id="detail" class="mt-8 font-display text-body text-fg">{{ sectionLabels[2] }}</h3>
+                  <h3 id="detail" class="mt-8 scroll-mt-24 text-subhead font-medium tracking-tight text-fg">{{ sectionLabels[2] }}</h3>
                   <p class="mt-3">{{ p.body[2] }}</p>
                 </section>
                 @if (p.body[3]; as note) {
-                  <section id="notes" class="scroll-mt-8 border-t border-fg/10 pt-8">
-                    <h2 class="font-display text-subhead text-fg">Field note</h2>
+                  <section id="notes" class="scroll-mt-24 border-t border-line pt-8">
+                    <h2 class="text-title font-medium tracking-tight text-fg">Field note</h2>
                     <p class="mt-3">{{ note }}</p>
                   </section>
                 }
                 @if (p.slug === 'publishing-a-crate-without-an-audience') {
-                  <section class="article-visual article-chart mt-10 rounded-md border border-fg/10 bg-surface p-4 font-mono text-caption tracking-mono text-muted" aria-label="API adoption chart">
-                    <div class="flex items-center justify-between border-b border-fg/10 pb-3"><span class="text-accent">adoption / first 8 weeks</span><span>ducklake-orm</span></div>
+                  <section class="panel mt-10 p-5 font-mono text-caption text-muted" aria-label="API adoption chart">
+                    <div class="flex items-center justify-between border-b border-line pb-3"><span class="text-accent">adoption / first 8 weeks</span><span>ducklake-orm</span></div>
                     <div class="mt-5 flex h-32 items-end gap-2">
                       @for (height of [18, 26, 31, 46, 52, 68, 78, 94]; track height; let i = $index) {
                         <div class="article-chart-bar" [style.height.%]="height" [style.animation-delay.ms]="i * 70"><span>{{ i + 1 }}</span></div>
                       }
                     </div>
-                    <p class="mt-3 text-fg/55">The useful signal was not raw downloads. It was the moment examples started looking like real applications.</p>
+                    <p class="mt-8 text-muted">The useful signal was not raw downloads. It was the moment examples started looking like real applications.</p>
                   </section>
                 } @else if (p.slug === 'what-i-got-wrong-about-event-buses') {
-                  <pre class="article-code mt-10 overflow-x-auto rounded-md p-4 font-mono text-small leading-6" aria-label="Event processing code example"><code><span class="code-muted">// delivered is not processed</span>
+                  <pre class="article-code mt-10 overflow-x-auto rounded-lg p-5 font-mono text-small leading-6" aria-label="Event processing code example"><code><span class="code-muted">// delivered is not processed</span>
 <span class="code-keyword">let</span> message = stream.read().<span class="code-function">await</span>?;
 <span class="code-keyword">if</span> (worker.handle(&amp;message).<span class="code-function">await</span>?) &#123;
   stream.<span class="code-function">ack</span>(message.id).<span class="code-function">await</span>?;
 &#125;</code></pre>
-                  <div class="article-callout mt-4 rounded-md border border-accent/20 bg-accent/5 p-4 font-serif text-small text-muted">The acknowledgement belongs after the side effect, not after the read. That one line is where delivery becomes a system you can reason about.</div>
+                  <div class="mt-4 rounded-lg border border-signal/30 bg-signal/5 p-5 text-small text-muted">The acknowledgement belongs after the side effect, not after the read. That one line is where delivery becomes a system you can reason about.</div>
                 } @else {
-                  <section class="article-diff mt-10 overflow-hidden rounded-md border border-fg/10 bg-surface font-mono text-caption tracking-mono" aria-label="Pull request diff">
-                    <div class="flex items-center justify-between border-b border-fg/10 px-4 py-3"><span class="text-accent">extensions/jdl · pull request</span><span class="text-muted">+18 −4</span></div>
-                    <div class="space-y-1 px-4 py-4 text-small leading-6"><p><span class="mr-3 text-fg/35">@@</span><span class="text-muted">grammar fixture / parser recovery</span></p><p><span class="mr-3 text-[#65b891]">+</span><span class="text-fg">add fixture for nested entity declarations</span></p><p><span class="mr-3 text-[#d77d8a]">−</span><span class="text-fg/60">skip malformed input silently</span></p><p><span class="mr-3 text-[#65b891]">+</span><span class="text-fg">assert diagnostic points to the token</span></p></div>
+                  <section class="panel mt-10 overflow-hidden font-mono text-caption" aria-label="Pull request diff">
+                    <div class="flex items-center justify-between border-b border-line px-5 py-3"><span class="text-accent">extensions/jdl · pull request</span><span class="text-muted">+18 −4</span></div>
+                    <div class="space-y-1 px-5 py-4 text-small leading-6"><p><span class="mr-3 text-muted">@@</span><span class="text-muted">grammar fixture / parser recovery</span></p><p><span class="diff-add mr-3">+</span><span class="text-fg">add fixture for nested entity declarations</span></p><p><span class="diff-del mr-3">−</span><span class="text-muted">skip malformed input silently</span></p><p><span class="diff-add mr-3">+</span><span class="text-fg">assert diagnostic points to the token</span></p></div>
                   </section>
                 }
               </div>
@@ -76,9 +74,9 @@ import type { TocItem } from "../lib/site.types";
           </main>
         </div>
       } @else {
-        <main class="mx-auto max-w-3xl px-4 py-12 text-center sm:px-6 lg:py-16">
-          <p class="font-serif text-subhead text-fg">{{ ui.postNotFound }}</p>
-          <a href="/" (click)="goBack($event)" class="mt-4 inline-flex font-mono text-caption tracking-mono text-accent hover:underline">{{ ui.backToBlog }}</a>
+        <main class="container-x py-40 text-center">
+          <p class="text-title font-medium tracking-tight text-fg">{{ ui.postNotFound }}</p>
+          <a href="/" (click)="goBack($event)" class="btn btn-ghost mt-6">{{ ui.backToBlog }}</a>
         </main>
       }
     </div>

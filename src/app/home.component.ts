@@ -8,8 +8,8 @@ import { IntroComponent } from "./intro.component";
 import { OpenSourceComponent } from "./open-source.component";
 import { ProjectsComponent } from "./projects.component";
 import { StackComponent } from "./stack.component";
-import { TocComponent } from "./toc.component";
-import { TOC, UI } from "../lib/site";
+import { SiteNavComponent } from "./site-nav.component";
+import { TOC, UI, lang } from "../lib/site";
 
 @Component({
   selector: "app-home",
@@ -22,44 +22,37 @@ import { TOC, UI } from "../lib/site";
     IntroComponent,
     OpenSourceComponent,
     ProjectsComponent,
+    SiteNavComponent,
     StackComponent,
-    TocComponent,
   ],
   template: `
     <div class="min-h-dvh bg-canvas">
       <div class="scroll-progress" aria-hidden="true"></div>
       <a
         href="#intro"
-        class="sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:block focus:bg-surface focus:px-3 focus:py-2 focus:text-body focus:text-fg"
+        class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-md focus:bg-surface focus:px-3 focus:py-2 focus:text-small focus:text-fg"
       >
         {{ ui.skipToContent }}
       </a>
-      <div class="mx-auto grid max-w-6xl gap-10 px-4 py-8 sm:px-6 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-16 lg:py-12">
-        <app-toc [active]="active()" />
-        <main>
-          <app-intro />
-          <app-projects />
-          <app-experience />
-          <app-open-source />
-          <app-stack />
-          <app-contact />
-          <app-footer />
-        </main>
-      </div>
+      <app-site-nav [active]="active()" />
+      <main>
+        <app-intro />
+        <app-projects />
+        <app-experience />
+        <app-open-source />
+        <app-stack />
+        <app-contact />
+      </main>
+      <app-footer />
 
-      <!-- Floating Quick Scroll-to-Top Button -->
       <button
         type="button"
         (click)="scrollToTop()"
-        [class]="
-          showScrollTop()
-            ? 'opacity-100 translate-y-0 pointer-events-auto'
-            : 'opacity-0 translate-y-4 pointer-events-none'
-        "
-        class="fixed bottom-6 right-6 z-40 inline-flex size-10 items-center justify-center rounded-full bg-surface text-fg shadow-lift border border-fg/15 transition-all duration-300 hover:text-accent hover:border-accent/40 hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent cursor-pointer"
-        aria-label="Scroll back to top"
+        [class]="showScrollTop() ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'"
+        class="scroll-top"
+        [attr.aria-label]="lang() === 'it' ? 'Torna in cima' : 'Scroll back to top'"
       >
-        <svg appIcon="arrow-up" class="size-4 transition-transform duration-200 hover:-translate-y-0.5"></svg>
+        <svg appIcon="arrow-up" class="size-4"></svg>
       </button>
     </div>
   `,
@@ -68,6 +61,7 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
   active = signal("#intro");
   showScrollTop = signal(false);
   protected readonly ui = UI;
+  protected readonly lang = lang;
   private observer: IntersectionObserver | null = null;
   private revealObserver: IntersectionObserver | null = null;
   private readonly title = inject(Title);

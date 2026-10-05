@@ -8,8 +8,8 @@ export const THEME_CHANGE_EVENT = "portfolio:theme-change";
 export const LIGHT_START_HOUR_UTC = 6;
 export const DARK_START_HOUR_UTC = 20;
 
-const LIGHT_THEME_COLOR = "#eceef4";
-const DARK_THEME_COLOR = "#0b0c10";
+const LIGHT_THEME_COLOR = "#f4f6f8";
+const DARK_THEME_COLOR = "#0b0d10";
 
 let refreshTimer: ReturnType<typeof setTimeout> | undefined;
 let visibilityBound = false;
