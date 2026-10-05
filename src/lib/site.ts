@@ -9,6 +9,7 @@ import type {
   BlogPost,
   Profile,
   Project,
+  Principle,
   Pulse,
   Role,
   Stack,
@@ -54,6 +55,7 @@ export const FUTURE_PROJECTS: FutureProject[] = [...EN.FUTURE_PROJECTS];
 export const BLOG: BlogPost[] = [...EN.BLOG];
 export const PULSE: Pulse = { ...EN.PULSE };
 export const TOOLS: Tool[] = [...EN.TOOLS];
+export const PRINCIPLES: Principle[] = [...EN.PRINCIPLES];
 export const UI: UiStrings = { ...EN.UI, sectionTitles: { ...EN.UI.sectionTitles } };
 
 export function setLanguage(next: Lang) {
@@ -77,6 +79,8 @@ export function setLanguage(next: Lang) {
   Object.assign(PULSE, data.PULSE);
   TOOLS.length = 0;
   TOOLS.push(...data.TOOLS);
+  PRINCIPLES.length = 0;
+  PRINCIPLES.push(...data.PRINCIPLES);
   Object.assign(UI, data.UI, { sectionTitles: { ...data.UI.sectionTitles } });
 
   lang.set(next);

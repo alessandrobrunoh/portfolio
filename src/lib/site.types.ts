@@ -35,12 +35,19 @@ export interface Company {
   summary: string;
 }
 
+/** A measured result. Rendered only when present — never fill with estimates. */
+export interface Impact {
+  value: string;
+  label: string;
+}
+
 export interface Role {
   title: string;
   dates: string;
   current: boolean;
   bullets: string[];
   tags: string[];
+  impact?: Impact[];
 }
 
 export interface Education {
@@ -80,6 +87,15 @@ export interface Project {
   highlights: string[];
   learned: string;
   body: string;
+  /** Case-study context: who had the problem and why it mattered. */
+  problem?: string;
+  impact?: Impact[];
+}
+
+/** One line of "How I work": a principle and how it shows up in practice. */
+export interface Principle {
+  title: string;
+  body: string;
 }
 
 export interface StackGroup {
@@ -108,6 +124,8 @@ export interface FutureProject {
   highlights: string[];
   learned: string;
   body: string;
+  problem?: string;
+  impact?: Impact[];
 }
 
 export type BlogStatus = "Planned" | "Draft" | "Published";
@@ -175,6 +193,9 @@ export interface UiStrings {
     stack: string;
     futureProjects: string;
     contact: string;
+    work: string;
+    approach: string;
+    writing: string;
   };
   backToBlog: string;
   postNotFound: string;
@@ -202,5 +223,6 @@ export interface SiteData {
   BLOG: BlogPost[];
   PULSE: Pulse;
   TOOLS: Tool[];
+  PRINCIPLES: Principle[];
   UI: UiStrings;
 }

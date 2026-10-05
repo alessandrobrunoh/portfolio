@@ -10,7 +10,7 @@ export const IT: SiteData = {
     name: "Alessandro Bruno",
     role: "Software Engineer — Systems & Product",
     shortRole: "Backend · Full-stack · Event-driven",
-    headline: "Progetto e rilascio software in produzione dall'inizio alla fine — servizi, API e interfacce, con lo stack che il problema richiede.",
+    headline: "Costruisco software in produzione dall'inizio alla fine, vicino alle persone che lo usano — servizi, API, interfacce e le integrazioni tra loro, con lo stack che il problema richiede.",
     location: "Bologna, Italia",
     github: "https://github.com/alessandrobrunoh",
     website: "https://alessandrobrunoh.it",
@@ -19,15 +19,15 @@ export const IT: SiteData = {
     avatar: "/avatar.jpg",
     company: { name: "Luna S.r.l.", href: "https://lunapartner.it" },
     bio: "Software engineer a Bologna. Da oltre un anno lavoro su sistemi in produzione in Luna S.r.l.: microservizi event-driven con consumer asincroni su Valkey Streams, una console operatore in Spring Boot e React, trace e log con OpenTelemetry verso Grafana, Loki e Tempo — tutto passato da code review senior. Scelgo lo strumento in base al problema, non il contrario: Rust, Java, TypeScript, Python, Angular o React. La mia tesi triennale, PETRA, è una piattaforma event-driven per la telemetria asincrona in tempo reale. Fuori dal lavoro costruisco strumenti un livello più in basso: ducklake-orm, un ORM pubblicato su crates.io, e Mnemosyne, una cronologia semantica del codice basata su Tree-sitter.",
-    availability: "Disponibile per ruoli da software engineer — backend, full-stack o sistemi; da remoto o ibrido in Italia, con preavviso. Cittadino UE.",
+    availability: "Disponibile per ruoli da Software Engineer e Forward Deployed Engineer — backend, full-stack o a contatto con il cliente; da remoto o ibrido in Italia, con preavviso. Cittadino UE.",
   },
 
   TOC: [
     { n: "01", href: "#intro", label: "Intro" },
-    { n: "02", href: "#projects", label: "Progetti" },
-    { n: "03", href: "#experience", label: "Esperienza" },
-    { n: "04", href: "#oss", label: "Open Source" },
-    { n: "05", href: "#stack", label: "Stack" },
+    { n: "02", href: "#experience", label: "Esperienza" },
+    { n: "03", href: "#work", label: "Lavori" },
+    { n: "04", href: "#approach", label: "Come lavoro" },
+    { n: "05", href: "#writing", label: "Scritti" },
     { n: "06", href: "#contact", label: "Contatti" },
   ],
 
@@ -36,7 +36,7 @@ export const IT: SiteData = {
     href: "https://lunapartner.it",
     location: "Bologna, Italia",
     summary:
-      "In Luna S.r.l. ho iniziato su una piattaforma fleet e dopo due mesi sono passato al backend Rust in produzione del cliente, con code review senior. Oggi lavoro su quella piattaforma event-driven e su una nuova console operatore.",
+      "In Luna S.r.l. lavoro sui sistemi dei clienti. Ho iniziato su una piattaforma fleet e dopo due mesi sono passato al backend in produzione di un cliente, con code review senior. Oggi lavoro dentro quella piattaforma event-driven e costruisco una nuova console operatore per chi la gestisce.",
   },
 
   ROLES: [
@@ -45,9 +45,9 @@ export const IT: SiteData = {
       dates: "Giu 2026 — presente",
       current: true,
       bullets: [
-        "Servizi Rust event-driven in produzione per carichi dei clienti: consumer asincroni su Valkey Streams, payload su S3.",
-        "Trace e log con OpenTelemetry verso Grafana, Loki e Tempo.",
-        "Una nuova console operatore in Spring Boot e React — API e interfaccia.",
+        "Dentro la piattaforma in produzione di un cliente: servizi Rust event-driven che elaborano i suoi carichi — consumer asincroni su Valkey Streams, payload su S3.",
+        "Ho reso i servizi osservabili da capo a capo: trace e log con OpenTelemetry verso Grafana, Loki e Tempo, così i problemi si seguono tra i servizi invece di indovinarli.",
+        "Sto costruendo una nuova console operatore dall'inizio alla fine — API in Spring Boot e interfaccia React per chi gestisce la piattaforma ogni giorno.",
       ],
       tags: ["Rust", "Tokio", "Valkey Streams", "S3", "OpenTelemetry", "Spring Boot", "React"],
     },
@@ -57,8 +57,8 @@ export const IT: SiteData = {
       current: false,
       bullets: [
         "Piattaforma fleet in Spring Boot, Angular e React Native, con aggiornamenti live via WebSocket.",
-        "Dopo due mesi, passato al backend Rust del cliente con code review senior.",
-        "Branch Git impilati e diff piccoli e revisionabili come metodo di lavoro.",
+        "Dopo due mesi, passato al backend Rust in produzione di un cliente, rilasciando con code review senior.",
+        "Diff piccoli e revisionabili su branch impilati — l'abitudine che rende sicuro portare modifiche nel sistema di qualcun altro.",
       ],
       tags: ["Spring Boot", "Angular", "React Native", "WebSocket", "Rust"],
     },
@@ -103,6 +103,7 @@ export const IT: SiteData = {
       id: "eivar",
       name: "Eivar-Online",
       blurb: "Prototipo multiplayer: simulazione Rust server-authoritative, stato replicato, predizione lato client.",
+      problem: "Un multiplayer si rompe appena ci si fida del client. Volevo capire se i pattern event-driven del lavoro potessero tenere coerente un unico mondo condiviso tra molti giocatori.",
       href: "https://github.com/alessandrobrunoh/Eivar-Online",
       stars: GITHUB_STATS.stars["Eivar-Online"] ?? 0,
       lang: "Rust",
@@ -122,7 +123,8 @@ export const IT: SiteData = {
     {
       id: "mnemosyne",
       name: "Mnemosyne",
-      blurb: "Cronologia semantica del codice, local-first: simboli e modifiche strutturali via Tree-sitter, non diff per righe.",
+      blurb: "Cronologia semantica del codice, local-first: simboli e modifiche strutturali via Tree-sitter, non diff per righe — interrogabile dagli agenti AI via MCP.",
+      problem: "Git ricorda solo quello che committi. Tra un commit e l'altro il lavoro si perde, e i diff per righe non dicono quale funzione è cambiata né come. Volevo una cronologia locale che capisca la struttura del codice, interrogabile anche dagli strumenti AI.",
       href: "https://github.com/alessandrobrunoh/Mnemosyne",
       stars: GITHUB_STATS.stars["Mnemosyne"] ?? 0,
       lang: "Rust",
@@ -143,6 +145,7 @@ export const IT: SiteData = {
       id: "ducklake",
       name: "ducklake-orm",
       blurb: "ORM Rust per DuckDB e DuckLake, pubblicato su crates.io — derive macro, query builder, pooling, migrazioni, time travel.",
+      problem: "DuckDB e DuckLake sono ottimi per l'analisi, ma usarli da Rust significava SQL scritto a mano e risultati poco tipizzati. Volevo l'ergonomia di un ORM senza nascondere quello che il database fa bene.",
       href: "https://github.com/alessandrobrunoh/ducklake-orm",
       stars: GITHUB_STATS.stars["ducklake-orm"] ?? 0,
       lang: "Rust",
@@ -162,6 +165,7 @@ export const IT: SiteData = {
       id: "weaklings",
       name: "Weaklings-Manager",
       blurb: "Piattaforma self-hosted per gilde di Albion — banca, divisione del loot, analisi delle battaglie, login Discord.",
+      problem: "Una gilda gestiva banca, divisione del loot ed eventi su fogli di calcolo e messaggi Discord. Serviva un unico strumento affidabile per gli ufficiali, con accessi legati ai ruoli che le persone avevano già su Discord.",
       href: "https://github.com/alessandrobrunoh/Weaklings-Manager",
       stars: GITHUB_STATS.stars["Weaklings-Manager"] ?? 0,
       lang: "Angular",
@@ -182,6 +186,7 @@ export const IT: SiteData = {
       id: "ketchapp",
       name: "KetchApp",
       blurb: "Produttività nello studio come microservizi. Pomodoro, piani con IA, notifiche asincrone.",
+      problem: "Un team universitario aveva bisogno di un'app di studio con sessioni Pomodoro, piani generati dall'AI e notifiche — costruita da più persone insieme senza pestarsi i piedi.",
       href: "https://github.com/orgs/ketchapp-for-study",
       lang: "Java",
       meta: "Org",
@@ -197,6 +202,7 @@ export const IT: SiteData = {
       id: "briscola",
       name: "Briscola Online",
       blurb: "Briscola in tempo reale via WebSocket. Multiplayer full-stack.",
+      problem: "Un gruppo di amici voleva giocare a Briscola online, insieme e in tempo reale, a un tavolo che si comportasse come quello vero.",
       href: "https://github.com/alessandrobrunoh/Progetto-Ingegneria-Web",
       stars: GITHUB_STATS.stars["Progetto-Ingegneria-Web"] ?? 0,
       lang: "Vue",
@@ -213,6 +219,7 @@ export const IT: SiteData = {
       id: "sdp",
       name: "Semantic Delta Protocol",
       blurb: "Modifiche al codice a livello di AST — Tree-sitter e hashing strutturale.",
+      problem: "I diff per righe perdono il codice quando si sposta o viene rinominato. Editor e strumenti devono seguire una funzione attraverso un refactor, non un numero di riga.",
       href: "https://github.com/alessandrobrunoh/Semantic-Delta-Protocol",
       lang: "Rust",
       meta: "Protocollo",
@@ -231,6 +238,7 @@ export const IT: SiteData = {
       id: "vapt",
       name: "VAPT Research",
       blurb: "Report di sicurezza su un fork di OWASP Juice Shop.",
+      problem: "Un corso di sicurezza chiedeva una vera valutazione, non un dump di scanner: trovare cosa è davvero sfruttabile in un'app volutamente vulnerabile e spiegare come correggerlo.",
       href: "https://github.com/alessandrobrunoh/Relazione-Sicurezza-Privacy",
       lang: "TypeScript",
       meta: "Ricerca",
@@ -397,6 +405,29 @@ export const IT: SiteData = {
     { name: "GitButler", product: "Client Git", href: "https://gitbutler.com", mark: "gitbutler" },
   ],
 
+  PRINCIPLES: [
+    {
+      title: "Parto dal problema, non dallo stack",
+      body: "Prima di scegliere uno strumento capisco come lavorano davvero le persone che usano il sistema. Rust dove contano latenza e correttezza, Spring Boot o React dove è quello che il team usa già.",
+    },
+    {
+      title: "Rilasci piccoli e frequenti",
+      body: "Diff piccoli e revisionabili su branch impilati. Facili da rivedere, facili da annullare, sicuri da portare dentro il sistema in produzione di qualcun altro.",
+    },
+    {
+      title: "Osservabile dal primo giorno",
+      body: "Trace, log e metriche arrivano insieme alla feature, non dopo l'incidente. Quando qualcosa si rompe da un cliente, le prove battono le ipotesi.",
+    },
+    {
+      title: "Mi prendo tutta la fetta",
+      body: "Dall'API allo schermo al deploy. Preferisco possedere una fetta sottile dall'inizio alla fine che uno strato spesso a metà.",
+    },
+    {
+      title: "Lo metto per iscritto",
+      body: "Decisioni, compromessi e runbook in linguaggio semplice, così il prossimo engineer — o il cliente — può andare avanti senza di me nella stanza.",
+    },
+  ],
+
   UI: {
     skipToContent: "Vai al contenuto",
     tocIndex: "Indice",
@@ -413,6 +444,9 @@ export const IT: SiteData = {
       stack: "Stack",
       futureProjects: "Esplorazioni",
       contact: "Contatti",
+      work: "Lavori",
+      approach: "Come lavoro",
+      writing: "Scritti",
     },
     backToBlog: "← Torna al Blog",
     postNotFound: "Articolo non trovato.",
