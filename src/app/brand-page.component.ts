@@ -10,41 +10,28 @@ type Swatch = { name: string; hex: string; ink: "light" | "dark" };
 
 const PALETTE: { group: { en: string; it: string }; note: { en: string; it: string }; swatches: Swatch[] }[] = [
   {
-    group: { en: "Electric blue", it: "Blu elettrico" },
-    note: { en: "The logo dot. An accent, never a wash.", it: "Il punto del logo. Un accento, mai uno sfondo." },
+    group: { en: "Core", it: "Base" },
+    note: { en: "The logo dot, the surfaces it sits on, and the ink.", it: "Il punto del logo, le superfici e l'inchiostro." },
     swatches: [
-      { name: "Signal", hex: "#0066FF", ink: "light" },
-      { name: "Digital", hex: "#0A6CFF", ink: "light" },
-      { name: "Highlight", hex: "#00B7FF", ink: "dark" },
-    ],
-  },
-  {
-    group: { en: "Charcoal", it: "Antracite" },
-    note: { en: "The home surface for the metallic mark.", it: "La superficie di casa del marchio metallico." },
-    swatches: [
-      { name: "Canvas", hex: "#0B0D10", ink: "light" },
-      { name: "Surface", hex: "#101318", ink: "light" },
-      { name: "Elevated", hex: "#151A21", ink: "light" },
-      { name: "Line", hex: "#252B34", ink: "light" },
-    ],
-  },
-  {
-    group: { en: "White", it: "Bianco" },
-    note: { en: "Paper for documents and the light theme.", it: "Carta per documenti e tema chiaro." },
-    swatches: [
+      { name: "Primary Blue", hex: "#3B82F6", ink: "light" },
+      { name: "Soft Gray", hex: "#E8ECF2", ink: "dark" },
+      { name: "Light Blue Gray", hex: "#D5DCE6", ink: "dark" },
+      { name: "Deep Ink", hex: "#1F2937", ink: "light" },
       { name: "White", hex: "#FFFFFF", ink: "dark" },
-      { name: "Soft", hex: "#F4F6F8", ink: "dark" },
-      { name: "Muted", hex: "#EEF1F5", ink: "dark" },
+      { name: "Muted Slate", hex: "#6B7280", ink: "light" },
     ],
   },
   {
-    group: { en: "Silver", it: "Argento" },
-    note: { en: "Supports the metal without competing with the blue.", it: "Sostiene il metallo senza competere col blu." },
+    group: { en: "Interface", it: "Interfaccia" },
+    note: { en: "Page, text and border roles on the site.", it: "Ruoli di pagina, testo e bordi sul sito." },
     swatches: [
-      { name: "Silver 300", hex: "#D8DAE1", ink: "dark" },
-      { name: "Silver 400", hex: "#BBC3CF", ink: "dark" },
-      { name: "Silver 500", hex: "#8D98A8", ink: "dark" },
-      { name: "Silver 700", hex: "#5C6675", ink: "light" },
+      { name: "Page subtle", hex: "#F8FAFC", ink: "dark" },
+      { name: "Text primary", hex: "#111827", ink: "light" },
+      { name: "Text secondary", hex: "#4B5563", ink: "light" },
+      { name: "Border", hex: "#E5E7EB", ink: "dark" },
+      { name: "Border strong", hex: "#CBD5E1", ink: "dark" },
+      { name: "Blue hover", hex: "#2563EB", ink: "light" },
+      { name: "Dark section", hex: "#0F172A", ink: "light" },
     ],
   },
 ];
@@ -67,8 +54,8 @@ const PALETTE: { group: { en: string; it: string }; note: { en: string; it: stri
           <p class="section-lede stagger-in mt-6">
             {{
               it()
-                ? 'Il monogramma ab. è un nastro di metallo con un solo punto blu elettrico. Qui trovi i file ufficiali, i colori e le regole per usarli bene.'
-                : 'The ab. monogram is a ribbon of metal with a single electric-blue dot. Here are the official files, the colours and the rules for using them well.'
+                ? 'Il monogramma ab. è fatto di grandi forme geometriche piatte, grigio-azzurre, con un solo punto blu. Qui trovi i file ufficiali, i colori e le regole per usarli bene.'
+                : 'The ab. monogram is made of large, flat geometric forms in pale gray-blue, with a single blue dot. Here are the official files, the colours and the rules for using them well.'
             }}
           </p>
           <div class="stagger-in mt-8 flex flex-wrap gap-2.5">
@@ -83,8 +70,8 @@ const PALETTE: { group: { en: string; it: string }; note: { en: string; it: stri
           </div>
 
           <div class="brand-stage stagger-in mt-14" aria-hidden="true">
-            <span class="brand-stage-glow"></span>
-            <img src="/brand/ab-logo-metallic-full.webp" alt="" width="640" height="431" />
+            <img src="/brand/ab-monogram.webp" alt="" width="960" height="666" />
+            <span class="brand-wordmark">Alessandro Bruno</span>
           </div>
         </header>
 
@@ -93,8 +80,8 @@ const PALETTE: { group: { en: string; it: string }; note: { en: string; it: stri
             <p class="section-lede">
               {{
                 it()
-                  ? 'Metallico come identità principale, bianco e nero per UI, stampa e formati piccoli. Usa sempre questi file: mai ridisegnare il marchio con un font.'
-                  : 'Metallic as the primary identity, white and black for UI, print and small sizes. Always use these files: never redraw the mark with a typeface.'
+                  ? 'Monogramma, logo completo e wordmark, ognuno in versione soft, nera e bianca. Usa sempre questi file: mai ridisegnare il marchio con un font.'
+                  : 'Monogram, full logo and wordmark, each in soft, black and white. Always use these files: never redraw the mark with a typeface.'
               }}
             </p>
           </app-section-head>
@@ -102,8 +89,13 @@ const PALETTE: { group: { en: string; it: string }; note: { en: string; it: stri
           <ul class="brand-assets">
             @for (asset of assets; track asset.id) {
               <li class="card reveal-on-scroll">
-                <div class="brand-asset-preview" [class.is-light]="asset.surface === 'light'">
-                  <img [src]="asset.preview" [alt]="asset.name" loading="lazy" />
+                <div class="brand-asset-preview" [class.is-dark]="asset.surface === 'dark'">
+                  @if (asset.preview) {
+                    <img [src]="asset.preview" [alt]="asset.name" loading="lazy" [class.is-small]="asset.kind === 'full'" />
+                  }
+                  @if (asset.kind !== 'monogram') {
+                    <span class="brand-wordmark" [class.text-white]="asset.ink === 'white'" [class.is-solo]="asset.kind === 'wordmark'">Alessandro Bruno</span>
+                  }
                 </div>
                 <div class="flex items-start justify-between gap-3 p-5">
                   <div class="min-w-0">
@@ -129,8 +121,8 @@ const PALETTE: { group: { en: string; it: string }; note: { en: string; it: stri
             <p class="section-lede">
               {{
                 it()
-                  ? 'Antracite, argento e bianco fanno il lavoro. Il blu elettrico è punteggiatura: punto del logo, link, focus, un bottone.'
-                  : 'Charcoal, silver and white do the work. Electric blue is punctuation: the logo dot, links, focus, one button.'
+                  ? 'Bianco, grigi tenui e inchiostro fanno il lavoro. Il blu è punteggiatura: punto del logo, link, stato attivo, focus, una call to action.'
+                  : 'White, soft grays and ink do the work. Blue is punctuation: the logo dot, links, active states, focus, one call to action.'
               }}
             </p>
           </app-section-head>
@@ -165,31 +157,31 @@ const PALETTE: { group: { en: string; it: string }; note: { en: string; it: stri
         </section>
 
         <section id="type" class="container-x section">
-          <app-section-head n="03" [title]="it() ? 'Tipografia' : 'Typography'" [kicker]="it() ? 'tre voci' : 'three voices'">
+          <app-section-head n="03" [title]="it() ? 'Tipografia' : 'Typography'" [kicker]="it() ? 'una famiglia' : 'one family'">
             <p class="section-lede">
               {{
                 it()
-                  ? 'Inter parla, Manrope firma, JetBrains Mono misura. Il monogramma è un disegno, non un carattere.'
-                  : 'Inter speaks, Manrope signs, JetBrains Mono measures. The monogram is a drawing, not a typeface.'
+                  ? 'Una sola famiglia, Inter, in pesi diversi. Il monogramma è un disegno, non un carattere.'
+                  : 'One family, Inter, in different weights. The monogram is a drawing, not a typeface.'
               }}
             </p>
           </app-section-head>
 
           <div class="brand-type">
             <div class="reveal-on-scroll">
-              <p class="eyebrow">Inter · 300–600</p>
-              <p class="mt-4 text-heading font-medium tracking-display text-fg">Precise by default<span class="brand-dot">.</span></p>
-              <p class="mt-3 text-small text-muted">{{ it() ? 'Interfaccia, titoli e testo. Titoli a 500, tracking −0.04em.' : 'Interface, headings and body. Headings at 500, −0.04em tracking.' }}</p>
+              <p class="eyebrow">Inter · 500 · −0.03em</p>
+              <p class="mt-4 text-heading font-medium tracking-display text-fg">Clarity first<span class="brand-dot">.</span></p>
+              <p class="mt-3 text-small text-muted">{{ it() ? 'Titoli: Inter 500–600, tracking stretto.' : 'Headings: Inter 500–600, tight tracking.' }}</p>
             </div>
             <div class="reveal-on-scroll">
-              <p class="eyebrow">Manrope Light · 300</p>
+              <p class="eyebrow">Inter · 400 · 1.6</p>
+              <p class="mt-4 max-w-prose text-lede text-fg">{{ it() ? 'Costruisco sistemi affidabili e i prodotti che ci stanno sopra.' : 'I build reliable systems and the products on top of them.' }}</p>
+              <p class="mt-3 text-small text-muted">{{ it() ? 'Testo: Inter 400, 16px e oltre, interlinea 1.6.' : 'Body: Inter 400, 16px and up, 1.6 line height.' }}</p>
+            </div>
+            <div class="reveal-on-scroll">
+              <p class="eyebrow">Inter Light · 300 · 0.35em</p>
               <p class="brand-wordmark mt-6 text-subhead text-fg">Alessandro Bruno</p>
-              <p class="mt-4 text-small text-muted">{{ it() ? 'Solo il wordmark e le etichette. Maiuscolo, tracking 0.40em.' : 'Wordmark and labels only. Uppercase, 0.40em tracking.' }}</p>
-            </div>
-            <div class="reveal-on-scroll">
-              <p class="eyebrow">JetBrains Mono · 400</p>
-              <p class="mt-6 font-mono text-lede text-fg">01 · #0066FF · v2026</p>
-              <p class="mt-4 text-small text-muted">{{ it() ? 'Indici, codici, dati. Mai paragrafi.' : 'Indexes, codes, data. Never paragraphs.' }}</p>
+              <p class="mt-4 text-small text-muted">{{ it() ? 'Solo il wordmark: maiuscolo, tracking molto largo, peso leggero.' : 'Wordmark only: uppercase, very wide tracking, light weight.' }}</p>
             </div>
           </div>
         </section>
@@ -199,15 +191,15 @@ const PALETTE: { group: { en: string; it: string }; note: { en: string; it: stri
             <dl class="grid gap-6 sm:grid-cols-3">
               <div>
                 <dt class="eyebrow">{{ it() ? 'Spazio di rispetto' : 'Clear space' }}</dt>
-                <dd class="mt-2 text-small text-fg">{{ it() ? '1× il diametro del punto, 2× negli hero.' : '1× the dot diameter, 2× in heroes.' }}</dd>
+                <dd class="mt-2 text-small text-fg">{{ it() ? '1× il diametro del punto, 1.5× preferito, 2× negli hero.' : '1× the dot diameter, 1.5× preferred, 2× in heroes.' }}</dd>
               </div>
               <div>
                 <dt class="eyebrow">{{ it() ? 'Monogramma minimo' : 'Minimum monogram' }}</dt>
-                <dd class="mt-2 text-small text-fg">{{ it() ? '32px (metallico 64px).' : '32px (metallic 64px).' }}</dd>
+                <dd class="mt-2 text-small text-fg">{{ it() ? '16px assoluto, 24px in UI, 64px+ negli hero.' : '16px absolute, 24px in UI, 64px+ in heroes.' }}</dd>
               </div>
               <div>
                 <dt class="eyebrow">{{ it() ? 'Logo completo minimo' : 'Minimum full logo' }}</dt>
-                <dd class="mt-2 text-small text-fg">{{ it() ? '180px di larghezza.' : '180px wide.' }}</dd>
+                <dd class="mt-2 text-small text-fg">{{ it() ? '120px di larghezza (180px consigliati).' : '120px wide (180px recommended).' }}</dd>
               </div>
             </dl>
           </app-section-head>
@@ -246,29 +238,33 @@ export class BrandPageComponent implements OnInit, OnDestroy {
 
   protected readonly doEn = [
     "Use the official files from this page.",
-    "Metallic on charcoal or soft white, with generous air around it.",
-    "Black on light backgrounds, white on dark ones.",
-    "Keep the dot electric blue in the metallic mark, mark-coloured in monochrome.",
+    "Give the mark quiet, spacious surfaces: white, soft off-white, pale cool gray.",
+    "Black on white for documents and print, white on dark sections.",
+    "Keep the dot blue in the soft mark, mark-coloured in monochrome.",
+    "Always provide alt=\"Alessandro Bruno\".",
   ];
   protected readonly doIt = [
     "Usa i file ufficiali di questa pagina.",
-    "Metallico su antracite o bianco morbido, con molto spazio intorno.",
-    "Nero su sfondi chiari, bianco su sfondi scuri.",
-    "Il punto resta blu elettrico nel metallico, dello stesso colore nel monocromo.",
+    "Dai al marchio superfici quiete e ariose: bianco, off-white, grigio freddo chiaro.",
+    "Nero su bianco per documenti e stampa, bianco sulle sezioni scure.",
+    "Il punto resta blu nel marchio soft, dello stesso colore nel monocromo.",
+    "Fornisci sempre alt=\"Alessandro Bruno\".",
   ];
   protected readonly dontEn = [
-    "Stretch, rotate, skew or crop the mark.",
-    "Add outlines, drop shadows, bevels or glows to the flat versions.",
-    "Recolour the dot, move it, resize it or add more dots.",
-    "Rebuild the monogram with a font or separate the a from the b.",
-    "Place the logo on busy photos or saturated colours.",
+    "Add metallic reflections, chrome, bevels or 3D.",
+    "Add hard outlines or strong shadows.",
+    "Stretch, rotate or change the proportions of the monogram.",
+    "Recolour the dot to an arbitrary colour.",
+    "Place the soft mark on busy imagery or low-contrast surfaces where it disappears.",
+    "Set the wordmark in a decorative typeface.",
   ];
   protected readonly dontIt = [
-    "Stirare, ruotare, inclinare o ritagliare il marchio.",
-    "Aggiungere contorni, ombre, smussi o bagliori alle versioni piatte.",
-    "Ricolorare il punto, spostarlo, ridimensionarlo o aggiungerne altri.",
-    "Ricostruire il monogramma con un font o separare la a dalla b.",
-    "Mettere il logo su foto affollate o colori saturi.",
+    "Aggiungere riflessi metallici, cromature, smussi o 3D.",
+    "Aggiungere contorni netti o ombre forti.",
+    "Stirare, ruotare o cambiare le proporzioni del monogramma.",
+    "Ricolorare il punto con un colore qualsiasi.",
+    "Mettere il marchio soft su immagini affollate o superfici a basso contrasto dove sparisce.",
+    "Comporre il wordmark con un carattere decorativo.",
   ];
 
   ngOnInit() {

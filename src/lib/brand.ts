@@ -1,67 +1,111 @@
-/** The official ab. logo family (public/logos) plus the light previews the site shows for each. */
+/** The official soft-minimal logo family (public/brand) and how the site previews each file. */
 export interface BrandAsset {
   id: string;
   name: string;
   file: string;
-  preview: string;
+  /** What the preview shows: the mark, the mark with the wordmark under it, or the wordmark alone. */
+  kind: "monogram" | "full" | "wordmark";
+  /** Raster preview of the mark (full and monogram only). */
+  preview?: string;
   /** Background the asset is designed for. */
-  surface: "dark" | "light";
+  surface: "light" | "dark";
+  /** Ink of the wordmark in the preview. */
+  ink: "ink" | "white";
   use: { en: string; it: string };
 }
 
 export const BRAND_ASSETS: BrandAsset[] = [
   {
-    id: "monogram-metallic",
-    name: "Monogram — Metallic",
-    file: "/logos/ab-monogram-metallic.svg",
-    preview: "/brand/ab-monogram-metallic.webp",
-    surface: "dark",
-    use: { en: "Primary mark. Hero, avatars, navigation.", it: "Marchio principale. Hero, avatar, navigazione." },
+    id: "monogram",
+    name: "Monogram",
+    file: "/brand/ab-soft-minimal-monogram.svg",
+    kind: "monogram",
+    preview: "/brand/ab-monogram.webp",
+    surface: "light",
+    ink: "ink",
+    use: { en: "Primary mark. Navbar, avatars, favicon, hero.", it: "Marchio principale. Navbar, avatar, favicon, hero." },
   },
   {
-    id: "logo-metallic-full",
-    name: "Logo — Metallic",
-    file: "/logos/ab-logo-metallic-full.svg",
-    preview: "/brand/ab-logo-metallic-full.webp",
-    surface: "dark",
-    use: { en: "Formal identity. Covers, title slides, brand pages.", it: "Identità formale. Copertine, slide, pagine brand." },
+    id: "full",
+    name: "Full logo",
+    file: "/brand/ab-soft-minimal-full.svg",
+    kind: "full",
+    preview: "/brand/ab-monogram.webp",
+    surface: "light",
+    ink: "ink",
+    use: { en: "Hero, brand page, case study covers, presentations.", it: "Hero, pagina brand, copertine, presentazioni." },
   },
   {
-    id: "monogram-white",
-    name: "Monogram — White",
-    file: "/logos/ab-monogram-white.svg",
-    preview: "/brand/ab-monogram-white.webp",
-    surface: "dark",
-    use: { en: "Flat mark for dark UI, video and overlays.", it: "Marchio piatto per UI scure, video e overlay." },
-  },
-  {
-    id: "logo-white-full",
-    name: "Logo — White",
-    file: "/logos/ab-logo-white-full.svg",
-    preview: "/brand/ab-logo-white-full.webp",
-    surface: "dark",
-    use: { en: "Dark footers, presentations, banners.", it: "Footer scuri, presentazioni, banner." },
+    id: "wordmark",
+    name: "Wordmark",
+    file: "/brand/ab-soft-minimal-wordmark.svg",
+    kind: "wordmark",
+    surface: "light",
+    ink: "ink",
+    use: { en: "Footer, email signature, narrow layouts.", it: "Footer, firma email, layout stretti." },
   },
   {
     id: "monogram-black",
     name: "Monogram — Black",
-    file: "/logos/ab-monogram-black.svg",
+    file: "/brand/ab-soft-minimal-monogram-black.svg",
+    kind: "monogram",
     preview: "/brand/ab-monogram-black.webp",
     surface: "light",
-    use: { en: "Light backgrounds, print, favicon, watermarks.", it: "Sfondi chiari, stampa, favicon, filigrane." },
+    ink: "ink",
+    use: { en: "White backgrounds, print, CVs, documentation.", it: "Sfondi bianchi, stampa, CV, documentazione." },
   },
   {
-    id: "logo-black-full",
-    name: "Logo — Black",
-    file: "/logos/ab-logo-black-full.svg",
-    preview: "/brand/ab-logo-black-full.webp",
+    id: "full-black",
+    name: "Full logo — Black",
+    file: "/brand/ab-soft-minimal-full-black.svg",
+    kind: "full",
+    preview: "/brand/ab-monogram-black.webp",
     surface: "light",
-    use: { en: "CV, PDFs, letterheads, documents.", it: "CV, PDF, carta intestata, documenti." },
+    ink: "ink",
+    use: { en: "Formal documents, résumés, PDF exports.", it: "Documenti formali, curriculum, PDF." },
+  },
+  {
+    id: "wordmark-black",
+    name: "Wordmark — Black",
+    file: "/brand/ab-soft-minimal-wordmark-black.svg",
+    kind: "wordmark",
+    surface: "light",
+    ink: "ink",
+    use: { en: "A purely typographic signature.", it: "Una firma solo tipografica." },
+  },
+  {
+    id: "monogram-white",
+    name: "Monogram — White",
+    file: "/brand/ab-soft-minimal-monogram-white.svg",
+    kind: "monogram",
+    preview: "/brand/ab-monogram-white.webp",
+    surface: "dark",
+    ink: "white",
+    use: { en: "Dark backgrounds, overlays, video.", it: "Sfondi scuri, overlay, video." },
+  },
+  {
+    id: "full-white",
+    name: "Full logo — White",
+    file: "/brand/ab-soft-minimal-full-white.svg",
+    kind: "full",
+    preview: "/brand/ab-monogram-white.webp",
+    surface: "dark",
+    ink: "white",
+    use: { en: "Dark heroes, dark footers, banners.", it: "Hero scuri, footer scuri, banner." },
+  },
+  {
+    id: "wordmark-white",
+    name: "Wordmark — White",
+    file: "/brand/ab-soft-minimal-wordmark-white.svg",
+    kind: "wordmark",
+    surface: "dark",
+    ink: "white",
+    use: { en: "Minimal dark layouts.", it: "Layout scuri minimali." },
   },
 ];
 
-export const LOGO_SVG = "/logos/ab-monogram-metallic.svg";
-export const WORDMARK_SVG = "/logos/ab-logo-metallic-full.svg";
+export const LOGO_SVG = "/brand/ab-soft-minimal-monogram.svg";
+export const WORDMARK_SVG = "/brand/ab-soft-minimal-wordmark.svg";
 
 /**
  * Copies an SVG file's markup to the clipboard. The fetch happens inside a ClipboardItem promise

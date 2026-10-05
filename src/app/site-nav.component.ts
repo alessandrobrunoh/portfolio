@@ -5,7 +5,7 @@ import { ThemeToggleComponent } from "./theme-toggle.component";
 import { LOGO_SVG, WORDMARK_SVG, copySvg } from "../lib/brand";
 import { PROFILE, TOC, UI, lang, setLanguage, type Lang } from "../lib/site";
 
-/** Fixed top bar on every page: the metallic mark, section links, language, theme, email. */
+/** Fixed top bar on every page: the soft monogram, section links, language, theme, contact. */
 @Component({
   selector: "app-site-nav",
   standalone: true,
@@ -23,8 +23,8 @@ import { PROFILE, TOC, UI, lang, setLanguage, type Lang } from "../lib/site";
             [attr.aria-haspopup]="'menu'"
             [attr.aria-expanded]="brandMenu()"
           >
-            <img class="dark:hidden" src="/brand/ab-monogram-black-160.webp" alt="" width="160" height="114" />
-            <img class="hidden dark:block" src="/brand/ab-monogram-white-160.webp" alt="" width="160" height="114" />
+            <img class="dark:hidden" src="/brand/ab-monogram-160.webp" alt="" width="160" height="111" />
+            <img class="hidden dark:block" src="/brand/ab-monogram-white-160.webp" alt="" width="160" height="111" />
             <span class="brand-wordmark hidden xl:inline" aria-hidden="true">{{ profile.name }}</span>
             <span class="sr-only">{{ profile.name }} — home</span>
           </a>
@@ -79,9 +79,8 @@ import { PROFILE, TOC, UI, lang, setLanguage, type Lang } from "../lib/site";
             <span class="nav-controls-sep" aria-hidden="true"></span>
             <app-theme-toggle />
           </div>
-          <a [href]="'mailto:' + profile.email" class="btn btn-primary btn-sm hidden sm:inline-flex">
-            <svg appIcon="mail" class="size-3.5"></svg>
-            {{ lang() === 'it' ? 'Scrivimi' : 'Email me' }}
+          <a [href]="linkFor('#contact')" class="btn btn-primary btn-sm hidden sm:inline-flex">
+            {{ lang() === 'it' ? 'Contattami' : 'Contact' }}
           </a>
           <button
             type="button"

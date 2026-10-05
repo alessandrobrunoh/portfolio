@@ -12,9 +12,10 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
   template: `
     <section id="intro" class="scroll-mt-16">
       <div class="hero">
+        <!-- Soft abstract brand shapes: two pale discs, no imagery behind the logo. -->
         <div class="hero-backdrop" aria-hidden="true">
-          <img class="hero-photo" src="/brand/hero-light.webp" alt="" width="1440" height="941" decoding="async" />
-          <div class="hero-grid"></div>
+          <span class="hero-shape hero-shape-a"></span>
+          <span class="hero-shape hero-shape-b"></span>
         </div>
 
         <div class="container-x hero-inner">
@@ -27,7 +28,8 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
             </p>
 
             <h1>
-              <span class="hero-name brand-wordmark">{{ profile.name }}</span>
+              <span class="eyebrow hero-eyebrow">Software · Systems · Product</span>
+              <span class="sr-only">{{ profile.name }} — </span>
               <span class="hero-title">
                 <span class="line"><span>{{ role().main }}</span></span>
                 @if (role().sub) {
@@ -39,9 +41,9 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
             <p class="hero-lede stagger-in">{{ profile.headline }}</p>
 
             <div class="stagger-in flex flex-wrap items-center gap-2.5">
-              <a [href]="'mailto:' + profile.email" class="btn btn-primary">
-                <svg appIcon="mail" class="size-4"></svg>
-                {{ lang() === 'it' ? 'Scrivimi' : 'Email me' }}
+              <a href="#work" class="btn btn-primary">
+                {{ lang() === 'it' ? 'Guarda i lavori' : 'View work' }}
+                <svg appIcon="arrow-right" class="size-4"></svg>
               </a>
               <a href="/alessandro-bruno-cv.pdf" download class="btn btn-ghost">
                 <svg appIcon="download" class="size-4"></svg>
@@ -59,19 +61,12 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
             </p>
           </div>
 
+          <!-- Full logo: the soft monogram with the wordmark set live in Inter under it. -->
           <div class="hero-mark" aria-hidden="true">
-            <div class="hero-mark-glow"></div>
-            <div class="hero-mark-frame">
-              <img
-                class="hero-mark-img"
-                src="/brand/ab-monogram-metallic.webp"
-                alt=""
-                width="960"
-                height="695"
-                fetchpriority="high"
-              />
-              <span class="hero-mark-sheen"></span>
-            </div>
+            <!-- Soft mark on light; the white variant on dark, as the brand asks for dark sections. -->
+            <img class="hero-mark-img dark:hidden" src="/brand/ab-monogram.webp" alt="" width="960" height="666" fetchpriority="high" />
+            <img class="hero-mark-img hidden dark:block" src="/brand/ab-monogram-white.webp" alt="" width="480" height="333" />
+            <span class="hero-mark-wordmark brand-wordmark">{{ profile.name }}</span>
           </div>
         </div>
 

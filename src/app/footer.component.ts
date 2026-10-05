@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { IconComponent } from "./icon.component";
 import { ToolsComponent } from "./tools.component";
-import { PROFILE, lang } from "../lib/site";
+import { PROFILE, TOC, lang } from "../lib/site";
 
 @Component({
   selector: "app-footer",
@@ -13,10 +13,10 @@ import { PROFILE, lang } from "../lib/site";
       <div class="container-x">
         <app-tools />
 
-        <!-- End of page: a sign-off with the white full logo (the footer is always black), not a second contact form. -->
+        <!-- End of page: the white monogram and a sign-off (the footer is always dark), not a second contact form. -->
         <div class="footer-main">
           <div>
-            <img class="footer-logo" src="/brand/ab-logo-white-full.webp" [alt]="profile.name" width="640" height="444" loading="lazy" />
+            <img class="footer-logo" src="/brand/ab-monogram-white.webp" [alt]="profile.name" width="480" height="333" loading="lazy" />
           </div>
           <div class="min-w-0">
             <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span>{{ lang() === 'it' ? 'Sei arrivato alla fine' : 'End of stream' }}</p>
@@ -43,10 +43,16 @@ import { PROFILE, lang } from "../lib/site";
           </div>
         </div>
 
+        <!-- The wordmark, as the brand asks for in footers: Inter Light, uppercase, wide tracking, white on dark. -->
         <p class="footer-giant" aria-hidden="true">{{ profile.name }}</p>
 
         <div class="footer-bottom">
           <span>© {{ year }} {{ profile.name }} · {{ profile.location }}</span>
+          <nav class="flex flex-wrap gap-x-5 gap-y-2" [attr.aria-label]="lang() === 'it' ? 'Sezioni' : 'Sections'">
+            @for (item of toc; track item.href) {
+              @if (item.href !== '#intro') { <a [href]="'/' + item.href">{{ item.label }}</a> }
+            }
+          </nav>
           <span class="flex gap-5">
             <a routerLink="/brand">Brand</a>
             <a [href]="'mailto:' + profile.email">Email</a>
@@ -60,6 +66,7 @@ import { PROFILE, lang } from "../lib/site";
 export class FooterComponent {
   protected readonly profile = PROFILE;
   protected readonly lang = lang;
+  protected readonly toc = TOC;
   protected readonly year = new Date().getFullYear();
 
   scrollToTop() {
