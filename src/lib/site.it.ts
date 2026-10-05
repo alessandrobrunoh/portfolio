@@ -420,22 +420,27 @@ export const IT: SiteData = {
 
   PRINCIPLES: [
     {
+      tag: "Capire",
       title: "Parto dal problema, non dallo stack",
       body: "Prima di scegliere uno strumento capisco come lavorano davvero le persone che usano il sistema. Rust dove contano latenza e correttezza, Spring Boot o React dove è quello che il team usa già.",
     },
     {
+      tag: "Rilasciare",
       title: "Rilasci piccoli e frequenti",
       body: "Diff piccoli e revisionabili su branch impilati. Facili da rivedere, facili da annullare, sicuri da portare dentro il sistema in produzione di qualcun altro.",
     },
     {
+      tag: "Osservare",
       title: "Osservabile dal primo giorno",
       body: "Trace, log e metriche arrivano insieme alla feature, non dopo l'incidente. Quando qualcosa si rompe da un cliente, le prove battono le ipotesi.",
     },
     {
+      tag: "Possedere",
       title: "Mi prendo tutta la fetta",
       body: "Dall'API allo schermo al deploy. Preferisco possedere una fetta sottile dall'inizio alla fine che uno strato spesso a metà.",
     },
     {
+      tag: "Condividere",
       title: "Lo metto per iscritto",
       body: "Decisioni, compromessi e runbook in linguaggio semplice, così il prossimo engineer — o il cliente — può andare avanti senza di me nella stanza.",
     },

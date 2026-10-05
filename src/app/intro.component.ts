@@ -16,7 +16,15 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
         <div class="hero-backdrop" aria-hidden="true">
           <span class="hero-shape hero-shape-a"></span>
           <span class="hero-shape hero-shape-b"></span>
-          <div class="hero-grid"><span class="hero-grid-pulse"></span></div>
+          <div class="hero-grid">
+            <!-- The plane drifts one cell diagonally on a loop; packets run along its lines like events on a stream. -->
+            <div class="hero-grid-plane">
+              <span class="hero-grid-pulse"></span>
+              @for (p of packets; track $index) {
+                <span class="grid-packet" [class.is-h]="p.h" [style.--c]="p.c" [style.--r]="p.r" [style.--d]="p.d + 's'" [style.--delay]="p.delay + 's'"></span>
+              }
+            </div>
+          </div>
         </div>
 
         <div class="container-x hero-inner">
@@ -169,6 +177,17 @@ export class IntroComponent {
     return [[...new Set(first)], [...new Set(second)]];
   });
   /** "Software Engineer — Systems & Product" sets as two display lines; the second ends on the logo dot. */
+  /** Packets on the hero grid: column/row on the 64px lattice, duration and delay in seconds. */
+  protected readonly packets = [
+    { h: false, c: 15, r: 0, d: 6.5, delay: 0 },
+    { h: false, c: 19, r: 0, d: 8, delay: 2.4 },
+    { h: false, c: 22, r: 0, d: 7, delay: 4.6 },
+    { h: false, c: 4, r: 0, d: 7.5, delay: 1.2 },
+    { h: true, c: 0, r: 5, d: 9, delay: 0.8 },
+    { h: true, c: 0, r: 8, d: 10, delay: 3.6 },
+    { h: true, c: 0, r: 11, d: 8.5, delay: 6 },
+  ];
+
   /** Stays "on" after a click so the knob rests on the right while the game is open. */
   protected readonly switched = signal(false);
   readonly playRequested = output<void>();

@@ -400,22 +400,27 @@ export const EN: SiteData = {
 
   PRINCIPLES: [
     {
+      tag: "Understand",
       title: "Start from the problem, not the stack",
       body: "I learn how the people who use a system actually work before I pick a tool. Rust where latency and correctness matter, Spring Boot or React where that is what the team already runs.",
     },
     {
+      tag: "Ship",
       title: "Ship small, ship often",
       body: "Small, reviewable diffs on stacked branches. Easy to review, easy to roll back, and safe to land inside someone else's production system.",
     },
     {
+      tag: "Observe",
       title: "Make it observable from day one",
       body: "Traces, logs and metrics go in with the feature, not after the incident. When something breaks at a client, evidence beats guesses.",
     },
     {
+      tag: "Own",
       title: "Own the whole slice",
       body: "From the API to the screen to the deploy. I would rather own a thin slice end to end than a thick layer halfway.",
     },
     {
+      tag: "Share",
       title: "Write it down",
       body: "Decisions, trade-offs and runbooks in plain language, so the next engineer — or the customer — can follow without me in the room.",
     },

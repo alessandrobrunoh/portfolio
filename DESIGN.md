@@ -86,18 +86,18 @@ The mark files are rasters wrapped in SVG (~1.3MB soft, ~95KB mono), so the site
 
 ## 3. Color
 
-Light is the home of the brand. Dark is the brand's `#0F172A` dark section, used for the footer and as an optional theme.
+Light is the home of the brand. Dark is a deeper night than the brand's `#0F172A` section colour (`#05080F`, still blue-black, never pure black), used for the footer and as the optional theme.
 
 | Role (CSS var) | Light | Dark | Use |
 |---|---|---|---|
-| `--canvas` | `#FFFFFF` | `#0F172A` | Page |
-| `--subtle` | `#F8FAFC` | `#111B2E` | Hero gradient, tech band, contact panel, hovers |
-| `--surface` | `#FFFFFF` | `#131D33` | Cards, nav controls, menus |
-| `--surface-2` | `#F1F4F8` | `#1B2740` | Bar tracks, pressed states |
-| `--line` / `--line-2` / `--line-strong` | `#E5E7EB` / `#D7DCE3` / `#CBD5E1` | `#24314A` / `#2C3A55` / `#3A4A68` | Borders: subtle, standard, strong |
-| `--fg` | `#111827` | `#F1F5F9` | Headings, primary text |
-| `--muted` | `#4B5563` | `#A3B0C2` | Secondary text, ledes |
-| `--faint` | `#6B7280` | `#8695AB` | Captions, labels, meta |
+| `--canvas` | `#FFFFFF` | `#05080F` | Page |
+| `--subtle` | `#F8FAFC` | `#090D17` | Hero gradient, tech band, contact panel, hovers |
+| `--surface` | `#FFFFFF` | `#0C111D` | Cards, nav controls, menus |
+| `--surface-2` | `#F1F4F8` | `#121927` | Bar tracks, pressed states |
+| `--line` / `--line-2` / `--line-strong` | `#E5E7EB` / `#D7DCE3` / `#CBD5E1` | `#19212F` / `#212B3C` / `#2C384D` | Borders: subtle, standard, strong |
+| `--fg` | `#111827` | `#EEF2F7` | Headings, primary text |
+| `--muted` | `#4B5563` | `#9AA6B8` | Secondary text, ledes |
+| `--faint` | `#6B7280` | `#7C889B` | Captions, labels, meta |
 | `--signal` | `#3B82F6` | `#3B82F6` | The dot, focus rings, live dots, progress, spine, chip tints |
 | `--accent` | `#2563EB` | `#7CB1FF` | Blue **text**: links, indexes, active labels |
 | `--cta` / `--cta-hover` | `#2563EB` / `#1D4ED8` | `#3B82F6` / `#2563EB` | Primary button fill |
@@ -129,7 +129,7 @@ Inter only (variable, `opsz` 14–32, 300–700). Code blocks use the system mon
 
 - Container `max-width: 1200px` + gutters 20 / 24 / 32px. Sections `padding-block: clamp(72px … 96px)`.
 - **Nav** (64px, fixed): white at 86% + 10px blur, 1px bottom border. Left: monogram (+ wordmark from `xl`). Centre (from `lg`): `02 Experience · 03 Work · 04 How I work · 05 Contact`, active = `fg` + 4px blue dot. Right: one pill with language (globe + rolling `EN`/`IT`) and theme (sun → moon), then the **Contact** pill CTA; menu button below `lg`. Hides on scroll down, returns on scroll up. Right-click on the mark opens the brand menu (Copy logo as SVG, Copy wordmark as SVG, Brand guidelines).
-- **Hero:** exactly one screen (`min-height: 100svh`, height-aware spacing). Background: `--subtle` → white with two pale discs (the logo's own gray, a 7% blue tint) and a fine **64px engineering grid** behind the mark in both themes (6% ink, faded out radially from the logo), with the same grid in blue showing only inside a soft spot that drifts across it over 14s. Left 7/12: company pill (the easter-egg switch, below), eyebrow `Software · Systems · Product`, display role, lede, **View work** (primary) · **Download CV** (secondary) · GitHub (ghost), availability. Right 5/12: the full logo. A Scroll cue sits bottom-left on desktop; on short phones the mark is hidden.
+- **Hero:** exactly one screen (`min-height: 100svh`, height-aware spacing). Background: `--subtle` → white with two pale discs (the logo's own gray, a 7% blue tint) and a fine **64px engineering grid** behind the mark in both themes (6% ink, faded out radially from the logo). The grid is alive: its plane drifts one cell diagonally every 16s, the same grid in blue shows only inside a soft spot that glides across it over 14s, and thin blue **packets** run along a few grid lines like events on a stream. Left 7/12: company pill (the easter-egg switch, below), eyebrow `Software · Systems · Product`, display role, lede, **View work** (primary) · **Download CV** (secondary) · GitHub (ghost), availability. Right 5/12: the full logo. A Scroll cue sits bottom-left on desktop; on short phones the mark is hidden.
 - **Below the fold:** three proof cards (In production / Published crate / Thesis), then the tech band (two marquees on `--subtle`, top left, bottom right; hovering pauses and swaps solid ↔ outline).
 - **Order:** 01 Intro (bio) → 02 Experience → 03 Work → 04 How I work → 05 Contact → footer. Experience leads because client production work is the strongest proof.
 
@@ -141,13 +141,18 @@ Inter only (variable, `opsz` 14–32, 300–700). Code blocks use the system mon
 - **Cards:** white, 1px `--line`, radius 20, padding 24 (lead up to 40), `shadow-sm` → `shadow-md` + 2px lift on hover.
 - **Timeline:** `11rem | 2.5rem | 1fr` — date, a 1px spine with a 12px ring node (current: filled blue, soft pulse), role with blue-dot bullets, chips, and "Read the case study →" when the role has a case.
 - **Work:** featured case card (problem first, numbered highlights), 2-up project cards, then the **Upstream / open source** list in one bordered card.
-- **How I work:** a horizontal timeline. Five steps on one rail: the rail's blue fill draws left to right when the section is seen, then each 44px node lights up blue in turn (190ms apart) with its title and text fading up. Below `lg` it becomes a swipeable track with scroll-snap.
-- **Easter egg switch:** the company pill in the hero is a button styled as a toggle. On hover/focus the avatar (the knob) slides to the right end with a slight spring, the text shifts left, a blue play glyph appears and the pill tints blue. A click keeps it "on" and opens **Dot Runner**.
-- **Dot Runner** (`app-dot-runner`): a modal (overlay + blur, radius-28 panel) with a canvas game. The blue ab. dot jumps (Space, ↑, W, tap) over ink pills named after real bugs (`unwrap()`, `merge conflict`, `flaky test`, `deadlock`…) and collects commits (blue rings, +25). Speed ramps up; score, commits and best (localStorage) sit under the canvas; the grid drifts behind for depth. Colours come from the live theme tokens. Escape, the close button or the overlay close it; focus is trapped inside and returns to the switch; the page does not scroll while it is open; a hidden tab pauses the run.
+- **How I work:** a journey. A rounded `--subtle` panel holds a soft wave (Catmull-Rom curve through five nodes, rising toward the last) over misty wave shapes and a soft sphere. Each step has a one-word tag in blue (Understand, Ship, Observe, Own, Share), a title and a sentence. When the panel is seen the wave draws itself in blue, each node pops in turn (260ms apart) and its text fades up; the last node is larger, filled and glows. Below `lg` it is a swipeable 80rem track.
+- **Experience entrance:** each row slides in from the left, its node pops, then title, org, bullets (staggered), case link and chips follow.
+- **Work entrance:** cards rise with a slight scale, staggered; highlights and chips follow inside. The featured card has a slow beam of blue light circling its border (`conic-gradient` on a registered `--beam` angle).
+- **Easter egg switch:** the company pill in the hero is a button styled as a toggle. On hover/focus the avatar (the knob) slides to the right end with a slight spring, the text shifts left, a blue play glyph appears and the pill tints blue. A click keeps it "on" and opens the **game hub**.
+- **Game hub** (`app-game-hub`): a modal (overlay + blur, radius-28 panel) that opens on a picker of three cards, each with a tiny animated preview, its controls and the best score. Picking one runs it in place; "← Games" goes back. Escape, the close button or the overlay close it; focus is trapped inside and returns to the switch; the page does not scroll while it is open; a hidden tab pauses a run. Games share `CanvasGame` (`game-kit.ts`): a logical canvas scaled for devicePixelRatio, a loop outside Angular, theme colours read from the live tokens, the shared grid floor, and per-game best scores in localStorage.
+  - **Dot Runner:** the blue dot jumps (Space, ↑, W, tap) over ink pills named after real bugs (`unwrap()`, `merge conflict`, `deadlock`…) and collects commits.
+  - **Ship the Stack:** a stacker. Layers named after the stack (Linux, Docker, PostgreSQL, Rust, Tokio…) slide in blue; drop them (Space, click, tap) on the one below; overhang is cut and tumbles away; ±5px is a "perfect".
+  - **Stack Snake:** the dot eats technologies shown on ink chips; arrows, WASD or swipe; walls ("out of bounds") and your own tail ("circular dependency") end the run.
 - **Contact panel:** `--subtle` card, radius 28, the email as a large link, Copy button, three facts.
 - **Footer:** always the dark section — tools grid, white monogram + sign-off + CTAs, the wordmark large in white, then copyright, section links and Brand / Email / GitHub.
 - **Case pages** (`/projects/:id`, `/work/:id`): page shell with a 14rem "On this page" rail (pill links, active = blue tint). Order: Overview → The problem → What I built → Decisions (cards: context, a `--subtle` "Choice" block, optional code) → Result (only with real numbers) → What I learned → Under the hood (live repo stats, projects only).
-- **Brand page** (`/brand`): stage with the full logo, the nine files as cards (preview on the surface each is drawn for; copy SVG / download), the palette as click-to-copy swatches, Inter specimens, clear space and sizes, Do / Don't.
+- **Brand page** (`/brand`): one guideline sheet. A cover (wordmark title, "Soft minimal logo", description, keywords, copy buttons, the floating mark), then hairline-divided numbered panels, each with a short explanation: 01 Primary logo · 02 Logo mark · 03 Wordmark (each copy SVG / download) · 04 Variations (six tiles on the surface each is drawn for: full and icon, light and dark, black and white monochrome; actions appear on hover) · 05 Colour palette (click-to-copy dots with usage) · 06 Gradient details (a close-up of the mark's own tones) · 07 Clear space (x-unit diagram) · 08 Minimum size · 09 Typography (Aa, weights, character set) · 10 Usage examples (app icon, business card, browser tab, dark banner, built in CSS) · 11 Do · 12 Don't · 13 Official files (all nine SVGs).
 
 ## 8. Content rules
 

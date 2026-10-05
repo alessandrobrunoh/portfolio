@@ -125,6 +125,8 @@ export interface Project {
 
 /** One line of "How I work": a principle and how it shows up in practice. */
 export interface Principle {
+  /** One word for the step on the timeline (Understand, Ship…). */
+  tag: string;
   title: string;
   body: string;
 }

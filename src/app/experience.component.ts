@@ -37,7 +37,7 @@ function buildRoadmap(): RoadmapStep[] {
 
       <ol class="tl">
         @for (step of roadmap(); track step.title) {
-          <li class="tl-row reveal-row" [class.is-current]="step.current">
+          <li class="tl-row reveal-on-scroll" [class.is-current]="step.current">
             <div class="tl-era">
               {{ step.era }}
               @if (step.current) { <span class="pill-now"><span class="size-1.5 rounded-full bg-signal" aria-hidden="true"></span>{{ lang() === 'it' ? 'ora' : 'now' }}</span> }
@@ -69,7 +69,7 @@ function buildRoadmap(): RoadmapStep[] {
               }
               @if (step.tags) {
                 <ul class="mt-5 flex flex-wrap gap-1.5">
-                  @for (tag of step.tags; track tag) { <li class="chip">{{ tag }}</li> }
+                  @for (tag of step.tags; track tag; let ci = $index) { <li class="chip" [style.--ci]="ci">{{ tag }}</li> }
                 </ul>
               }
             </article>

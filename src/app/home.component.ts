@@ -4,7 +4,7 @@ import { ContactComponent } from "./contact.component";
 import { ExperienceComponent } from "./experience.component";
 import { FooterComponent } from "./footer.component";
 import { IconComponent } from "./icon.component";
-import { DotRunnerComponent } from "./dot-runner.component";
+import { GameHubComponent } from "./game-hub.component";
 import { IntroComponent } from "./intro.component";
 import { ProjectsComponent } from "./projects.component";
 import { ApproachComponent } from "./approach.component";
@@ -19,7 +19,7 @@ import { TOC, UI, lang } from "../lib/site";
     ExperienceComponent,
     FooterComponent,
     IconComponent,
-    DotRunnerComponent,
+    GameHubComponent,
     IntroComponent,
     ProjectsComponent,
     SiteNavComponent,
@@ -45,7 +45,7 @@ import { TOC, UI, lang } from "../lib/site";
       <app-footer />
 
       @if (gameOpen()) {
-        <app-dot-runner (closed)="closeGame()" />
+        <app-game-hub (closed)="closeGame()" />
       }
 
       <button
