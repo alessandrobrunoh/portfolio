@@ -76,10 +76,8 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
 
           <!-- Full logo: the soft monogram with the wordmark set live in Inter under it. -->
           <div class="hero-mark" aria-hidden="true">
-            <!-- Soft mark on light; the white variant on dark, as the brand asks for dark sections. -->
             <span class="hero-mark-float">
-              <img class="hero-mark-img dark:hidden" src="/brand/ab-monogram-black.webp" alt="" width="960" height="666" fetchpriority="high" />
-              <img class="hero-mark-img hidden dark:block" src="/brand/ab-monogram-white.webp" alt="" width="480" height="333" />
+              <img class="hero-mark-img" src="/brand/ab-monogram.webp" alt="" width="960" height="666" fetchpriority="high" />
             </span>
             <span class="hero-mark-wordmark brand-wordmark">{{ profile.name }}</span>
           </div>
