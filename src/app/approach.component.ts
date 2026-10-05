@@ -69,7 +69,7 @@ function wavePath(points: readonly [number, number][]): string {
             @for (index of [open()]; track index) {
               <article class="journey-detail-card" aria-labelledby="journey-detail-title">
                 <div class="journey-detail-topline">
-                  <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>Checkpoint 0{{ (open() ?? 0) + 1 }}</p>
+                  <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>{{ selected.tag }}</p>
                   <button type="button" class="journey-close" (click)="close()" [disabled]="transitioning()" [attr.aria-label]="lang() === 'it' ? 'Torna a tutti i checkpoint' : 'Back to all checkpoints'">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="size-4" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6" /></svg>
                   </button>
