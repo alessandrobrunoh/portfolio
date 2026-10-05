@@ -1,4 +1,6 @@
 import { Component, computed } from "@angular/core";
+import { RouterLink } from "@angular/router";
+import { IconComponent } from "./icon.component";
 import { SectionHeadComponent } from "./section-head.component";
 import { COMPANY, EDUCATION, ROLES, UI, lang } from "../lib/site";
 import type { Impact } from "../lib/site.types";
@@ -11,13 +13,14 @@ type RoadmapStep = {
   note?: string;
   tags?: readonly string[];
   impact?: readonly Impact[];
+  caseId?: string;
   current: boolean;
 };
 
 /** Built from the live (language-switched) data, so it must be read after every setLanguage. */
 function buildRoadmap(): RoadmapStep[] {
   return [
-    ...ROLES.map((role) => ({ era: role.dates, title: role.title, org: `${COMPANY.name} · ${COMPANY.location}`, bullets: role.bullets, tags: role.tags, impact: role.impact, current: role.current })),
+    ...ROLES.map((role) => ({ era: role.dates, title: role.title, org: `${COMPANY.name} · ${COMPANY.location}`, bullets: role.bullets, tags: role.tags, impact: role.impact, caseId: role.caseId, current: role.current })),
     { era: EDUCATION.dates, title: EDUCATION.school, org: `${EDUCATION.degree} · ${EDUCATION.native}`, note: EDUCATION.thesis, current: false },
   ];
 }
@@ -25,7 +28,7 @@ function buildRoadmap(): RoadmapStep[] {
 @Component({
   selector: "app-experience",
   standalone: true,
-  imports: [SectionHeadComponent],
+  imports: [IconComponent, RouterLink, SectionHeadComponent],
   template: `
     <section id="experience" class="container-x section scroll-mt-16">
       <app-section-head n="02" [title]="ui.sectionTitles.experience" [kicker]="lang() === 'it' ? 'percorso / decisioni' : 'timeline / decisions'">
@@ -57,6 +60,12 @@ function buildRoadmap(): RoadmapStep[] {
               }
               @if (step.note) {
                 <blockquote class="mt-5 max-w-2xl border-l border-silver/50 pl-4 text-small text-muted">{{ step.note }}</blockquote>
+              }
+              @if (step.caseId) {
+                <a [routerLink]="['/work', step.caseId]" class="case-link mt-5">
+                  <span>{{ lang() === 'it' ? 'Leggi il caso' : 'Read the case study' }}</span>
+                  <svg appIcon="arrow-right" class="size-4"></svg>
+                </a>
               }
               @if (step.tags) {
                 <ul class="mt-5 flex flex-wrap gap-1.5">

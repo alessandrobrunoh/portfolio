@@ -7,7 +7,6 @@ import { IconComponent } from "./icon.component";
 import { IntroComponent } from "./intro.component";
 import { ProjectsComponent } from "./projects.component";
 import { ApproachComponent } from "./approach.component";
-import { WritingComponent } from "./writing.component";
 import { SiteNavComponent } from "./site-nav.component";
 import { TOC, UI, lang } from "../lib/site";
 
@@ -23,7 +22,6 @@ import { TOC, UI, lang } from "../lib/site";
     ProjectsComponent,
     SiteNavComponent,
     ApproachComponent,
-    WritingComponent,
   ],
   template: `
     <div class="min-h-dvh bg-canvas">
@@ -40,7 +38,6 @@ import { TOC, UI, lang } from "../lib/site";
         <app-experience />
         <app-projects />
         <app-approach />
-        <app-writing />
         <app-contact />
       </main>
       <app-footer />

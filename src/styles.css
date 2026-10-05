@@ -1361,6 +1361,62 @@ html.theme-vt::view-transition-new(root) {
     flex-direction: column-reverse;
   }
 
+  /* Link from a timeline role to its case study. */
+  .case-link {
+    display: inline-flex;
+    min-height: 2.5rem;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.875rem;
+    border: 1px solid color-mix(in srgb, var(--signal) 40%, var(--line));
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--signal) 8%, transparent);
+    font-size: var(--text-small);
+    font-weight: 500;
+    color: var(--fg);
+    transition: border-color var(--motion-fast) var(--ease-out-quart), background-color var(--motion-fast) var(--ease-out-quart);
+  }
+
+  .case-link svg {
+    color: var(--accent);
+    transition: transform var(--motion-fast) var(--ease-out-quart);
+  }
+
+  .case-link:hover {
+    border-color: var(--signal);
+    background: color-mix(in srgb, var(--signal) 14%, transparent);
+  }
+
+  .case-link:hover svg {
+    transform: translateX(3px);
+  }
+
+  /* Decisions: context in muted, the choice in full ink under a Manrope label. */
+  .decisions {
+    border-top: 1px solid var(--line);
+  }
+
+  .decision {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 1.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .decision-n {
+    padding-top: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+  }
+
+  .decision-choice {
+    margin-top: 1rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--signal);
+  }
+
   /* ---------- How I work ---------- */
   .principles {
     border-top: 1px solid var(--line);
@@ -1405,30 +1461,6 @@ html.theme-vt::view-transition-new(root) {
     }
     .principle-body {
       grid-column: 2;
-    }
-  }
-
-  /* ---------- Writing ---------- */
-  .writing-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
-  }
-
-  .writing-card {
-    display: flex;
-    height: 100%;
-    min-height: 17rem;
-    flex-direction: column;
-    padding: 1.5rem;
-  }
-
-  @media (max-width: 1023px) {
-    .writing-grid {
-      grid-template-columns: 1fr;
-    }
-    .writing-card {
-      min-height: 0;
     }
   }
 
@@ -2206,25 +2238,6 @@ html.theme-vt::view-transition-new(root) {
     background: color-mix(in srgb, var(--signal) 6%, transparent);
   }
 
-  .article-chart-bar {
-    position: relative;
-    flex: 1;
-    min-width: 0.55rem;
-    border-radius: 4px 4px 0 0;
-    background: linear-gradient(180deg, var(--signal), color-mix(in srgb, var(--signal) 35%, var(--surface)));
-    transform-origin: bottom;
-    animation: chart-grow 1.4s var(--ease-out-quart) both;
-  }
-
-  .article-chart-bar span {
-    position: absolute;
-    top: calc(100% + 0.5rem);
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.6rem;
-    color: var(--muted);
-  }
-
   /* Code is the one place with a fixed palette: a picture of an editor, not UI. */
   .article-code {
     border: 1px solid #252b34;
@@ -2685,8 +2698,7 @@ html.theme-vt::view-transition-new(root) {
   .live-dot,
   .tl-row.is-current .tl-node,
   .data-bar span,
-  .change-track span,
-  .article-chart-bar {
+  .change-track span {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;

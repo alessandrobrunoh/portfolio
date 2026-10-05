@@ -147,7 +147,7 @@ It should feel like a software engineer's workbench, not an agency landing page:
 - Motion is slow and restrained (400–1400ms, ease-out). No bounce. `prefers-reduced-motion` disables choreography.
 - Bilingual EN/IT. Copy changes; the visual system does not.
 
-**Page shell.** Fixed 64px top nav. Full-bleed hero, then numbered sections inside `.container-x` (max 76rem, 20/32px gutter), separated by a content-width hairline: `01 Intro` → `02 Experience` → `03 Work` → `04 How I work` → `05 Writing` → `06 Contact`. Experience comes first because client production work is the strongest proof, for Software Engineer and Forward Deployed Engineer roles alike. Footer is always black (`#000`, dark tokens) with daily tools, the white full logo, a sign-off and the wordmark engraved at display size. A 2px blue gradient scroll-progress bar is pinned to the top. Subpages (project, blog) use the same nav plus a 14rem sticky "On this page" rail.
+**Page shell.** Fixed 64px top nav. Full-bleed hero, then numbered sections inside `.container-x` (max 76rem, 20/32px gutter), separated by a content-width hairline: `01 Intro` → `02 Experience` → `03 Work` → `04 How I work` → `05 Contact`. Experience comes first because client production work is the strongest proof, for Software Engineer and Forward Deployed Engineer roles alike. Footer is always black (`#000`, dark tokens) with daily tools, the white full logo, a sign-off and the wordmark engraved at display size. A 2px blue gradient scroll-progress bar is pinned to the top. Subpages (project, blog) use the same nav plus a 14rem sticky "On this page" rail.
 
 ## 2. Brand Assets in the Interface
 
@@ -261,7 +261,6 @@ Two columns from `lg` (5/12 + 7/12, bottom-aligned): eyebrow `NN —— KICKER` 
 ### Cards
 - **Project lead**: full-row `.card`, eyebrow `01 —— FEATURED`, heading-sm name, then **The problem** (the case-study `problem`, in `fg`), chips; right column lists highlights as mono-numbered hairline rows. Footer row: meta in accent mono + "Read the case study ↗".
 - **Project card**: 2-up grid, index top-left, stars · year top-right, Title name, small blurb, language chip + meta (or a `chip-signal` "Published on crates.io" when the project is also a published contribution), arrow that nudges up-right on hover.
-- **Writing card**: 3-up (1-up below `lg`), Manrope subtitle eyebrow + status chip (Draft / Published, never hidden), Title, muted pitch, "Read ↗".
 - **Contact panel**: 24px radius `.card` with ambient glow and a 7–9% opacity metallic monogram watermark bottom-right; statement heading, lede, the email address as a large Inter link with a growing underline, Copy ghost button, and a three-column facts row.
 
 ### Timeline (Experience)
@@ -273,8 +272,11 @@ Projects and open source are one section. Open source alone was three rows, one 
 ### How I work (`#approach`)
 Replaces the old Stack grid (tools are already in the tech band). Five numbered principles from `PRINCIPLES` as hairline rows: mono index | Title | muted body, with a faint signal wash on hover. Principles describe working habits, never claims about specific events.
 
-### Writing (`#writing`)
-The `BLOG` posts as cards linking to `/blog/:slug`. Drafts are labelled Draft.
+### No blog: depth lives with the work
+There is no Writing section and no `/blog`. The in-depth story of a piece of work sits on its own page as **Decisions** (`Decision`: title, context, choice, optional code), rendered by `app-decisions`: numbered hairline rows, context in muted, the choice in ink behind a 2px signal rule and a Manrope "Choice" label, code in the fixed charcoal editor palette. A standalone article only makes sense again once 2–3 are finished, real and verifiable.
+
+### Case studies from client work (`/work/:id`)
+`CASES` holds work that is not a repository, starting with `event-platform` (the Luna client platform). Same reading order as a project page — Overview → The problem → What I built → Decisions → Result → What I learned + stack chips — plus a confidentiality line (client and internal details left out on purpose). A timeline role links to its case through `Role.caseId` with a `.case-link` button (signal-tinted, arrow nudges right).
 
 ### Impact
 `Role.impact` and `Project.impact` (`{ value, label }[]`) render as large numbers with a muted label (`.impact-row`) in the timeline and in a **Result** block on case studies. They are optional and empty by default: only real, measured numbers go there.
@@ -283,7 +285,7 @@ The `BLOG` posts as cards linking to `/blog/:slug`. Drafts are labelled Draft.
 Always black (`#000`) in both themes: the element carries `.dark`, so every token inside resolves to the dark set. A blue ambient glow bleeds in from the top edge. Daily-tools grid (4 → 2 columns), then the white full logo | "End of stream" sign-off | CV + Back to top, then `ALESSANDRO BRUNO` in Manrope 300 at display size, engraved (charcoal-to-black text fill) and rising into place as it enters, then a mono bottom bar (© year, location, Email, GitHub).
 
 ### Subpages
-Project pages are case studies, in this order: Overview (name, blurb, source/demo) → **The problem** → **What I built** (body + numbered highlights) → **Result** (only with real `impact`) → **What I learned** → *Under the hood*: live README excerpt, repository metrics and the latest change set. The rail lists only the sections that render. Nav + `page-shell` (14rem rail + content). Rail links are small Inter with mono numbers; active = surface fill, line ring and a 2px inset signal edge. Project pages keep live GitHub metrics in `panel`/`card` surfaces with signal data bars; code blocks are a fixed charcoal editor palette in both themes.
+Project pages are case studies, in this order: Overview (name, blurb, source/demo) → **The problem** → **What I built** (body + numbered highlights) → **Decisions** (when the project has them) → **Result** (only with real `impact`) → **What I learned** → *Under the hood*: live README excerpt, repository metrics and the latest change set. The rail lists only the sections that render. Nav + `page-shell` (14rem rail + content). Rail links are small Inter with mono numbers; active = surface fill, line ring and a 2px inset signal edge. Project pages keep live GitHub metrics in `panel`/`card` surfaces with signal data bars; code blocks are a fixed charcoal editor palette in both themes.
 
 ## 7. Motion
 

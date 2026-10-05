@@ -3,6 +3,7 @@ import { PLATFORM_ID } from "@angular/core";
 import { AfterViewInit, Component, OnDestroy, computed, inject, input, signal } from "@angular/core";
 import { Meta, Title } from "@angular/platform-browser";
 import { Router } from "@angular/router";
+import { DecisionsComponent } from "./decisions.component";
 import { IconComponent } from "./icon.component";
 import { KeybindComponent } from "./keybind.component";
 import { SiteNavComponent } from "./site-nav.component";
@@ -24,7 +25,7 @@ const PAGE_META = [
 @Component({
   selector: "app-project-page",
   standalone: true,
-  imports: [IconComponent, KeybindComponent, SiteNavComponent, TocComponent],
+  imports: [DecisionsComponent, IconComponent, KeybindComponent, SiteNavComponent, TocComponent],
   template: `
     <div class="min-h-dvh bg-canvas">
       <div class="scroll-progress" aria-hidden="true"></div>
@@ -79,6 +80,13 @@ const PAGE_META = [
                     }
                   </ol>
                 </section>
+
+                @if (p.decisions?.length) {
+                  <section id="decisions" class="mt-16 scroll-mt-24">
+                    <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>{{ it() ? 'Decisioni' : 'Decisions' }}</p>
+                    <app-decisions class="mt-5 block" [decisions]="p.decisions!" />
+                  </section>
+                }
 
                 @if (p.impact?.length) {
                   <section id="impact" class="mt-16 scroll-mt-24">
@@ -308,6 +316,7 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
       { id: "overview", label: it ? "Panoramica" : "Overview", show: true },
       { id: "problem", label: it ? "Il problema" : "The problem", show: !!p?.problem },
       { id: "built", label: it ? "Cosa ho costruito" : "What I built", show: true },
+      { id: "decisions", label: it ? "Decisioni" : "Decisions", show: !!p?.decisions?.length },
       { id: "impact", label: it ? "Risultato" : "Result", show: !!p?.impact?.length },
       { id: "lesson", label: it ? "Cosa ho imparato" : "What I learned", show: true },
       { id: "story", label: it ? "Il codice" : "The code", show: true },
@@ -363,7 +372,7 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
 
   private setupObserver() {
     if (this.observer) return;
-    const sections = ["overview", "problem", "built", "impact", "lesson", "story", "metrics", "diff"]
+    const sections = ["overview", "problem", "built", "decisions", "impact", "lesson", "story", "metrics", "diff"]
       .map((id) => document.getElementById(id))
       .filter((section): section is HTMLElement => section !== null);
     if (sections.length === 0) return;

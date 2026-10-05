@@ -20,7 +20,7 @@ const LOCAL_TIME = new Intl.DateTimeFormat("en-GB", {
         <img class="contact-panel-mark" src="/brand/ab-monogram-metallic.webp" alt="" width="960" height="695" loading="lazy" aria-hidden="true" />
 
         <p class="eyebrow">
-          <span class="eyebrow-index">06</span>
+          <span class="eyebrow-index">05</span>
           <span class="eyebrow-rule" aria-hidden="true"></span>
           {{ ui.sectionTitles.contact }}
         </p>

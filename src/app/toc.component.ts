@@ -2,7 +2,7 @@ import { Component, input } from "@angular/core";
 import { lang } from "../lib/site";
 import type { TocItem } from "../lib/site.types";
 
-/** "On this page" rail for project and blog pages. The site nav owns brand, language and theme. */
+/** "On this page" rail for project and case-study pages. The site nav owns brand, language and theme. */
 @Component({
   selector: "app-toc",
   standalone: true,
