@@ -26,7 +26,7 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
               <span>{{ profile.location }}</span>
             </p>
 
-            <h1 class="mt-9">
+            <h1>
               <span class="hero-name brand-wordmark">{{ profile.name }}</span>
               <span class="hero-title">
                 <span class="line"><span>{{ role().main }}</span></span>
@@ -38,7 +38,7 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
 
             <p class="hero-lede stagger-in">{{ profile.headline }}</p>
 
-            <div class="stagger-in mt-9 flex flex-wrap items-center gap-2.5">
+            <div class="stagger-in flex flex-wrap items-center gap-2.5">
               <a [href]="'mailto:' + profile.email" class="btn btn-primary">
                 <svg appIcon="mail" class="size-4"></svg>
                 {{ lang() === 'it' ? 'Scrivimi' : 'Email me' }}
@@ -47,13 +47,13 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
                 <svg appIcon="download" class="size-4"></svg>
                 {{ lang() === 'it' ? 'Scarica il CV' : 'Download CV' }}
               </a>
-              <a [href]="profile.github" target="_blank" rel="noreferrer" class="btn btn-quiet">
+              <a [href]="profile.github" target="_blank" rel="noreferrer" class="btn btn-quiet" aria-label="GitHub">
                 <svg appIcon="github" class="size-4"></svg>
-                GitHub
+                <span class="hidden sm:inline" aria-hidden="true">GitHub</span>
               </a>
             </div>
 
-            <p class="stagger-in mt-7 flex max-w-xl items-start gap-3 text-small text-muted">
+            <p class="hero-availability stagger-in">
               <span class="live-dot mt-[0.45rem]" aria-hidden="true"></span>
               {{ profile.availability }}
             </p>
@@ -75,28 +75,34 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
           </div>
         </div>
 
-        <!-- Proof, not adjectives: each fact matches the CV and links to its source. -->
-        <div class="container-x">
-          <dl class="hero-proof stagger-in">
+        <!-- The first screen is exactly one viewport; this cue says there is more below. -->
+        <a href="#proof" class="hero-scroll" [attr.aria-label]="lang() === 'it' ? 'Scorri al contenuto' : 'Scroll to content'">
+          <span class="hero-scroll-track" aria-hidden="true"><span></span></span>
+          <span aria-hidden="true">{{ lang() === 'it' ? 'Scorri' : 'Scroll' }}</span>
+        </a>
+      </div>
+
+      <!-- Proof, not adjectives: each fact matches the CV and links to its source. -->
+      <div id="proof" class="container-x scroll-mt-16 pt-6">
+        <dl class="hero-proof reveal-on-scroll">
+          <div>
+            <dt class="eyebrow">{{ lang() === 'it' ? 'In produzione' : 'In production' }}</dt>
+            <dd class="value">{{ lang() === 'it' ? '1+ anno' : '1+ year' }}</dd>
+            <dd class="note">{{ lang() === 'it' ? 'servizi event-driven in ' : 'event-driven services at ' }}{{ profile.company.name }}</dd>
+          </div>
+          @if (published; as c) {
             <div>
-              <dt class="eyebrow">{{ lang() === 'it' ? 'In produzione' : 'In production' }}</dt>
-              <dd class="value">{{ lang() === 'it' ? '1+ anno' : '1+ year' }}</dd>
-              <dd class="note">{{ lang() === 'it' ? 'servizi event-driven in ' : 'event-driven services at ' }}{{ profile.company.name }}</dd>
+              <dt class="eyebrow">{{ lang() === 'it' ? 'Crate pubblicato' : 'Published crate' }}</dt>
+              <dd class="value"><a [href]="c.href" target="_blank" rel="noreferrer">{{ c.title }}</a></dd>
+              <dd class="note">{{ lang() === 'it' ? 'ORM open source su crates.io' : 'open-source ORM on crates.io' }}</dd>
             </div>
-            @if (published; as c) {
-              <div>
-                <dt class="eyebrow">{{ lang() === 'it' ? 'Crate pubblicato' : 'Published crate' }}</dt>
-                <dd class="value"><a [href]="c.href" target="_blank" rel="noreferrer">{{ c.title }}</a></dd>
-                <dd class="note">{{ lang() === 'it' ? 'ORM open source su crates.io' : 'open-source ORM on crates.io' }}</dd>
-              </div>
-            }
-            <div>
-              <dt class="eyebrow">{{ lang() === 'it' ? 'Tesi' : 'Thesis' }}</dt>
-              <dd class="value">PETRA</dd>
-              <dd class="note">{{ lang() === 'it' ? 'telemetria event-driven in tempo reale' : 'real-time event-driven telemetry' }}</dd>
-            </div>
-          </dl>
-        </div>
+          }
+          <div>
+            <dt class="eyebrow">{{ lang() === 'it' ? 'Tesi' : 'Thesis' }}</dt>
+            <dd class="value">PETRA</dd>
+            <dd class="note">{{ lang() === 'it' ? 'telemetria event-driven in tempo reale' : 'real-time event-driven telemetry' }}</dd>
+          </div>
+        </dl>
       </div>
 
       <!--
