@@ -2,7 +2,7 @@ import { Component, computed } from "@angular/core";
 import { IconComponent } from "./icon.component";
 import { SectionHeadComponent } from "./section-head.component";
 
-import { CONTRIBUTIONS, EDUCATION, PROFILE, UI, lang } from "../lib/site";
+import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site";
 
 @Component({
   selector: "app-intro",
@@ -18,7 +18,7 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, UI, lang } from "../lib/site";
         </div>
 
         <div class="container-x hero-inner">
-          <div class="min-w-0">
+          <div class="hero-copy min-w-0">
             <p class="hero-meta stagger-in">
               <img [src]="profile.avatar" alt="" width="56" height="56" />
               <strong>{{ profile.company.name }}</strong>
@@ -26,12 +26,12 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, UI, lang } from "../lib/site";
               <span>{{ profile.location }}</span>
             </p>
 
-            <h1 class="stagger-in mt-9">
+            <h1 class="mt-9">
               <span class="hero-name brand-wordmark">{{ profile.name }}</span>
               <span class="hero-title">
-                {{ role().main }}
+                <span class="line"><span>{{ role().main }}</span></span>
                 @if (role().sub) {
-                  <span class="sub">{{ role().sub }}<span class="brand-dot">.</span></span>
+                  <span class="line sub"><span>{{ role().sub }}<span class="brand-dot">.</span></span></span>
                 }
               </span>
             </h1>
@@ -79,7 +79,7 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, UI, lang } from "../lib/site";
         <div class="container-x">
           <dl class="hero-proof stagger-in">
             <div>
-              <dt class="eyebrow">{{ lang() === 'it' ? 'Rust in produzione' : 'Production Rust' }}</dt>
+              <dt class="eyebrow">{{ lang() === 'it' ? 'In produzione' : 'In production' }}</dt>
               <dd class="value">{{ lang() === 'it' ? '1+ anno' : '1+ year' }}</dd>
               <dd class="note">{{ lang() === 'it' ? 'servizi event-driven in ' : 'event-driven services at ' }}{{ profile.company.name }}</dd>
             </div>
@@ -87,7 +87,7 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, UI, lang } from "../lib/site";
               <div>
                 <dt class="eyebrow">{{ lang() === 'it' ? 'Crate pubblicato' : 'Published crate' }}</dt>
                 <dd class="value"><a [href]="c.href" target="_blank" rel="noreferrer">{{ c.title }}</a></dd>
-                <dd class="note">{{ lang() === 'it' ? 'ORM Rust su crates.io' : 'Rust ORM on crates.io' }}</dd>
+                <dd class="note">{{ lang() === 'it' ? 'ORM open source su crates.io' : 'open-source ORM on crates.io' }}</dd>
               </div>
             }
             <div>
@@ -97,6 +97,15 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, UI, lang } from "../lib/site";
             </div>
           </dl>
         </div>
+      </div>
+
+      <!-- The working set, not a badge wall: two rows of the real stack, sliding with scroll. -->
+      <div class="tech-band mt-16" aria-label="{{ lang() === 'it' ? 'Tecnologie' : 'Technologies' }}" role="group">
+        @for (row of techRows(); track $index; let odd = $odd) {
+          <div class="tech-row" [class.is-ghost]="odd" [attr.aria-hidden]="odd ? 'true' : null">
+            @for (t of row; track $index) { <span>{{ t }}</span> }
+          </div>
+        }
       </div>
 
       <div class="container-x section">
@@ -123,7 +132,17 @@ export class IntroComponent {
   protected get published() {
     return CONTRIBUTIONS.find((c) => c.status === "Published");
   }
-  /** "Software Engineer — Rust / Backend" sets as two display lines; the second ends on the logo dot. */
+  /** "Software Engineer — Systems & Product" sets as two display lines; the second ends on the logo dot. */
+  /** Languages and frameworks on one row, infrastructure on the other; each repeated to fill wide screens. */
+  protected readonly techRows = computed(() => {
+    lang();
+    const split = (list: string, sep: string) => list.split(sep).map((t) => t.trim()).filter(Boolean);
+    const [infra, ...code] = [...STACK.groups].reverse();
+    const first = code.reverse().flatMap((g) => [...split(g.name, "&"), ...split(g.items, "·")]);
+    const second = [...split(infra.items, "·"), ...split(infra.also ?? "", ",")];
+    const fill = (row: string[]) => [...row, ...row, ...row];
+    return [fill([...new Set(first)]), fill([...new Set(second)])];
+  });
   protected readonly role = computed(() => {
     lang();
     const [main, sub] = PROFILE.role.split(" — ");

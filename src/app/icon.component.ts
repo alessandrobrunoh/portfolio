@@ -14,7 +14,8 @@ export type IconName =
   | "chevron-right"
   | "arrow-up"
   | "arrow-left"
-  | "arrow-right";
+  | "arrow-right"
+  | "globe";
 
 /** Lucide-compatible stroke icons, ported 1:1 from lucide-react path data. */
 @Component({
@@ -82,6 +83,11 @@ export type IconName =
       @case ("arrow-left") {
         <svg:path d="m12 19-7-7 7-7" />
         <svg:path d="M19 12H5" />
+      }
+      @case ("globe") {
+        <svg:circle cx="12" cy="12" r="10" />
+        <svg:path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+        <svg:path d="M2 12h20" />
       }
       @case ("arrow-right") {
         <svg:path d="M5 12h14" />

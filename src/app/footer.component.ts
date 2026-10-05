@@ -8,15 +8,14 @@ import { PROFILE, lang } from "../lib/site";
   standalone: true,
   imports: [IconComponent, ToolsComponent],
   template: `
-    <footer class="site-footer">
+    <footer class="site-footer dark">
       <div class="container-x">
         <app-tools />
 
-        <!-- End of page: a sign-off with the full logo, not a second contact form. -->
+        <!-- End of page: a sign-off with the white full logo (the footer is always black), not a second contact form. -->
         <div class="footer-main">
           <div>
-            <img class="footer-logo hidden dark:block" src="/brand/ab-logo-white-full.webp" [alt]="profile.name" width="640" height="444" loading="lazy" />
-            <img class="footer-logo dark:hidden" src="/brand/ab-logo-black-full.webp" [alt]="profile.name" width="640" height="409" loading="lazy" />
+            <img class="footer-logo" src="/brand/ab-logo-white-full.webp" [alt]="profile.name" width="640" height="444" loading="lazy" />
           </div>
           <div class="min-w-0">
             <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span>{{ lang() === 'it' ? 'Sei arrivato alla fine' : 'End of stream' }}</p>
@@ -42,6 +41,8 @@ import { PROFILE, lang } from "../lib/site";
             </button>
           </div>
         </div>
+
+        <p class="footer-giant" aria-hidden="true">{{ profile.name }}</p>
 
         <div class="footer-bottom">
           <span>© {{ year }} {{ profile.name }} · {{ profile.location }}</span>

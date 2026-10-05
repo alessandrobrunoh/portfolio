@@ -1,15 +1,15 @@
 import { ApplicationRef, Component, HostListener, OnInit, computed, inject, input, signal } from "@angular/core";
 import { IconComponent } from "./icon.component";
-import { ThemeClockComponent } from "./theme-clock.component";
+import { ThemeToggleComponent } from "./theme-toggle.component";
 import { PROFILE, TOC, UI, lang, setLanguage, type Lang } from "../lib/site";
 
 /** Fixed top bar on every page: the metallic mark, section links, language, theme, email. */
 @Component({
   selector: "app-site-nav",
   standalone: true,
-  imports: [IconComponent, ThemeClockComponent],
+  imports: [IconComponent, ThemeToggleComponent],
   template: `
-    <header class="site-nav" [class.is-scrolled]="scrolled()" [class.is-open]="menuOpen()">
+    <header class="site-nav" [class.is-scrolled]="scrolled()" [class.is-hidden]="hidden() && !menuOpen()" [class.is-open]="menuOpen()">
       <div class="container-x site-nav-inner">
         <a [href]="home() ? '#intro' : '/'" class="site-brand" (click)="menuOpen.set(false)">
           <img src="/brand/ab-monogram-metallic-160.webp" alt="" width="160" height="116" />
@@ -31,11 +31,21 @@ import { PROFILE, TOC, UI, lang, setLanguage, type Lang } from "../lib/site";
         </nav>
 
         <div class="flex items-center gap-2">
-          <div class="lang-toggle" role="group" [attr.aria-label]="ui.tocLanguages">
-            <button type="button" (click)="setLang('en')" [attr.aria-pressed]="lang() === 'en'" lang="en">EN</button>
-            <button type="button" (click)="setLang('it')" [attr.aria-pressed]="lang() === 'it'" lang="it">IT</button>
+          <div class="nav-controls">
+            <button
+              type="button"
+              class="nav-ctl lang-roll"
+              (click)="setLang(lang() === 'it' ? 'en' : 'it')"
+              [attr.data-lang]="lang()"
+              [attr.aria-label]="lang() === 'it' ? 'Switch to English' : 'Passa all’italiano'"
+              [attr.title]="lang() === 'it' ? 'Switch to English' : 'Passa all’italiano'"
+            >
+              <svg appIcon="globe" class="lang-roll-globe size-4"></svg>
+              <span class="lang-roll-track" aria-hidden="true"><span lang="en">EN</span><span lang="it">IT</span></span>
+            </button>
+            <span class="nav-controls-sep" aria-hidden="true"></span>
+            <app-theme-toggle />
           </div>
-          <app-theme-clock />
           <a [href]="'mailto:' + profile.email" class="btn btn-primary btn-sm hidden sm:inline-flex">
             <svg appIcon="mail" class="size-3.5"></svg>
             {{ lang() === 'it' ? 'Scrivimi' : 'Email me' }}
@@ -86,6 +96,9 @@ export class SiteNavComponent implements OnInit {
   protected readonly lang = lang;
   protected readonly scrolled = signal(false);
   protected readonly menuOpen = signal(false);
+  /** Tucks away while reading down, comes back on any scroll up. */
+  protected readonly hidden = signal(false);
+  private lastY = 0;
   private readonly appRef = inject(ApplicationRef);
 
   // The brand mark already leads to the intro, so the bar lists the sections after it.
@@ -100,7 +113,12 @@ export class SiteNavComponent implements OnInit {
 
   @HostListener("window:scroll")
   onScroll() {
-    if (typeof window !== "undefined") this.scrolled.set(window.scrollY > 8);
+    if (typeof window === "undefined") return;
+    const y = window.scrollY;
+    this.scrolled.set(y > 8);
+    if (Math.abs(y - this.lastY) < 6) return;
+    this.hidden.set(y > this.lastY && y > 320);
+    this.lastY = y;
   }
 
   @HostListener("document:keydown.escape")

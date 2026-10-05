@@ -41,7 +41,7 @@
   --text-heading-sm--line-height: 1.08;
   --text-heading: clamp(2.25rem, 1.5rem + 2.6vw, 3.75rem);
   --text-heading--line-height: 1.02;
-  --text-display: clamp(2.75rem, 1.2rem + 5.2vw, 6rem);
+  --text-display: clamp(2.5rem, 1rem + 4.5vw, 5rem);
   --text-display--line-height: 0.98;
 
   --tracking-mono: 0.01em;
@@ -176,19 +176,41 @@
   }
 }
 
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
+/* Route changes: the old page lifts away, the new one rises in. The nav stays put. */
+html:not(.theme-vt) .site-nav {
+  view-transition-name: site-nav;
 }
 
 ::view-transition-old(root) {
-  z-index: 1;
+  animation: vt-page-out 260ms var(--ease-out-quart) both;
 }
 
 ::view-transition-new(root) {
+  animation: vt-page-in 620ms 80ms var(--ease-out-quart) both;
+}
+
+/* Theme changes: a circular reveal grows from the toggle. */
+html.theme-vt::view-transition-old(root),
+html.theme-vt::view-transition-new(root) {
+  mix-blend-mode: normal;
+}
+
+html.theme-vt::view-transition-old(root) {
+  z-index: 1;
+  animation: none;
+}
+
+html.theme-vt::view-transition-new(root) {
   z-index: 2;
-  animation: theme-clip var(--motion-emphasis) var(--ease-out-quart) both;
+  animation: theme-clip 700ms var(--ease-out-quart) both;
+}
+
+@keyframes vt-page-out {
+  to { opacity: 0; transform: translateY(-1.5rem) scale(0.99); filter: blur(4px); }
+}
+
+@keyframes vt-page-in {
+  from { opacity: 0; transform: translateY(2rem); filter: blur(6px); }
 }
 
 @keyframes theme-clip {
@@ -466,7 +488,14 @@
     inset: 0 0 auto;
     z-index: 50;
     border-bottom: 1px solid transparent;
-    transition: background-color var(--motion-slow) var(--ease-out-quart), border-color var(--motion-slow) var(--ease-out-quart);
+    transition:
+      background-color var(--motion-slow) var(--ease-out-quart),
+      border-color var(--motion-slow) var(--ease-out-quart),
+      transform 500ms var(--ease-out-quart);
+  }
+
+  .site-nav.is-hidden {
+    transform: translateY(-100%);
   }
 
   .site-nav.is-scrolled,
@@ -570,33 +599,125 @@
     transform: scale(1);
   }
 
-  .lang-toggle {
+  /* Language + theme share one hairline capsule: two quiet 36px controls and a divider. */
+  .nav-controls {
     display: inline-flex;
+    height: 2.5rem;
     align-items: center;
     padding: 0.1875rem;
     border: 1px solid var(--line);
-    border-radius: 8px;
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--surface) 55%, transparent);
   }
 
-  .lang-toggle button {
-    min-width: 2rem;
-    min-height: 1.75rem;
-    padding: 0 0.375rem;
-    border-radius: 5px;
+  .nav-controls-sep {
+    width: 1px;
+    height: 1rem;
+    background: var(--line);
+  }
+
+  .nav-ctl {
+    display: inline-flex;
+    height: 2.125rem;
+    min-width: 2.125rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    padding: 0 0.5rem;
+    border-radius: 999px;
     color: var(--muted);
     transition: color var(--motion-quick) var(--ease-out-quart), background-color var(--motion-quick) var(--ease-out-quart);
   }
 
-  .lang-toggle button:hover {
+  .nav-ctl:hover {
+    color: var(--fg);
+    background: var(--surface-2);
+  }
+
+  .nav-ctl:active {
+    transform: scale(0.94);
+  }
+
+  /* Language: the code rolls like a split-flap when it changes; the globe turns a quarter. */
+  .lang-roll {
+    padding-inline: 0.625rem 0.75rem;
+  }
+
+  .lang-roll-globe {
+    transition: transform 700ms var(--ease-out-quart);
+  }
+
+  .lang-roll[data-lang="it"] .lang-roll-globe {
+    transform: rotate(90deg);
+  }
+
+  .lang-roll-track {
+    display: flex;
+    height: 1rem;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: var(--font-mono);
+    font-size: 0.71875rem;
+    font-weight: 500;
+    line-height: 1rem;
     color: var(--fg);
   }
 
-  .lang-toggle button[aria-pressed="true"] {
-    background: var(--surface-2);
-    color: var(--fg);
-    box-shadow: 0 0 0 1px var(--line);
+  .lang-roll-track > span {
+    transition: transform 500ms var(--ease-out-quart);
+  }
+
+  .lang-roll[data-lang="it"] .lang-roll-track > span {
+    transform: translateY(-100%);
+  }
+
+  /* Theme: sun to moon. The core grows, a disc slides in to cut the crescent, the rays spin out. */
+  .theme-toggle {
+    width: 2.125rem;
+    padding: 0;
+  }
+
+  .theme-toggle-icon {
+    width: 1.125rem;
+    height: 1.125rem;
+    overflow: visible;
+  }
+
+  .theme-toggle-core {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 600ms var(--ease-out-quart);
+  }
+
+  .theme-toggle-cut {
+    transform: translate(9px, -9px);
+    transition: transform 600ms var(--ease-out-quart);
+  }
+
+  .theme-toggle-rays {
+    transform-origin: 12px 12px;
+    transition: transform 600ms var(--ease-out-quart), opacity 300ms var(--ease-out-quart);
+  }
+
+  .dark .theme-toggle-core {
+    transform: scale(1.75);
+  }
+
+  .dark .theme-toggle-cut {
+    transform: translate(0, 0);
+  }
+
+  .dark .theme-toggle-rays {
+    opacity: 0;
+    transform: rotate(-120deg) scale(0.4);
+  }
+
+  .theme-toggle:hover .theme-toggle-rays {
+    transform: rotate(45deg);
+  }
+
+  .dark .theme-toggle:hover .theme-toggle-rays {
+    transform: rotate(-120deg) scale(0.4);
   }
 
   .icon-btn {
@@ -667,6 +788,13 @@
     -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
     mask-image: linear-gradient(180deg, #000 55%, transparent 100%);
     transition: opacity var(--motion-slow) var(--ease-out-quart);
+  }
+
+  /* Single column: the copy sits over the mountains, so the photo steps back. */
+  @media (max-width: 1023px) {
+    .hero-photo {
+      opacity: 0.45;
+    }
   }
 
   .dark .hero-photo {
@@ -760,6 +888,26 @@
     color: var(--fg);
   }
 
+  /* Each display line slides up out of its own mask on load. */
+  .hero-title .line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.12em;
+    margin-bottom: -0.12em;
+  }
+
+  .hero-title .line > span {
+    display: inline-block;
+    animation: line-up 1100ms var(--ease-out-quart) both;
+  }
+
+  .hero-title .line:nth-child(1) > span { animation-delay: 140ms; }
+  .hero-title .line:nth-child(2) > span { animation-delay: 260ms; }
+
+  .hero-name {
+    animation: wordmark-in 1400ms 60ms var(--ease-out-quart) both;
+  }
+
   .hero-title .sub {
     display: block;
     color: color-mix(in srgb, var(--muted) 82%, var(--fg));
@@ -778,9 +926,6 @@
     position: relative;
     justify-self: center;
     width: min(80%, 22rem);
-    animation: mark-parallax linear both;
-    animation-timeline: scroll();
-    animation-range: 0 90vh;
   }
 
   @media (min-width: 1024px) {
@@ -1422,9 +1567,51 @@
   }
 
   /* ---------- Footer ---------- */
+  /* Always black: the footer carries .dark, so every token inside resolves to the dark set. */
   .site-footer {
-    border-top: 1px solid var(--line);
-    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: #000;
+    color: var(--fg);
+  }
+
+  .site-footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    z-index: -1;
+    width: min(64rem, 120%);
+    height: 22rem;
+    transform: translate(-50%, -55%);
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(0 102 255 / 0.18), transparent);
+    pointer-events: none;
+  }
+
+  .site-footer .tool-slot {
+    background: #07080a;
+  }
+
+  /* The signature: the wordmark set huge and engraved into the black, rising as you arrive. */
+  .footer-giant {
+    display: block;
+    margin-top: 1rem;
+    padding-bottom: 1.75rem;
+    font-family: var(--font-brand);
+    font-size: clamp(1.375rem, 0.2rem + 5.3vw, 5rem);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-align: center;
+    background: linear-gradient(180deg, #2b323d 0%, #12161c 70%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    user-select: none;
   }
 
   .tool-grid {
@@ -1727,10 +1914,6 @@
   to { background-position: -20% 0; }
 }
 
-@keyframes mark-parallax {
-  to { transform: translateY(3.5rem); }
-}
-
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
@@ -1794,150 +1977,281 @@
 .reveal-on-scroll:nth-child(4) { transition-delay: 180ms; }
 .reveal-on-scroll:nth-child(5) { transition-delay: 240ms; }
 
-/* Theme clock: a small UTC sky. The dial is the UTC day, the hairline at y 40 is the horizon,
-   and the body lighting the page (sun = light, moon = dark) sits at the current UTC time.
-   Everything that moves keys off html.dark, so it starts in the same style pass as the theme flip. */
+
+/* ---------- Depth & motion ---------- */
+@property --spot {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
 @layer components {
-  .theme-clock {
-    position: relative;
-    overflow: visible;
-    cursor: pointer;
+  /* Pointer tilt + spotlight (appTilt sets --rx --ry --mx --my). */
+  .card[data-tilt] {
+    --rx: 0deg;
+    --ry: 0deg;
+    --lift: 0px;
+    background:
+      radial-gradient(26rem circle at var(--mx, 50%) var(--my, -20%), color-mix(in srgb, var(--signal) var(--spot), transparent), transparent 55%),
+      var(--surface);
+    transform: perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(var(--lift));
     transition:
-      border-color var(--motion-fast) var(--ease-out-quart),
-      background-color var(--motion-fast) var(--ease-out-quart),
-      color var(--motion-quick) var(--ease-out-quart);
+      transform 450ms var(--ease-out-quart),
+      box-shadow var(--motion-fast) var(--ease-out-quart),
+      --spot 400ms var(--ease-out-quart);
+    will-change: transform;
   }
 
-  .theme-clock:is(:hover, :focus-visible) {
-    border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  .card[data-tilt].is-tilting {
+    --spot: 11%;
+    transition:
+      transform 120ms linear,
+      box-shadow var(--motion-fast) var(--ease-out-quart),
+      --spot 400ms var(--ease-out-quart);
   }
 
-  .theme-clock-sky {
-    transition: transform var(--motion-quick) var(--ease-out-quart);
+  .card-link[data-tilt]:hover,
+  .card-link[data-tilt]:focus-visible {
+    --lift: -4px;
+    transform: perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(var(--lift));
   }
 
-  .theme-clock:active .theme-clock-sky {
-    transform: scale(0.96);
+  /* Primary buttons catch a sliver of light on hover. */
+  .btn-primary {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
   }
 
-  /* Bodies are drawn centred on their anchor <g>, so the SVG default origin is the body centre.
-     State rules below set only longhands, so the reduced-motion and instant `transition: none` win. */
-  .theme-clock-orb,
-  .theme-clock-ghost {
-    transform-box: view-box;
-    transform-origin: 0 0;
-    transition-property: transform, opacity;
-    transition-timing-function: var(--ease-out-quart);
+  .btn-primary::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.35) 50%, transparent 65%);
+    transform: translateX(-120%);
   }
 
-  /* Lit: at the current time. It rises up its column 150ms after the switch, once the other has set. */
-  .theme-clock-orb-sun,
-  .dark .theme-clock-orb-moon {
-    opacity: 1;
-    transform: none;
-    transition-duration: var(--motion-emphasis), var(--motion-quick);
-    transition-delay: var(--motion-quick), var(--motion-quick);
+  .btn-primary:hover::after {
+    transform: translateX(120%);
+    transition: transform 800ms var(--ease-smooth-out);
   }
 
-  /* Unlit: sets straight down behind the horizon and waits 48 units under the slot, opaque until gone. */
-  .theme-clock-orb-moon,
-  .dark .theme-clock-orb-sun {
-    opacity: 0;
-    transform: translateY(48px) scale(0.6);
-    transition-duration: var(--motion-slow), var(--motion-quick);
-    transition-delay: 0ms, var(--motion-fast);
+  .btn svg {
+    transition: transform var(--motion-fast) var(--ease-out-quart);
   }
 
-  /* Slot below the horizon: swap in place, so nothing shows through the slot under the hairline. */
-  :root:not(.dark) .theme-clock.is-low .theme-clock-orb-moon,
-  .dark .theme-clock.is-low .theme-clock-orb-sun {
-    transform: scale(0.6);
+  .btn:hover svg {
+    transform: translateY(-1px);
   }
 
-  /* Preview: the other body rises out of the horizon over its flank (sun: morning side, moon: evening side). */
-  .theme-clock-ghost {
-    opacity: 0;
-    transform: translateY(24px) scale(0.6);
-    transition-duration: var(--motion-fast), var(--motion-quick);
+  /* Technology band: two rows of the actual stack, sliding in opposite directions with scroll. */
+  .tech-band {
+    position: relative;
+    overflow: hidden;
+    padding-block: 2.25rem;
+    border-top: 1px solid var(--line);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
   }
 
-  :root:not(.dark) .theme-clock:focus-visible:not(.is-committed) .theme-clock-ghost-moon,
-  .dark .theme-clock:focus-visible:not(.is-committed) .theme-clock-ghost-sun {
-    opacity: 0.55;
-    transform: scale(0.8);
-    transition-duration: var(--motion-slow), var(--motion-fast);
+  .tech-row {
+    display: flex;
+    width: max-content;
+    gap: 2.5rem;
+    white-space: nowrap;
   }
 
-  /* Night sky: three points, out one by one after sunset, gone together at dawn. No twinkle. */
-  .theme-clock-stars circle {
-    fill: currentColor;
-    opacity: 0;
-    transition: opacity var(--motion-quick) var(--ease-out-quart);
+  .tech-row + .tech-row {
+    margin-top: 1.25rem;
   }
 
-  .dark .theme-clock-stars circle {
-    opacity: 1;
-    transition-duration: var(--motion-slow);
-    transition-delay: 200ms;
+  .tech-row span {
+    display: inline-flex;
+    align-items: center;
+    gap: 2.5rem;
+    font-size: clamp(1.75rem, 1rem + 2.6vw, 3.5rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    color: var(--fg);
   }
 
-  .dark .theme-clock-stars circle:nth-child(2) {
-    transition-delay: 280ms;
+  .tech-row span::after {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--signal);
   }
 
-  .dark .theme-clock-stars circle:nth-child(3) {
-    transition-delay: 360ms;
+  .tech-row.is-ghost span {
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--silver) 70%, transparent);
   }
 
-  /* Tab catch-up: jump to the new time and theme, never replay the swap. */
-  .theme-clock-instant :is(.theme-clock-orb, .theme-clock-ghost, .theme-clock-stars circle) {
-    transition: none;
+  .tech-row.is-ghost span::after {
+    background: var(--silver);
+    opacity: 0.6;
   }
 
-  .theme-clock-hint {
-    display: grid;
+  /* Timeline spine: a blue fill that follows you down each row. */
+  .tl-spine::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(var(--signal), color-mix(in srgb, var(--signal) 20%, transparent));
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+}
+
+/* Reveals that end on the resting state: safe without scroll-timeline support. */
+.section-title,
+.contact-statement {
+  animation: title-rise linear both;
+  animation-timeline: view();
+  animation-range: entry 5% entry 65%;
+}
+
+.eyebrow-rule {
+  transform-origin: left;
+  animation: rule-draw linear both;
+  animation-timeline: view();
+  animation-range: entry 20% entry 90%;
+}
+
+.footer-giant {
+  animation: giant-rise linear both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 100%;
+}
+
+/* Parallax: only where scroll timelines exist, so no browser is left mid-move. */
+@supports (animation-timeline: scroll()) {
+  .hero-copy {
+    animation: hero-copy-out linear both;
+    animation-timeline: scroll();
+    animation-range: 0 75vh;
   }
 
-  .theme-clock-hint > * {
-    grid-area: 1 / 1;
-    transition: opacity var(--motion-fast) var(--ease-out-quart), transform var(--motion-fast) var(--ease-out-quart);
+  .hero-mark {
+    animation: mark-parallax linear both;
+    animation-timeline: scroll();
+    animation-range: 0 100vh;
   }
 
-  .theme-clock-hint-action {
-    opacity: 0;
-    transform: translateY(0.2rem);
-    color: var(--accent);
+  .hero-grid {
+    animation: grid-drift linear both;
+    animation-timeline: scroll();
+    animation-range: 0 100vh;
   }
 
-  .theme-clock:focus-visible:not(.is-committed) .theme-clock-hint-clock {
-    opacity: 0;
-    transform: translateY(-0.2rem);
+  .hero-photo {
+    animation: photo-drift linear both;
+    animation-timeline: scroll();
+    animation-range: 0 100vh;
   }
 
-  .theme-clock:focus-visible:not(.is-committed) .theme-clock-hint-action {
-    opacity: 1;
-    transform: translateY(0);
+  .tech-row {
+    animation: tech-left linear both;
+    animation-timeline: view();
+    animation-range: cover;
   }
 
-  /* Pointer preview only where hover is real: a tap never leaves a sticky preview behind. */
-  @media (hover: hover) {
-    :root:not(.dark) .theme-clock:hover:not(.is-committed) .theme-clock-ghost-moon,
-    .dark .theme-clock:hover:not(.is-committed) .theme-clock-ghost-sun {
-      opacity: 0.55;
-      transform: scale(0.8);
-      transition-duration: var(--motion-slow), var(--motion-fast);
-    }
-
-    .theme-clock:hover:not(.is-committed) .theme-clock-hint-clock {
-      opacity: 0;
-      transform: translateY(-0.2rem);
-    }
-
-    .theme-clock:hover:not(.is-committed) .theme-clock-hint-action {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .tech-row.is-ghost {
+    animation-name: tech-right;
   }
+
+  .tl-spine::after {
+    animation: spine-fill linear both;
+    animation-timeline: view();
+    animation-range: entry 40% cover 60%;
+  }
+
+  .project-lead-glow {
+    animation: glow-drift linear both;
+    animation-timeline: view();
+    animation-range: cover;
+  }
+
+  .contact-panel-mark {
+    animation: watermark-drift linear both;
+    animation-timeline: view();
+    animation-range: cover;
+  }
+}
+
+.hero-mark-glow {
+  animation: glow-breathe 9s ease-in-out infinite alternate;
+}
+
+@keyframes line-up {
+  from { transform: translateY(105%); }
+}
+
+@keyframes wordmark-in {
+  from { opacity: 0; letter-spacing: 0.9em; }
+}
+
+@keyframes title-rise {
+  from { opacity: 0; transform: translateY(1.5rem); clip-path: inset(0 0 100% 0); }
+  to { opacity: 1; transform: none; clip-path: inset(0 0 -20% 0); }
+}
+
+@keyframes rule-draw {
+  from { transform: scaleX(0); }
+}
+
+@keyframes giant-rise {
+  from { opacity: 0; transform: translateY(45%); letter-spacing: 0.26em; }
+}
+
+@keyframes hero-copy-out {
+  to { transform: translateY(-5rem); opacity: 0.15; }
+}
+
+@keyframes mark-parallax {
+  to { transform: translateY(7rem) scale(0.92); }
+}
+
+@keyframes grid-drift {
+  to { transform: translateY(9rem); }
+}
+
+@keyframes photo-drift {
+  to { transform: translateY(6rem) scale(1.06); }
+}
+
+@keyframes tech-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-28%); }
+}
+
+@keyframes tech-right {
+  from { transform: translateX(-28%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes spine-fill {
+  to { transform: scaleY(1); }
+}
+
+@keyframes glow-drift {
+  from { transform: translate(10%, 20%); }
+  to { transform: translate(-25%, -10%); }
+}
+
+@keyframes watermark-drift {
+  from { transform: translateY(4rem) rotate(-4deg); }
+  to { transform: translateY(-2rem) rotate(0deg); }
+}
+
+@keyframes glow-breathe {
+  from { opacity: 0.75; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1.06); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1975,24 +2289,47 @@
     display: none;
   }
 
+  .hero-copy,
+  .hero-grid,
+  .hero-photo,
+  .hero-mark-glow,
+  .hero-name,
+  .hero-title .line > span,
+  .section-title,
+  .contact-statement,
+  .eyebrow-rule,
+  .footer-giant,
+  .tech-row,
+  .project-lead-glow,
+  .contact-panel-mark {
+    animation: none !important;
+  }
+
+  .tl-spine::after {
+    display: none;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root),
+  ::view-transition-group(*) {
+    animation: none !important;
+  }
+
   .card,
   .card::after,
   .tl-body,
   .oss-row,
   .tool-slot,
-  .theme-clock,
-  .theme-clock-sky,
-  .theme-clock-orb,
-  .theme-clock-ghost,
-  .theme-clock-stars circle,
-  .theme-clock-hint > * {
+  .site-nav,
+  .theme-toggle-icon *,
+  .lang-roll-track > span {
     transition: none !important;
   }
 
   .card-link:hover,
-  .tl-row:hover .tl-body,
-  .theme-clock:active .theme-clock-sky {
-    transform: none;
+  .card[data-tilt],
+  .tl-row:hover .tl-body {
+    transform: none !important;
   }
 
   ::view-transition-old(root),

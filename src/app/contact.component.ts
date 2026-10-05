@@ -1,5 +1,6 @@
 import { Component, DestroyRef, OnInit, inject, signal } from "@angular/core";
 import { IconComponent } from "./icon.component";
+import { TiltDirective } from "./tilt.directive";
 import { PROFILE, UI, lang } from "../lib/site";
 
 const LOCAL_TIME = new Intl.DateTimeFormat("en-GB", {
@@ -11,10 +12,10 @@ const LOCAL_TIME = new Intl.DateTimeFormat("en-GB", {
 @Component({
   selector: "app-contact",
   standalone: true,
-  imports: [IconComponent],
+  imports: [IconComponent, TiltDirective],
   template: `
     <section id="contact" class="container-x section scroll-mt-16">
-      <div class="card contact-panel reveal-on-scroll">
+      <div class="reveal-on-scroll"><div class="card contact-panel" appTilt="1.2">
         <span class="project-lead-glow" aria-hidden="true"></span>
         <img class="contact-panel-mark" src="/brand/ab-monogram-metallic.webp" alt="" width="960" height="695" loading="lazy" aria-hidden="true" />
 
@@ -24,7 +25,7 @@ const LOCAL_TIME = new Intl.DateTimeFormat("en-GB", {
           {{ ui.sectionTitles.contact }}
         </p>
         <h2 class="contact-statement mt-6">
-          {{ lang() === 'it' ? 'Stai costruendo qualcosa in Rust? Parliamone' : 'Building something in Rust? Let’s talk' }}<span class="brand-dot" aria-hidden="true">.</span>
+          {{ lang() === 'it' ? 'Hai qualcosa da costruire? Parliamone' : 'Got something to build? Let’s talk' }}<span class="brand-dot" aria-hidden="true">.</span>
         </h2>
         <p class="section-lede mt-5">{{ ui.contactLede }}</p>
 
@@ -68,7 +69,7 @@ const LOCAL_TIME = new Intl.DateTimeFormat("en-GB", {
             </dd>
           </div>
         </dl>
-      </div>
+      </div></div>
     </section>
   `,
 })

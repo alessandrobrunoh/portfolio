@@ -1,11 +1,12 @@
 import { Component } from "@angular/core";
 import { SectionHeadComponent } from "./section-head.component";
+import { TiltDirective } from "./tilt.directive";
 import { STACK, UI, lang } from "../lib/site";
 
 @Component({
   selector: "app-stack",
   standalone: true,
-  imports: [SectionHeadComponent],
+  imports: [SectionHeadComponent, TiltDirective],
   template: `
     <section id="stack" class="container-x section scroll-mt-16">
       <app-section-head n="05" [title]="ui.sectionTitles.stack" [kicker]="lang() === 'it' ? 'livelli / interfacce / leva' : 'layers / interfaces / leverage'">
@@ -14,7 +15,7 @@ import { STACK, UI, lang } from "../lib/site";
 
       <div class="stack-grid">
         @for (g of groups; track g.name; let i = $index) {
-          <article class="card stack-card reveal-on-scroll">
+          <div class="reveal-on-scroll"><article class="card stack-card h-full" appTilt>
             <div class="flex items-center justify-between gap-3">
               <span class="eyebrow-index">0{{ i + 1 }}</span>
               @if (g.level) { <span class="stack-level">{{ g.level }}</span> }
@@ -26,7 +27,7 @@ import { STACK, UI, lang } from "../lib/site";
             @if (g.also) {
               <div class="stack-also"><p class="eyebrow">{{ lang() === 'it' ? 'Anche' : 'Also' }}</p><p class="mt-1.5">{{ g.also }}</p></div>
             }
-          </article>
+          </article></div>
         }
       </div>
     </section>

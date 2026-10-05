@@ -2,12 +2,13 @@ import { Component } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { IconComponent } from "./icon.component";
 import { SectionHeadComponent } from "./section-head.component";
+import { TiltDirective } from "./tilt.directive";
 import { PROJECTS, UI, lang } from "../lib/site";
 
 @Component({
   selector: "app-projects",
   standalone: true,
-  imports: [IconComponent, RouterLink, SectionHeadComponent],
+  imports: [IconComponent, RouterLink, SectionHeadComponent, TiltDirective],
   template: `
     <section id="projects" class="container-x section scroll-mt-16">
       <app-section-head n="02" [title]="ui.sectionTitles.projects" [kicker]="lang() === 'it' ? 'lavori scelti / 2024—oggi' : 'selected work / 2024—now'">
@@ -18,7 +19,7 @@ import { PROJECTS, UI, lang } from "../lib/site";
         @for (p of projects.slice(0, maxProjects); track p.id; let i = $index; let first = $first) {
           @if (first) {
             <li class="lead reveal-on-scroll">
-              <a [routerLink]="['/projects', p.id]" class="card card-link project-card project-lead">
+              <a [routerLink]="['/projects', p.id]" class="card card-link project-card project-lead" appTilt="2.5">
                 <span class="project-lead-glow" aria-hidden="true"></span>
                 <div class="flex items-start justify-between gap-3">
                   <span class="eyebrow"><span class="eyebrow-index">01</span><span class="eyebrow-rule" aria-hidden="true"></span>{{ lang() === 'it' ? 'In evidenza' : 'Featured' }}</span>
@@ -48,7 +49,7 @@ import { PROJECTS, UI, lang } from "../lib/site";
             </li>
           } @else {
             <li class="reveal-on-scroll">
-              <a [routerLink]="['/projects', p.id]" class="card card-link project-card">
+              <a [routerLink]="['/projects', p.id]" class="card card-link project-card" appTilt>
                 <div class="flex items-start justify-between gap-3">
                   <span class="eyebrow-index">0{{ i + 1 }}</span>
                   <span class="meta-mono">@if (p.stars) { <span title="GitHub stars">★ {{ p.stars }}</span> · }{{ p.year }}</span>

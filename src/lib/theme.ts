@@ -103,9 +103,15 @@ export function toggleThemeFromPointer(event: MouseEvent) {
   root.style.setProperty("--vt-r", `${Math.ceil(radius)}px`);
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const doc = document as Document & { startViewTransition?: (cb: () => void) => void };
+  const doc = document as Document & {
+    startViewTransition?: (cb: () => void) => { finished: Promise<void> };
+  };
   if (!reduced && typeof doc.startViewTransition === "function") {
-    doc.startViewTransition(toggleThemeOverride);
+    // Marks this transition as a theme change, so it gets the circular reveal, not the route fade.
+    root.classList.add("theme-vt");
+    doc
+      .startViewTransition(toggleThemeOverride)
+      .finished.finally(() => root.classList.remove("theme-vt"));
     return;
   }
   toggleThemeOverride();
