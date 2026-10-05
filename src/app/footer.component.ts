@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { RouterLink } from "@angular/router";
 import { IconComponent } from "./icon.component";
 import { ToolsComponent } from "./tools.component";
 import { PROFILE, lang } from "../lib/site";
@@ -6,7 +7,7 @@ import { PROFILE, lang } from "../lib/site";
 @Component({
   selector: "app-footer",
   standalone: true,
-  imports: [IconComponent, ToolsComponent],
+  imports: [IconComponent, RouterLink, ToolsComponent],
   template: `
     <footer class="site-footer dark">
       <div class="container-x">
@@ -47,6 +48,7 @@ import { PROFILE, lang } from "../lib/site";
         <div class="footer-bottom">
           <span>© {{ year }} {{ profile.name }} · {{ profile.location }}</span>
           <span class="flex gap-5">
+            <a routerLink="/brand">Brand</a>
             <a [href]="'mailto:' + profile.email">Email</a>
             <a [href]="profile.github" target="_blank" rel="noreferrer">GitHub</a>
           </span>
