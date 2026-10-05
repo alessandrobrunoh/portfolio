@@ -116,17 +116,20 @@ const PAGE_META = [
                       </div>
                       <span class="hidden meta-mono sm:block">github / live</span>
                     </div>
-                    <div class="mt-6 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-3">
+                    <!-- Stars only when there are some: "★ 0" reads as a negative signal, not a neutral one. -->
+                    <div [class]="'mt-6 grid gap-px overflow-hidden rounded-lg border border-line bg-line ' + (live.stars || live.forks ? 'sm:grid-cols-3' : 'sm:grid-cols-2')">
                       <div class="bg-surface p-5">
                         <p class="meta-mono">Useful lines</p>
                         <p class="mt-2 text-heading-sm font-medium tracking-tight text-accent">{{ live.usefulLines.toLocaleString() }}</p>
                         <p class="mt-1 meta-mono">{{ live.filesCounted }} source files</p>
                       </div>
-                      <div class="bg-surface p-5">
-                        <p class="meta-mono">Community signal</p>
-                        <p class="mt-2 text-heading-sm font-medium tracking-tight text-fg">★ {{ live.stars }}</p>
-                        <p class="mt-1 meta-mono">{{ live.forks }} forks</p>
-                      </div>
+                      @if (live.stars || live.forks) {
+                        <div class="bg-surface p-5">
+                          <p class="meta-mono">Community signal</p>
+                          <p class="mt-2 text-heading-sm font-medium tracking-tight text-fg">★ {{ live.stars }}</p>
+                          <p class="mt-1 meta-mono">{{ live.forks }} forks</p>
+                        </div>
+                      }
                       <div class="bg-surface p-5">
                         <p class="meta-mono">Last push</p>
                         <p class="mt-2 text-heading-sm font-medium tracking-tight text-fg">{{ formatDate(live.updatedAt) }}</p>
@@ -221,10 +224,12 @@ const PAGE_META = [
                         <dt class="meta-mono">Useful lines</dt>
                         <dd class="mt-1 text-fg">{{ live.usefulLines.toLocaleString() }} <span class="text-muted">/ {{ live.filesCounted }} source files</span></dd>
                       </div>
-                      <div>
-                        <dt class="meta-mono">GitHub</dt>
-                        <dd class="mt-1 text-fg">★ {{ live.stars }} <span class="text-muted">· {{ live.forks }} forks</span></dd>
-                      </div>
+                      @if (live.stars || live.forks) {
+                        <div>
+                          <dt class="meta-mono">GitHub</dt>
+                          <dd class="mt-1 text-fg">★ {{ live.stars }} <span class="text-muted">· {{ live.forks }} forks</span></dd>
+                        </div>
+                      }
                       <div>
                         <dt class="meta-mono">Last push</dt>
                         <dd class="mt-1 text-fg">{{ formatDate(live.updatedAt) }}</dd>
