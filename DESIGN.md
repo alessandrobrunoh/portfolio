@@ -1,6 +1,6 @@
 ---
 name: Alessandro Bruno
-description: Personal site of a Software Engineer (Rust / Backend) — the ab. identity on screen: charcoal surfaces, machined silver, one electric-blue signal.
+description: Personal site of a Software Engineer (Systems & Product) — the ab. identity on screen: charcoal surfaces, machined silver, one electric-blue signal.
 colors:
   canvas: "#F4F6F8"
   surface: "#FFFFFF"
@@ -25,7 +25,7 @@ colors:
 typography:
   display:
     fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(2.75rem, 1.2rem + 5.2vw, 6rem)"
+    fontSize: "clamp(2.5rem, 1rem + 4.5vw, 5rem)"
     fontWeight: 500
     lineHeight: 0.98
     letterSpacing: "-0.045em"
@@ -125,7 +125,7 @@ components:
 
 # Design System: Alessandro Bruno
 
-Personal site of Alessandro Bruno, Software Engineer (Rust / Backend). This document is the visual source of truth for [alessandrobrunoh.it](https://alessandrobrunoh.it). The brand itself (logo files, clear space, misuse) is defined in [`BRAND.md`](./BRAND.md); this file is how that brand becomes an interface.
+Personal site of Alessandro Bruno, Software Engineer (Systems & Product). The site presents an engineer, not a language: no single technology leads the copy, and the stack shows up as a moving band of everything he actually uses. This document is the visual source of truth for [alessandrobrunoh.it](https://alessandrobrunoh.it). The brand itself (logo files, clear space, misuse) is defined in [`BRAND.md`](./BRAND.md); this file is how that brand becomes an interface.
 
 Canonical tokens live in `src/styles.css` (`:root` / `.dark` and the Tailwind `@theme` block). If prose and code disagree, the CSS wins. If this file and `BRAND.md` disagree about the logo, `BRAND.md` wins.
 
@@ -147,7 +147,7 @@ It should feel like a software engineer's workbench, not an agency landing page:
 - Motion is slow and restrained (400–1400ms, ease-out). No bounce. `prefers-reduced-motion` disables choreography.
 - Bilingual EN/IT. Copy changes; the visual system does not.
 
-**Page shell.** Fixed 64px top nav. Full-bleed hero, then numbered sections (`01 Intro` → `06 Contact`) inside `.container-x` (max 76rem, 20/32px gutter), separated by a content-width hairline. Footer is a `surface` band with daily tools, the full logo and a sign-off. A 2px blue gradient scroll-progress bar is pinned to the top. Subpages (project, blog) use the same nav plus a 14rem sticky "On this page" rail.
+**Page shell.** Fixed 64px top nav. Full-bleed hero, then numbered sections (`01 Intro` → `06 Contact`) inside `.container-x` (max 76rem, 20/32px gutter), separated by a content-width hairline. Footer is always black (`#000`, dark tokens) with daily tools, the white full logo, a sign-off and the wordmark engraved at display size. A 2px blue gradient scroll-progress bar is pinned to the top. Subpages (project, blog) use the same nav plus a 14rem sticky "On this page" rail.
 
 ## 2. Brand Assets in the Interface
 
@@ -157,8 +157,8 @@ Source files live in `public/logos/` (official SVGs, each a wrapped raster). The
 |---|---|---|
 | Nav mark (every page) | `brand/ab-monogram-metallic-160.webp` | 30px tall |
 | Hero mark, contact watermark, sheen mask | `brand/ab-monogram-metallic.webp` (960w) | up to 30rem wide |
-| Footer, dark theme | `brand/ab-logo-white-full.webp` | 13.5rem wide |
-| Footer, light theme | `brand/ab-logo-black-full.webp` | 13.5rem wide |
+| Footer (always black) | `brand/ab-logo-white-full.webp` | 13.5rem wide |
+| Light documents / spare | `brand/ab-logo-black-full.webp` | — |
 | Spare / documents | `brand/ab-logo-metallic-full.webp`, `brand/ab-monogram-{white,black}-160.webp` | — |
 | Light hero backdrop | `brand/hero-light.webp` (from `public/hero.png`, sphere cropped out) | cover |
 | Favicon | `favicon.svg` (128px metallic on `#0B0D10`), `favicon-32.png`, `apple-touch-icon.png` | — |
@@ -199,7 +199,7 @@ All values are the brand hexes from `BRAND.md`. Roles are CSS custom properties,
 
 **No pure black, no grey ramps.** Neutrals are the brand's cool charcoals and silvers. Tailwind `slate`/`gray` or `#000` surfaces are from another site.
 
-**Theme is lighting.** Dark is the default identity, light is the same layout on paper. The only theme-specific *content* is the hero backdrop: a fine 72px grid with blue ambient light in dark, the soft landscape (`hero-light.webp`) in light. Theme change is a circular view-transition clip from the toggle, 500ms ease-out-quart; the automatic schedule (light 06:00–20:00 UTC) and the theme-clock control are unchanged.
+**Theme is lighting.** Dark is the default identity, light is the same layout on paper. The only theme-specific *content* is the hero backdrop: a fine 72px grid with blue ambient light in dark, the soft landscape (`hero-light.webp`) in light. Theme change is a circular view-transition clip growing from the toggle (700ms ease-out-quart, scoped by `html.theme-vt` so route changes don't inherit it). With no stored choice the theme still follows the UTC schedule (light 06:00–20:00); a click stores a manual choice.
 
 ## 4. Typography
 
@@ -209,7 +209,7 @@ All values are the brand hexes from `BRAND.md`. Roles are CSS custom properties,
 
 ### Hierarchy
 
-- **Display** (Inter 500, `clamp(2.75rem → 6rem)`, lh 0.98, tracking −0.045em): the hero only. Role on two lines, the second (`Rust / Backend`) in a muted silver ending on the blue dot.
+- **Display** (Inter 500, `clamp(2.5rem → 5rem)`, lh 0.98, tracking −0.045em): the hero only. Role on exactly two lines (`Software Engineer` / `Systems & Product.`), sized so each fits its line in the 7/12 column; the second line is muted silver and ends on the blue dot.
 - **Heading** (Inter 500, `clamp(2.25rem → 3.75rem)`, lh 1.02, −0.045em): section titles (`Projects.`) and the contact statement. Always end on `<span class="brand-dot">.</span>`.
 - **Heading-sm** (Inter 500, `clamp(1.75rem → 2.5rem)`, −0.035em): the featured project name, big metric numbers.
 - **Title** (Inter 500, 1.5rem, −0.025em): card names, timeline roles, subpage h2.
@@ -217,7 +217,7 @@ All values are the brand hexes from `BRAND.md`. Roles are CSS custom properties,
 - **Body / Small** (Inter 400, 1rem / 0.875rem): everything else. Cap measure at `max-w-prose`.
 - **Wordmark** (Manrope 300, uppercase, 0.4em tracking): `ALESSANDRO BRUNO` above the hero title and next to the nav mark. Never bold, never sentence case.
 - **Eyebrow** (Manrope 500, 0.6875rem, uppercase, 0.24em): section kickers (`02 —— SELECTED WORK / 2024—NOW`), fact labels, card labels.
-- **Mono** (JetBrains Mono, 0.72–0.75rem): indexes (`02`), years, stars, repo paths, chips, the UTC clock. Data, not sentences.
+- **Mono** (JetBrains Mono, 0.72–0.75rem): indexes (`02`), years, stars, repo paths, chips, the language code. Data, not sentences.
 
 ### Named rules
 
@@ -238,10 +238,10 @@ Flat at rest. Depth comes from one surface step (`canvas → surface → surface
 ## 6. Components
 
 ### Navigation (`app-site-nav`)
-Fixed, 64px. Transparent over the hero; once scrolled, `--nav-bg` + 14px blur + bottom hairline. Left: metallic monogram (30px) + Manrope wordmark from `xl`. Centre (from `lg`): sections as `02 Projects` (mono number + Inter 14px); the active one turns `fg` with a 4px signal dot under it. Right: EN/IT segmented toggle, the compact theme clock (UTC readout from `xl`), primary "Email me" (from `sm`), menu button (below `lg`). The mobile sheet is opaque canvas with large Inter links and email/GitHub buttons; Escape closes it. On subpages the same links point to `/#section`.
+Fixed, 64px. Transparent over the hero; once scrolled, `--nav-bg` + 14px blur + bottom hairline. Left: metallic monogram (30px) + Manrope wordmark from `xl`. Centre (from `lg`): sections as `02 Projects` (mono number + Inter 14px); the active one turns `fg` with a 4px signal dot under it. Right: one hairline capsule holding the language control (globe + `EN`/`IT` that rolls like a split-flap; the globe turns 90°) and the theme toggle (a sun whose core grows while a disc slides in to cut a crescent and the rays spin out), then primary "Email me" (from `sm`) and the menu button (below `lg`). The bar tucks away while scrolling down past 320px and returns on any scroll up. The mobile sheet is opaque canvas with large Inter links and email/GitHub buttons; Escape closes it. On subpages the same links point to `/#section`.
 
 ### Hero (`app-intro`)
-Full-bleed, `min(52rem, 100svh − nav)`. Left 7/12: meta pill (avatar · company · location), wordmark, display role, lede, actions (primary Email · ghost CV · quiet GitHub), availability with a live dot. Right 5/12: the metallic monogram with ambient glow, a masked bottom-up reveal (1300ms), one light sweep through its own alpha (1600ms, again on hover) and a slow scroll parallax. Below: a three-cell proof strip (Production Rust / Published crate / Thesis) with eyebrow labels and Inter numbers.
+Full-bleed, `min(52rem, 100svh − nav)`. Left 7/12: meta pill (avatar · company · location), wordmark, display role, lede, actions (primary Email · ghost CV · quiet GitHub), availability with a live dot. Right 5/12: the metallic monogram with ambient glow, a masked bottom-up reveal (1300ms), one light sweep through its own alpha (1600ms, again on hover) and a slow scroll parallax. Display lines slide up out of their own masks; the wordmark settles from 0.9em to 0.4em tracking. Below: a three-cell proof strip (In production / Published crate / Thesis), then the **tech band**: two full-bleed rows of the real stack (languages & frameworks solid, infrastructure outlined in silver) that slide in opposite directions with scroll.
 
 ### Section head (`app-section-head`)
 Two columns from `lg` (5/12 + 7/12, bottom-aligned): eyebrow `NN —— KICKER` + heading with the dot on the left; the lede (projected content) on the right. `bare` variant (About) top-aligns and drops the bottom margin.
@@ -265,7 +265,7 @@ Newest first. Grid `11rem | 2.5rem | 1fr`: mono era (+ `now` pill), a 1px spine 
 Hairline rows: status (dot + word) | title, `repo · PR #n` in mono, note | arrow. Hover pads the row in and tints it `surface`.
 
 ### Footer
-`surface` band: daily-tools grid (4 → 2 columns), then the full logo (white in dark, black in light) | "End of stream" sign-off | CV + Back to top, then a mono bottom bar (© year, location, Email, GitHub).
+Always black (`#000`) in both themes: the element carries `.dark`, so every token inside resolves to the dark set. A blue ambient glow bleeds in from the top edge. Daily-tools grid (4 → 2 columns), then the white full logo | "End of stream" sign-off | CV + Back to top, then `ALESSANDRO BRUNO` in Manrope 300 at display size, engraved (charcoal-to-black text fill) and rising into place as it enters, then a mono bottom bar (© year, location, Email, GitHub).
 
 ### Subpages
 Nav + `page-shell` (14rem rail + content). Rail links are small Inter with mono numbers; active = surface fill, line ring and a 2px inset signal edge. Project pages keep live GitHub metrics in `panel`/`card` surfaces with signal data bars; code blocks are a fixed charcoal editor palette in both themes.
@@ -273,11 +273,15 @@ Nav + `page-shell` (14rem rail + content). Rail links are small Inter with mono 
 ## 7. Motion
 
 - Easing: `--ease-out-quart` (`cubic-bezier(0.23, 1, 0.32, 1)`) for UI, `--ease-smooth-out` for sweeps. Durations 150 / 250 / 400 / 500ms for UI; 700ms content reveals; 1300–1600ms hero.
-- Load: hero copy staggers in (fade + 12px rise, 100ms apart); the mark reveals bottom-up, then the sheen passes once.
-- Scroll: cards fade-rise via IntersectionObserver, rows via `animation-timeline: view()`, progress bar via `scroll()`, hero mark parallax 3.5rem.
-- Live: 2.4s soft ring pulse on live dots and the current timeline node. Nothing else loops.
+- Load: hero copy staggers in (fade + 12px rise, 100ms apart); display lines slide out of masks; the mark reveals bottom-up, then the sheen passes once.
+- Route change: Angular `withViewTransitions` — the old page lifts and blurs out (260ms), the new one rises in (620ms). The nav has its own `view-transition-name` and stays still.
+- Theme change: circular clip from the toggle (see Colors).
+- Scroll reveals (end on the resting state, safe everywhere): section titles rise out of a clip, eyebrow rules draw left to right, cards fade-rise, rows slide up, the footer wordmark rises.
+- Parallax (inside `@supports (animation-timeline: scroll())` only, so no browser freezes mid-move): hero copy drifts up and fades, the mark sinks 7rem and scales to .92, the grid and photo drift at their own depths, the tech rows slide opposite ways, the timeline spine fills blue row by row, the featured-project glow and the contact watermark drift across their panels.
+- Pointer: `appTilt` gives cards up to 5° tilt (2.5° featured, 1.2° contact) and a blue spotlight that follows the cursor (`--spot` is a registered `@property`, so it fades). Mouse and pen only. Primary buttons catch a light sliver on hover.
+- Live: 2.4s soft ring pulse on live dots and the current timeline node; the hero glow breathes over 9s. Nothing else loops.
 - Never animate layout properties. Transform, opacity, clip-path, background-position only.
-- `prefers-reduced-motion`: no reveals, no sheen, no parallax, no pulses, no view-transition clip, `scroll-behavior: auto`.
+- `prefers-reduced-motion`: no reveals, no sheen, no parallax, no tilt, no pulses, no route or theme view transitions, `scroll-behavior: auto`.
 
 ## 8. Do's and Don'ts
 
@@ -291,7 +295,8 @@ Nav + `page-shell` (14rem rail + content). Rail links are small Inter with mono 
 
 ### Don't
 - **Don't** recreate `ab.` in text, stretch, recolour, outline, shadow or filter the logo files, or place the metallic mark on busy imagery without air around it.
-- **Don't** introduce a second accent colour, gradient text, neon glows, or large blue fills.
+- **Don't** introduce a second accent colour, colourful gradient text, neon glows, or large blue fills. (The only gradient type is the footer engraving, charcoal to black.)
+- **Don't** position the person around one language. Facts can name Rust, Java or TypeScript; headlines, availability and calls to action stay technology-agnostic.
 - **Don't** add serif fonts, all-caps Inter headings, or bold (600+) display type.
 - **Don't** put glass, grain or resting drop shadows on cards.
 - **Don't** use the hero landscape anywhere but the light-mode hero; it is atmosphere, not content.
@@ -315,4 +320,4 @@ Nav + `page-shell` (14rem rail + content). Rail links are small Inter with mono 
 }
 ```
 
-Tailwind tokens bound in `@theme`: `bg-canvas`, `bg-surface`, `bg-surface-2`, `border-line`, `text-fg`, `text-muted`, `text-accent`, `bg-signal`, `text-on-accent`, `text-silver`, `font-sans`, `font-brand`, `font-mono`, `text-display`, `text-heading`, `text-heading-sm`, `text-title`, `text-subhead`, `text-lede`, `text-body`, `text-small`, `text-caption`, `tracking-tight`, `tracking-display`, `tracking-eyebrow`, `tracking-brand`, `rounded-sm|md|lg|xl|full`, `shadow-border`, `shadow-lift`, `shadow-dialog`. Component classes: `.container-x`, `.section`, `.eyebrow`, `.brand-wordmark`, `.brand-dot`, `.btn(-primary|-ghost|-quiet|-sm)`, `.chip(-quiet)`, `.card`, `.card-link`, `.live-dot`, `.meta-mono`, `.panel`.
+Tailwind tokens bound in `@theme`: `bg-canvas`, `bg-surface`, `bg-surface-2`, `border-line`, `text-fg`, `text-muted`, `text-accent`, `bg-signal`, `text-on-accent`, `text-silver`, `font-sans`, `font-brand`, `font-mono`, `text-display`, `text-heading`, `text-heading-sm`, `text-title`, `text-subhead`, `text-lede`, `text-body`, `text-small`, `text-caption`, `tracking-tight`, `tracking-display`, `tracking-eyebrow`, `tracking-brand`, `rounded-sm|md|lg|xl|full`, `shadow-border`, `shadow-lift`, `shadow-dialog`. Component classes: `.container-x`, `.section`, `.eyebrow`, `.brand-wordmark`, `.brand-dot`, `.btn(-primary|-ghost|-quiet|-sm)`, `.chip(-quiet)`, `.card`, `.card-link`, `.live-dot`, `.meta-mono`, `.panel`, `.nav-controls`/`.nav-ctl`, `.tech-band`/`.tech-row`, `.footer-giant`. Directive: `appTilt` (`[appTilt]="max degrees"`).
