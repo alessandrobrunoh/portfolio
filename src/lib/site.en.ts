@@ -23,8 +23,7 @@ export const EN: SiteData = {
     { n: "02", href: "#experience", label: "Experience" },
     { n: "03", href: "#work", label: "Work" },
     { n: "04", href: "#approach", label: "How I work" },
-    { n: "05", href: "#writing", label: "Writing" },
-    { n: "06", href: "#contact", label: "Contact" },
+    { n: "05", href: "#contact", label: "Contact" },
   ],
 
   COMPANY: {
@@ -40,6 +39,7 @@ export const EN: SiteData = {
       title: "Software Developer",
       dates: "Jun 2026 — present",
       current: true,
+      caseId: "event-platform",
       bullets: [
         "Embedded on a client's production platform: event-driven Rust services that process their workloads — async consumers on Valkey Streams, payloads on S3.",
         "Made the services observable end to end: traces and logs through OpenTelemetry into Grafana, Loki and Tempo, so problems are traced across services instead of guessed.",
@@ -141,6 +141,18 @@ export const EN: SiteData = {
       name: "ducklake-orm",
       blurb: "Rust ORM for DuckDB and DuckLake, published on crates.io — derive macros, query builders, pooling, migrations, time travel.",
       problem: "DuckDB and DuckLake are great for analytics, but using them from Rust meant hand-written SQL and loosely typed results. I wanted the ergonomics of an ORM without hiding what the database does well.",
+      decisions: [
+        {
+          title: "Typed errors and discoverable defaults",
+          context: "Analytical storage is powerful, but power alone does not make a tool pleasant to use on an ordinary workday.",
+          choice: "Typed errors, defaults you can discover from the API, and migrations inside the library — so a new user can predict what happens next without opening the implementation.",
+        },
+        {
+          title: "Know where the abstraction stops",
+          context: "An ORM that hides everything makes the reader pay its complexity tax.",
+          choice: "Derive macros and query builders cover the common path — filters, ordering, limits, counts, fetch_one. Beyond that the database speaks for itself, including DuckLake time travel.",
+        },
+      ],
       href: "https://github.com/alessandrobrunoh/ducklake-orm",
       stars: GITHUB_STATS.stars["ducklake-orm"] ?? 0,
       lang: "Rust",
@@ -303,45 +315,47 @@ export const EN: SiteData = {
 
   ],
 
-  BLOG: [
+  CASES: [
     {
-      slug: "publishing-a-crate-without-an-audience",
-      title: "Making a data tool feel like a product",
-      subtitle: "ducklake-orm",
-      pitch: "The small API and documentation decisions that turn low-level storage work into something people can actually use.",
-      status: "Planned",
-      body: [
-        "Analytical storage is powerful, but power alone does not make a tool pleasant. I built ducklake-orm to explore the boundary between DuckDB's capabilities and an API that feels clear on an ordinary workday.",
-        "The interesting decisions were not only about queries. They were about typed errors, discoverable defaults, migrations, and the point where an abstraction should stop and let the database speak.",
-        "This draft will walk through the trade-offs that shaped the API, the documentation I wish I had written first, and the difference between wrapping a system and making it understandable.",
-        "The test I keep coming back to is simple: can a new user predict what happens next without opening the implementation? If not, the abstraction is still making the reader pay its complexity tax.",
+      id: "event-platform",
+      title: "An event-driven platform for a client",
+      role: "Software Developer · Luna S.r.l.",
+      era: "2025 — present",
+      blurb: "Working inside a client's production backend: Rust consumers on Valkey Streams, payloads on S3, end-to-end tracing, and an operator console for the people who run it.",
+      problem: "A client runs its workloads through an event-driven backend. Work arrives as events, payloads live on S3, and every event has to be processed exactly once in effect — under load, with retries — while the people operating the platform need to see what happened when something goes wrong.",
+      built: [
+        "Async Rust consumers on Valkey Streams that read, handle and acknowledge events, with payloads on S3.",
+        "Tracing and logging through OpenTelemetry into Grafana, Loki and Tempo, so a single event can be followed across services.",
+        "A new operator console — Spring Boot APIs and a React UI — for the people who run the platform day to day.",
+        "Everything shipped as small, reviewable diffs under senior code review.",
       ],
-    },
-    {
-      slug: "what-i-got-wrong-about-event-buses",
-      title: "What I got wrong about event buses",
-      subtitle: "Valkey / internship → hire",
-      pitch: "The assumptions I brought from a request/response world into an event-driven one, and where they broke.",
-      status: "Planned",
-      body: [
-        "I came into the Rust backend role from a request/response world — a Spring API that answered a call and moved on. The event bus doesn't work that way, and the assumptions I brought with me were wrong in ways that only showed up under load.",
-        "The first one: I treated \"delivered\" and \"processed\" as the same event. They aren't, and the gap between them is where retries, duplicates, and ordering bugs live. Valkey streams make that gap visible if you're willing to look at it.",
-        "This is a draft — the finished piece will walk through the specific failure that taught me this, and how observability (Grafana, Alloy, Loki, Tempo) had to be designed in before I trusted the bus enough to build on top of it.",
-        "The practical rule became a small state machine: read, handle, acknowledge. Once those transitions were explicit, retries stopped feeling like edge cases and started looking like part of the design.",
+      decisions: [
+        {
+          title: "Acknowledge after the side effect, not after the read",
+          context: "I came from a request/response world, where a call is answered and forgotten. On an event bus I treated “delivered” and “processed” as the same thing. They are not: the gap between them is where retries, duplicates and ordering bugs live.",
+          choice: "Make each consumer an explicit small state machine — read, handle, acknowledge — and acknowledge only once the work has actually happened. Retries stopped being edge cases and became part of the design.",
+          code: "// delivered is not processed\nlet message = stream.read().await?;\nif worker.handle(&message).await? {\n    stream.ack(message.id).await?;\n}",
+        },
+        {
+          title: "Observability before trust",
+          context: "An event bus fails quietly: a message that was never processed can look exactly like one that was.",
+          choice: "Traces and logs went in through OpenTelemetry, into Grafana, Loki and Tempo, before more was built on top of the bus — so every event can be followed end to end, and problems are found from evidence rather than guesses.",
+        },
       ],
-    },
-    {
-      slug: "reading-a-zed-pr-end-to-end",
-      title: "Reading a Zed PR end to end",
-      subtitle: "Open source, in practice",
-      pitch: "How a real PR moves through review in a fast-moving codebase — what reviewers actually look for.",
-      status: "Draft",
-      body: [
-        "Getting the JDL language extension merged into zed-industries/extensions meant reading Zed's own review process as closely as the code — a fast-moving codebase with strong opinions about what a contribution should look like before a maintainer will even look at it.",
-        "The interesting part wasn't the grammar file. It was watching what reviewers actually flagged: naming that didn't match existing conventions, missing test fixtures, and scope creep in a PR that was supposed to do one thing.",
-        "This is still a draft. The finished piece walks through the specific review comments on that PR and the newer one still open (dynamic port forwarding), and what they taught me about writing a PR a stranger can approve quickly.",
-        "A good review is a compression exercise: the patch should make the intended behavior obvious, keep the diff narrow, and leave the reviewer with one decision instead of ten guesses.",
+      learned: "Delivery is not processing. Once the transitions are explicit and observable, an event-driven system becomes something you can reason about — and explain to the people who depend on it.",
+      stack: [
+        "Rust",
+        "Tokio",
+        "Valkey Streams",
+        "S3",
+        "OpenTelemetry",
+        "Grafana",
+        "Loki",
+        "Tempo",
+        "Spring Boot",
+        "React",
       ],
+      confidentiality: "Client work: the client, its data and internal details are left out on purpose.",
     },
   ],
 
@@ -425,10 +439,7 @@ export const EN: SiteData = {
       contact: "Contact",
       work: "Work",
       approach: "How I work",
-      writing: "Writing",
     },
-    backToBlog: "← Back to Blog",
-    postNotFound: "Post not found.",
     close: "Close",
     toggleTheme: "Toggle color theme",
     openMenu: "Open menu",

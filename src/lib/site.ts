@@ -6,7 +6,7 @@ import type {
   Contribution,
   Education,
   FutureProject,
-  BlogPost,
+  CaseStudy,
   Profile,
   Project,
   Principle,
@@ -18,7 +18,7 @@ import type {
   UiStrings,
 } from "./site.types";
 
-export type { Contribution, FutureProject, BlogPost, Project } from "./site.types";
+export type { CaseStudy, Contribution, Decision, FutureProject, Project } from "./site.types";
 export type Lang = "en" | "it";
 
 const STORAGE_KEY = "site-lang";
@@ -52,7 +52,7 @@ export const CONTRIBUTIONS: Contribution[] = [...EN.CONTRIBUTIONS];
 export const PROJECTS: Project[] = [...EN.PROJECTS];
 export const STACK: Stack = { groups: [...EN.STACK.groups] };
 export const FUTURE_PROJECTS: FutureProject[] = [...EN.FUTURE_PROJECTS];
-export const BLOG: BlogPost[] = [...EN.BLOG];
+export const CASES: CaseStudy[] = [...EN.CASES];
 export const PULSE: Pulse = { ...EN.PULSE };
 export const TOOLS: Tool[] = [...EN.TOOLS];
 export const PRINCIPLES: Principle[] = [...EN.PRINCIPLES];
@@ -74,8 +74,8 @@ export function setLanguage(next: Lang) {
   STACK.groups = [...data.STACK.groups];
   FUTURE_PROJECTS.length = 0;
   FUTURE_PROJECTS.push(...data.FUTURE_PROJECTS);
-  BLOG.length = 0;
-  BLOG.push(...data.BLOG);
+  CASES.length = 0;
+  CASES.push(...data.CASES);
   Object.assign(PULSE, data.PULSE);
   TOOLS.length = 0;
   TOOLS.push(...data.TOOLS);

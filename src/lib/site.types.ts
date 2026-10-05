@@ -41,6 +41,17 @@ export interface Impact {
   label: string;
 }
 
+/**
+ * A decision worth explaining: the situation, what I chose and why. Optional code shows the
+ * choice in practice. Only real decisions — this is the "article" content, kept with its project.
+ */
+export interface Decision {
+  title: string;
+  context: string;
+  choice: string;
+  code?: string;
+}
+
 export interface Role {
   title: string;
   dates: string;
@@ -48,6 +59,25 @@ export interface Role {
   bullets: string[];
   tags: string[];
   impact?: Impact[];
+  /** Id of a CaseStudy (/work/:id) that tells this role's main story in depth. */
+  caseId?: string;
+}
+
+/** A case study from client work (/work/:id). Client details stay out on purpose. */
+export interface CaseStudy {
+  id: string;
+  title: string;
+  role: string;
+  era: string;
+  blurb: string;
+  problem: string;
+  built: string[];
+  decisions: Decision[];
+  impact?: Impact[];
+  learned: string;
+  stack: string[];
+  /** Shown under the title: why names and details are missing. */
+  confidentiality: string;
 }
 
 export interface Education {
@@ -89,6 +119,7 @@ export interface Project {
   body: string;
   /** Case-study context: who had the problem and why it mattered. */
   problem?: string;
+  decisions?: Decision[];
   impact?: Impact[];
 }
 
@@ -125,18 +156,8 @@ export interface FutureProject {
   learned: string;
   body: string;
   problem?: string;
+  decisions?: Decision[];
   impact?: Impact[];
-}
-
-export type BlogStatus = "Planned" | "Draft" | "Published";
-
-export interface BlogPost {
-  slug: string;
-  title: string;
-  subtitle: string;
-  pitch: string;
-  status: BlogStatus;
-  body: string[];
 }
 
 export interface PulseKpi {
@@ -195,10 +216,7 @@ export interface UiStrings {
     contact: string;
     work: string;
     approach: string;
-    writing: string;
   };
-  backToBlog: string;
-  postNotFound: string;
   close: string;
   toggleTheme: string;
   openMenu: string;
@@ -220,7 +238,7 @@ export interface SiteData {
   PROJECTS: Project[];
   STACK: Stack;
   FUTURE_PROJECTS: FutureProject[];
-  BLOG: BlogPost[];
+  CASES: CaseStudy[];
   PULSE: Pulse;
   TOOLS: Tool[];
   PRINCIPLES: Principle[];
