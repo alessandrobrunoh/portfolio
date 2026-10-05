@@ -459,6 +459,22 @@ html.theme-vt::view-transition-new(root) {
       border-color var(--motion-slow) var(--ease-out-quart);
   }
 
+  /* A soft light under the pointer (SpotlightDirective writes --mx/--my). */
+  .card[data-spotlight]::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(22rem circle at var(--mx, 50%) var(--my, 0%), rgb(59 130 246 / 0.09), transparent 65%);
+    opacity: 0;
+    transition: opacity var(--motion-emphasis) var(--ease-out-quart);
+    pointer-events: none;
+  }
+
+  .card[data-spotlight]:hover::before {
+    opacity: 1;
+  }
+
   .card-link:hover,
   .card-link:focus-visible {
     transform: translateY(-2px);
@@ -837,6 +853,45 @@ html.theme-vt::view-transition-new(root) {
     background: radial-gradient(closest-side, rgb(59 130 246 / 0.07), transparent);
   }
 
+  /* The engineering grid: 64px cells, faded out from the mark, with a slow blue pulse crossing it. */
+  .hero-grid {
+    --grid-ink: rgb(15 23 42 / 0.06);
+    position: absolute;
+    inset: -10% 0 0;
+    background-image:
+      linear-gradient(var(--grid-ink) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-ink) 1px, transparent 1px);
+    background-size: 64px 64px;
+    background-position: center top;
+    -webkit-mask-image: radial-gradient(ellipse 55% 60% at 72% 46%, #000 0%, rgb(0 0 0 / 0.5) 45%, transparent 78%);
+    mask-image: radial-gradient(ellipse 55% 60% at 72% 46%, #000 0%, rgb(0 0 0 / 0.5) 45%, transparent 78%);
+  }
+
+  .dark .hero-grid {
+    --grid-ink: rgb(241 245 249 / 0.06);
+  }
+
+  /* Same grid in blue, visible only inside a soft spot that drifts across it. */
+  .hero-grid-pulse {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgb(59 130 246 / 0.35) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(59 130 246 / 0.35) 1px, transparent 1px);
+    background-size: 64px 64px;
+    background-position: center top;
+    -webkit-mask-image: radial-gradient(circle 14rem at var(--px, 60%) var(--py, 40%), #000, transparent 70%);
+    mask-image: radial-gradient(circle 14rem at var(--px, 60%) var(--py, 40%), #000, transparent 70%);
+    animation: grid-pulse 14s ease-in-out infinite alternate;
+  }
+
+  @media (max-width: 1023px) {
+    .hero-grid {
+      -webkit-mask-image: radial-gradient(ellipse 90% 45% at 50% 78%, #000 0%, transparent 75%);
+      mask-image: radial-gradient(ellipse 90% 45% at 50% 78%, #000 0%, transparent 75%);
+    }
+  }
+
   .hero-inner {
     display: grid;
     flex: 1;
@@ -889,6 +944,74 @@ html.theme-vt::view-transition-new(root) {
     color: var(--fg);
   }
 
+  /*
+   * Easter-egg switch: the avatar is the knob. On hover/focus it slides to the right end, the
+   * text shifts left and a play glyph appears where the knob was. It rests "on" while the game runs.
+   */
+  .hero-switch {
+    position: relative;
+    padding: 0.3125rem 0.875rem 0.3125rem 2.625rem;
+    cursor: pointer;
+    transition:
+      padding 420ms var(--ease-out-quart),
+      border-color var(--motion-slow) var(--ease-out-quart),
+      background-color var(--motion-slow) var(--ease-out-quart),
+      box-shadow var(--motion-slow) var(--ease-out-quart);
+  }
+
+  .hero-switch-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+  }
+
+  .hero-switch-knob {
+    position: absolute;
+    top: 50%;
+    left: 0.3125rem;
+    margin-top: -0.875rem;
+    transition: left 520ms cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow var(--motion-slow) var(--ease-out-quart);
+  }
+
+  .hero-switch-play {
+    position: absolute;
+    top: 50%;
+    left: 0.75rem;
+    display: grid;
+    margin-top: -0.4375rem;
+    color: var(--signal);
+    opacity: 0;
+    transform: scale(0.4) rotate(-90deg);
+    transition: opacity var(--motion-slow) var(--ease-out-quart), transform 420ms var(--ease-out-quart);
+  }
+
+  .hero-switch:is(:hover, :focus-visible, .is-on) {
+    padding-left: 2.125rem;
+    padding-right: 2.625rem;
+    border-color: rgb(59 130 246 / 0.45);
+    background: color-mix(in srgb, var(--surface) 88%, var(--signal));
+    box-shadow: var(--shadow-md);
+  }
+
+  .hero-switch:is(:hover, :focus-visible, .is-on) .hero-switch-knob {
+    left: calc(100% - 2.0625rem);
+    box-shadow: 0 0 0 2px var(--signal);
+  }
+
+  .hero-switch:is(:hover, :focus-visible, .is-on) .hero-switch-play {
+    opacity: 1;
+    transform: none;
+    transition-delay: 120ms;
+  }
+
+  .hero-switch:focus-visible {
+    outline: none;
+  }
+
+  .hero-switch:active .hero-switch-knob {
+    transform: scale(0.92);
+  }
+
   .hero-meta .sep {
     width: 3px;
     height: 3px;
@@ -910,8 +1033,12 @@ html.theme-vt::view-transition-new(root) {
     color: var(--fg);
   }
 
+  /* Each display line rises out of its own mask. */
   .hero-title .line {
     display: block;
+    overflow: hidden;
+    padding-bottom: 0.12em;
+    margin-bottom: -0.12em;
   }
 
   .hero-title .sub {
@@ -960,6 +1087,12 @@ html.theme-vt::view-transition-new(root) {
       width: min(100%, 26rem);
       padding: 2rem;
     }
+  }
+
+  .hero-mark-float {
+    display: block;
+    width: 100%;
+    animation: mark-float 7s ease-in-out 900ms infinite;
   }
 
   .hero-mark-img {
@@ -1532,39 +1665,89 @@ html.theme-vt::view-transition-new(root) {
     }
   }
 
-  /* ---------- How I work ---------- */
-  .principles {
+  /* ---------- How I work: a horizontal timeline ---------- */
+  .steps-scroller {
+    position: relative;
+  }
+
+  .steps {
+    position: relative;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 2rem;
   }
 
-  .principle {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    padding: 1.5rem;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    background: var(--surface);
-    box-shadow: var(--shadow-sm);
+  /* The rail runs through the node centres; its blue fill draws in when the section is seen. */
+  .steps::before,
+  .steps::after {
+    content: "";
+    position: absolute;
+    top: 1.375rem;
+    left: 1.375rem;
+    right: 1.375rem;
+    height: 1px;
+    background: var(--line-strong);
   }
 
-  .principle:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
+  .steps::after {
+    height: 2px;
+    margin-top: -0.5px;
+    background: linear-gradient(90deg, var(--signal), #93c5fd);
+    transform: scaleX(0);
+    transform-origin: left;
   }
 
-  .principle-n {
-    display: inline-grid;
-    width: 2.25rem;
-    height: 2.25rem;
+  .step {
+    position: relative;
+    padding-right: 0.5rem;
+  }
+
+  .step-node {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
     place-items: center;
-    border-radius: var(--radius-sm);
-    background: rgb(59 130 246 / 0.1);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--canvas);
     font-size: 0.8125rem;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
-    color: var(--accent);
+    color: var(--faint);
+    transition:
+      background-color var(--motion-slow) var(--ease-out-quart),
+      border-color var(--motion-slow) var(--ease-out-quart),
+      color var(--motion-slow) var(--ease-out-quart),
+      transform var(--motion-slow) var(--ease-out-quart),
+      box-shadow var(--motion-slow) var(--ease-out-quart);
+  }
+
+  .step:hover .step-node {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 6px rgb(59 130 246 / 0.12);
+  }
+
+  .step .principle-title,
+  .step .principle-body {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+
+  .steps-scroller.is-visible .steps::after {
+    animation: rail-draw 1100ms var(--ease-out-quart) 150ms forwards;
+  }
+
+  .steps-scroller.is-visible .step-node {
+    animation: node-on 480ms var(--ease-out-quart) forwards;
+    animation-delay: calc(250ms + var(--i) * 190ms);
+  }
+
+  .steps-scroller.is-visible .step .principle-title,
+  .steps-scroller.is-visible .step .principle-body {
+    animation: fade-up 520ms var(--ease-out-quart) forwards;
+    animation-delay: calc(330ms + var(--i) * 190ms);
   }
 
   .principle-title {
@@ -1576,13 +1759,36 @@ html.theme-vt::view-transition-new(root) {
   }
 
   .principle-body {
-    font-size: var(--text-body);
+    font-size: var(--text-small);
+    line-height: 1.6;
     color: var(--muted);
   }
 
-  @media (max-width: 767px) {
-    .principles {
-      grid-template-columns: 1fr;
+  /* Narrow screens: the timeline becomes a swipeable track with snap points. */
+  @media (max-width: 1023px) {
+    .steps-scroller {
+      margin-inline: calc(-1 * var(--gutter));
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+    .steps-scroller::-webkit-scrollbar {
+      display: none;
+    }
+    .steps {
+      grid-template-columns: repeat(5, min(72vw, 17rem));
+      width: max-content;
+      padding-inline: var(--gutter);
+      padding-bottom: 0.5rem;
+    }
+    .steps::before,
+    .steps::after {
+      left: calc(var(--gutter) + 1.375rem);
+      right: calc(var(--gutter) + 1.375rem);
+    }
+    .step {
+      scroll-snap-align: start;
+      scroll-margin-left: var(--gutter);
     }
   }
 
@@ -1781,6 +1987,29 @@ html.theme-vt::view-transition-new(root) {
     user-select: none;
   }
 
+  /* The wordmark types itself in, letter by letter, when the footer arrives.
+     Flex ignores the whitespace between the letter spans, so tracking stays exactly 0.3em. */
+  .footer-giant.reveal-on-scroll {
+    display: flex;
+    justify-content: center;
+    padding-left: 0.3em;
+    text-indent: 0;
+    opacity: 0.92;
+    transform: none;
+  }
+
+  .footer-giant span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.4em);
+    filter: blur(6px);
+  }
+
+  .footer-giant.is-visible span {
+    animation: letter-in 700ms var(--ease-out-quart) forwards;
+    animation-delay: calc(var(--i) * 45ms);
+  }
+
   .footer-bottom {
     display: flex;
     flex-wrap: wrap;
@@ -1799,6 +2028,73 @@ html.theme-vt::view-transition-new(root) {
 
   .footer-bottom a:hover {
     color: var(--fg);
+  }
+
+  /* ---------- Easter egg: Dot Runner ---------- */
+  .game-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    background: var(--overlay);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    animation: fade-in var(--motion-slow) var(--ease-out-quart) both;
+  }
+
+  .game-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 81;
+    width: min(54rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    overflow: auto;
+    padding: clamp(1.25rem, 1rem + 1.5vw, 2rem);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xl);
+    background: var(--surface);
+    box-shadow: var(--shadow-lg);
+    transform: translate(-50%, -50%);
+    animation: game-in 420ms var(--ease-out-quart) both;
+  }
+
+  .game-panel:focus {
+    outline: none;
+  }
+
+  .game-stage {
+    position: relative;
+    margin-top: 1.25rem;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+  }
+
+  .game-canvas {
+    display: block;
+    width: 100%;
+    aspect-ratio: 800 / 320;
+    touch-action: manipulation;
+    cursor: pointer;
+  }
+
+  .game-canvas:focus-visible {
+    outline: none;
+    box-shadow: inset var(--shadow-focus);
+  }
+
+  .game-message {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+    background: color-mix(in srgb, var(--subtle) 72%, transparent);
+    pointer-events: none;
+    animation: fade-in var(--motion-slow) var(--ease-out-quart) both;
   }
 
   /* ---------- Brand page ---------- */
@@ -2135,7 +2431,19 @@ html.theme-vt::view-transition-new(root) {
   .dark .diff-del { color: #f87171; }
 }
 
-/* ---------- Motion: calm by default ---------- */
+/* ---------- Motion ---------- */
+@property --px {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 60%;
+}
+
+@property --py {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 40%;
+}
+
 @keyframes data-rise {
   from { transform: scaleX(0); opacity: 0.4; }
   to { transform: scaleX(1); opacity: 1; }
@@ -2179,8 +2487,58 @@ html.theme-vt::view-transition-new(root) {
   to { transform: scaleY(1); }
 }
 
+@keyframes grid-drift {
+  to { transform: translateY(6rem); }
+}
+
 @keyframes cue-out {
   to { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes game-in {
+  from { opacity: 0; transform: translate(-50%, calc(-50% + 1rem)) scale(0.98); }
+}
+
+@keyframes grid-pulse {
+  0% { --px: 58%; --py: 30%; }
+  50% { --px: 86%; --py: 62%; }
+  100% { --px: 66%; --py: 78%; }
+}
+
+@keyframes mark-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes line-up {
+  from { transform: translateY(105%); }
+}
+
+@keyframes rail-draw {
+  to { transform: scaleX(1); }
+}
+
+@keyframes node-on {
+  0% { transform: scale(0.85); }
+  60% { transform: scale(1.12); }
+  100% { transform: scale(1); border-color: var(--signal); background: var(--signal); color: #ffffff; box-shadow: 0 0 0 6px rgb(59 130 246 / 0.12); }
+}
+
+@keyframes letter-in {
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+@keyframes title-rise {
+  from { opacity: 0; transform: translateY(1.25rem); clip-path: inset(0 0 100% 0); }
+  to { opacity: 1; transform: none; clip-path: inset(0 0 -25% 0); }
+}
+
+@keyframes rule-draw {
+  from { transform: scaleX(0); }
 }
 
 @keyframes mark-drift {
@@ -2202,7 +2560,7 @@ html.theme-vt::view-transition-new(root) {
 
 .hero-title .line > span {
   display: inline-block;
-  animation: fade-up 520ms var(--ease-out-quart) both;
+  animation: line-up 900ms var(--ease-out-quart) both;
 }
 
 .hero-title .line:nth-child(1) > span { animation-delay: 120ms; }
@@ -2240,10 +2598,31 @@ html.theme-vt::view-transition-new(root) {
 .reveal-on-scroll:nth-child(3) { transition-delay: 120ms; }
 .reveal-on-scroll:nth-child(4) { transition-delay: 180ms; }
 
-/* Minimal parallax, only where scroll timelines exist. */
+/* Section titles rise out of a clip and the eyebrow rules draw in as they enter. */
+.section-title,
+.contact-statement {
+  animation: title-rise linear both;
+  animation-timeline: view();
+  animation-range: entry 5% entry 60%;
+}
+
+.eyebrow-rule {
+  transform-origin: left;
+  animation: rule-draw linear both;
+  animation-timeline: view();
+  animation-range: entry 20% entry 90%;
+}
+
+/* Parallax, only where scroll timelines exist. */
 @supports (animation-timeline: scroll()) {
   .hero-mark-img {
     animation: mark-drift linear both;
+    animation-timeline: scroll();
+    animation-range: 0 100vh;
+  }
+
+  .hero-grid {
+    animation: grid-drift linear both;
     animation-timeline: scroll();
     animation-range: 0 100vh;
   }
@@ -2285,6 +2664,17 @@ html.theme-vt::view-transition-new(root) {
   .live-dot,
   .tl-row.is-current .tl-node,
   .tech-row,
+  .hero-grid,
+  .hero-grid-pulse,
+  .hero-mark-float,
+  .section-title,
+  .contact-statement,
+  .eyebrow-rule,
+  .steps::after,
+  .step-node,
+  .step .principle-title,
+  .step .principle-body,
+  .footer-giant span,
   .brand-menu,
   .site-nav-sheet,
   .data-bar span,
@@ -2299,6 +2689,13 @@ html.theme-vt::view-transition-new(root) {
     display: none;
   }
 
+  .hero-grid-pulse {
+    display: none;
+  }
+
+  .hero-switch,
+  .hero-switch-knob,
+  .hero-switch-play,
   .card,
   .card-link:hover,
   .tool-slot,
@@ -2315,6 +2712,13 @@ html.theme-vt::view-transition-new(root) {
   ::view-transition-old(root),
   ::view-transition-new(root),
   ::view-transition-group(*) {
+    animation: none !important;
+  }
+
+  /* The game itself still runs (it is user-started); only its entrance is skipped. */
+  .game-overlay,
+  .game-panel,
+  .game-message {
     animation: none !important;
   }
 }

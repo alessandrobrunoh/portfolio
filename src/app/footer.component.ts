@@ -44,7 +44,9 @@ import { PROFILE, TOC, lang } from "../lib/site";
         </div>
 
         <!-- The wordmark, as the brand asks for in footers: Inter Light, uppercase, wide tracking, white on dark. -->
-        <p class="footer-giant" aria-hidden="true">{{ profile.name }}</p>
+        <p class="footer-giant reveal-on-scroll" aria-hidden="true">
+          @for (ch of letters; track $index) { <span [style.--i]="$index">{{ ch === ' ' ? '\u00a0' : ch }}</span> }
+        </p>
 
         <div class="footer-bottom">
           <span>© {{ year }} {{ profile.name }} · {{ profile.location }}</span>
@@ -67,6 +69,8 @@ export class FooterComponent {
   protected readonly profile = PROFILE;
   protected readonly lang = lang;
   protected readonly toc = TOC;
+  /** The wordmark letter by letter, so it can type itself in when the footer arrives. */
+  protected readonly letters = PROFILE.name.split("");
   protected readonly year = new Date().getFullYear();
 
   scrollToTop() {

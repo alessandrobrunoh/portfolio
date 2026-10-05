@@ -1,4 +1,4 @@
-import { Component, computed } from "@angular/core";
+import { Component, computed, output, signal } from "@angular/core";
 import { IconComponent } from "./icon.component";
 import { SectionHeadComponent } from "./section-head.component";
 
@@ -12,20 +12,36 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
   template: `
     <section id="intro" class="scroll-mt-16">
       <div class="hero">
-        <!-- Soft abstract brand shapes: two pale discs, no imagery behind the logo. -->
+        <!-- A fine engineering grid behind the mark (with a slow blue pulse), plus two pale discs. -->
         <div class="hero-backdrop" aria-hidden="true">
           <span class="hero-shape hero-shape-a"></span>
           <span class="hero-shape hero-shape-b"></span>
+          <div class="hero-grid"><span class="hero-grid-pulse"></span></div>
         </div>
 
         <div class="container-x hero-inner">
           <div class="hero-copy min-w-0">
-            <p class="hero-meta stagger-in">
-              <img [src]="profile.avatar" alt="" width="56" height="56" />
-              <strong>{{ profile.company.name }}</strong>
-              <span class="sep" aria-hidden="true"></span>
-              <span>{{ profile.location }}</span>
-            </p>
+            <!--
+              Easter egg: the pill is a switch. Hover or focus slides the avatar to the right like a
+              toggle knob and reveals a play glyph; clicking opens the mini-game.
+            -->
+            <button
+              type="button"
+              class="hero-meta hero-switch stagger-in"
+              [class.is-on]="switched()"
+              (click)="play()"
+              [attr.aria-label]="(lang() === 'it' ? 'Easter egg: gioca a un minigioco — ' : 'Easter egg: play a mini-game — ') + profile.company.name + ', ' + profile.location"
+            >
+              <span class="hero-switch-play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" class="size-3.5" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" /></svg>
+              </span>
+              <span class="hero-switch-text">
+                <strong>{{ profile.company.name }}</strong>
+                <span class="sep" aria-hidden="true"></span>
+                <span>{{ profile.location }}</span>
+              </span>
+              <img class="hero-switch-knob" [src]="profile.avatar" alt="" width="56" height="56" />
+            </button>
 
             <h1>
               <span class="eyebrow hero-eyebrow">Software · Systems · Product</span>
@@ -64,8 +80,10 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
           <!-- Full logo: the soft monogram with the wordmark set live in Inter under it. -->
           <div class="hero-mark" aria-hidden="true">
             <!-- Soft mark on light; the white variant on dark, as the brand asks for dark sections. -->
-            <img class="hero-mark-img dark:hidden" src="/brand/ab-monogram.webp" alt="" width="960" height="666" fetchpriority="high" />
-            <img class="hero-mark-img hidden dark:block" src="/brand/ab-monogram-white.webp" alt="" width="480" height="333" />
+            <span class="hero-mark-float">
+              <img class="hero-mark-img dark:hidden" src="/brand/ab-monogram.webp" alt="" width="960" height="666" fetchpriority="high" />
+              <img class="hero-mark-img hidden dark:block" src="/brand/ab-monogram-white.webp" alt="" width="480" height="333" />
+            </span>
             <span class="hero-mark-wordmark brand-wordmark">{{ profile.name }}</span>
           </div>
         </div>
@@ -151,6 +169,20 @@ export class IntroComponent {
     return [[...new Set(first)], [...new Set(second)]];
   });
   /** "Software Engineer — Systems & Product" sets as two display lines; the second ends on the logo dot. */
+  /** Stays "on" after a click so the knob rests on the right while the game is open. */
+  protected readonly switched = signal(false);
+  readonly playRequested = output<void>();
+
+  protected play() {
+    this.switched.set(true);
+    this.playRequested.emit();
+  }
+
+  /** Called by the page when the game closes. */
+  reset() {
+    this.switched.set(false);
+  }
+
   protected readonly role = computed(() => {
     lang();
     const [main, sub] = PROFILE.role.split(" — ");

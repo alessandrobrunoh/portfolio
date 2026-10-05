@@ -19,15 +19,21 @@ import { PRINCIPLES, UI, lang } from "../lib/site";
         </p>
       </app-section-head>
 
-      <ol class="principles">
-        @for (p of principles; track p.title; let i = $index) {
-          <li class="principle reveal-row">
-            <span class="principle-n">0{{ i + 1 }}</span>
-            <h3 class="principle-title">{{ p.title }}</h3>
-            <p class="principle-body">{{ p.body }}</p>
-          </li>
-        }
-      </ol>
+      <!--
+        A horizontal timeline: the rail draws in as the section enters, then each node lights up in
+        turn. On narrow screens it becomes a swipeable track with snap points.
+      -->
+      <div class="steps-scroller reveal-on-scroll">
+        <ol class="steps">
+          @for (p of principles; track p.title; let i = $index) {
+            <li class="step" [style.--i]="i">
+              <span class="step-node">0{{ i + 1 }}</span>
+              <h3 class="principle-title mt-6">{{ p.title }}</h3>
+              <p class="principle-body mt-3">{{ p.body }}</p>
+            </li>
+          }
+        </ol>
+      </div>
     </section>
   `,
 })

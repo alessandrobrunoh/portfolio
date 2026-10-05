@@ -1,5 +1,6 @@
 import { Component, DestroyRef, OnInit, inject, signal } from "@angular/core";
 import { IconComponent } from "./icon.component";
+import { SpotlightDirective } from "./spotlight.directive";
 import { PROFILE, UI, lang } from "../lib/site";
 
 const LOCAL_TIME = new Intl.DateTimeFormat("en-GB", {
@@ -11,10 +12,10 @@ const LOCAL_TIME = new Intl.DateTimeFormat("en-GB", {
 @Component({
   selector: "app-contact",
   standalone: true,
-  imports: [IconComponent],
+  imports: [IconComponent, SpotlightDirective],
   template: `
     <section id="contact" class="container-x section scroll-mt-16">
-      <div class="reveal-on-scroll"><div class="card contact-panel">
+      <div class="reveal-on-scroll"><div class="card contact-panel" appSpotlight>
                 <img class="contact-panel-mark" src="/brand/ab-monogram.webp" alt="" width="960" height="666" loading="lazy" aria-hidden="true" />
 
         <p class="eyebrow">
