@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="220" viewBox="0 0 1600 220" role="img" aria-labelledby="title desc">
+  <title id="title">Alessandro Bruno wordmark</title>
+  <desc id="desc">Soft-minimal wordmark for Alessandro Bruno.</desc>
+  
+  <text x="50%" y="132" text-anchor="middle"
+        fill="#111827"
+        font-family="Inter, Manrope, Arial, Helvetica, sans-serif"
+        font-size="74"
+        font-weight="300"
+        letter-spacing="18"
+        style="text-transform: uppercase;">ALESSANDRO BRUNO</text>
+</svg>

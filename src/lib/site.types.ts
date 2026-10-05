@@ -35,12 +35,49 @@ export interface Company {
   summary: string;
 }
 
+/** A measured result. Rendered only when present — never fill with estimates. */
+export interface Impact {
+  value: string;
+  label: string;
+}
+
+/**
+ * A decision worth explaining: the situation, what I chose and why. Optional code shows the
+ * choice in practice. Only real decisions — this is the "article" content, kept with its project.
+ */
+export interface Decision {
+  title: string;
+  context: string;
+  choice: string;
+  code?: string;
+}
+
 export interface Role {
   title: string;
   dates: string;
   current: boolean;
   bullets: string[];
   tags: string[];
+  impact?: Impact[];
+  /** Id of a CaseStudy (/work/:id) that tells this role's main story in depth. */
+  caseId?: string;
+}
+
+/** A case study from client work (/work/:id). Client details stay out on purpose. */
+export interface CaseStudy {
+  id: string;
+  title: string;
+  role: string;
+  era: string;
+  blurb: string;
+  problem: string;
+  built: string[];
+  decisions: Decision[];
+  impact?: Impact[];
+  learned: string;
+  stack: string[];
+  /** Shown under the title: why names and details are missing. */
+  confidentiality: string;
 }
 
 export interface Education {
@@ -80,6 +117,21 @@ export interface Project {
   highlights: string[];
   learned: string;
   body: string;
+  /** Case-study context: who had the problem and why it mattered. */
+  problem?: string;
+  decisions?: Decision[];
+  impact?: Impact[];
+}
+
+/** One line of "How I work": a principle and how it shows up in practice. */
+export interface Principle {
+  /** One word for the step on the timeline (Understand, Ship…). */
+  tag: string;
+  title: string;
+  body: string;
+  /** Shown when the step is opened: a longer paragraph and how it shows up in practice. */
+  detail: string;
+  practice: string[];
 }
 
 export interface StackGroup {
@@ -108,17 +160,9 @@ export interface FutureProject {
   highlights: string[];
   learned: string;
   body: string;
-}
-
-export type BlogStatus = "Planned" | "Draft" | "Published";
-
-export interface BlogPost {
-  slug: string;
-  title: string;
-  subtitle: string;
-  pitch: string;
-  status: BlogStatus;
-  body: string[];
+  problem?: string;
+  decisions?: Decision[];
+  impact?: Impact[];
 }
 
 export interface PulseKpi {
@@ -175,9 +219,9 @@ export interface UiStrings {
     stack: string;
     futureProjects: string;
     contact: string;
+    work: string;
+    approach: string;
   };
-  backToBlog: string;
-  postNotFound: string;
   close: string;
   toggleTheme: string;
   openMenu: string;
@@ -199,8 +243,9 @@ export interface SiteData {
   PROJECTS: Project[];
   STACK: Stack;
   FUTURE_PROJECTS: FutureProject[];
-  BLOG: BlogPost[];
+  CASES: CaseStudy[];
   PULSE: Pulse;
   TOOLS: Tool[];
+  PRINCIPLES: Principle[];
   UI: UiStrings;
 }

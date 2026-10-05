@@ -1,13 +1,22 @@
 import { Component, input } from "@angular/core";
 
+/** Index + kicker eyebrow, a display title ending on the logo dot, and an optional lede beside it. */
 @Component({
   selector: "app-section-head",
   standalone: true,
+  host: { class: "contents" },
   template: `
-    <header class="section-mark mb-8">
-      <div class="reveal-title flex items-baseline gap-3">
-        <span class="font-mono text-caption tracking-mono text-accent">{{ n() }}</span>
-        <h2 class="font-display text-heading-sm text-fg">{{ title() }}</h2>
+    <header class="section-head" [class.is-bare]="bare()">
+      <div>
+        <p class="eyebrow">
+          <span class="eyebrow-index">{{ n() }}</span>
+          <span class="eyebrow-rule" aria-hidden="true"></span>
+          @if (kicker()) { <span>{{ kicker() }}</span> }
+        </p>
+        <h2 class="section-title">{{ title() }}<span class="brand-dot" aria-hidden="true">.</span></h2>
+      </div>
+      <div class="min-w-0">
+        <ng-content />
       </div>
     </header>
   `,
@@ -15,4 +24,7 @@ import { Component, input } from "@angular/core";
 export class SectionHeadComponent {
   n = input.required<string>();
   title = input.required<string>();
+  kicker = input<string>("");
+  /** The head is the whole block (About): no bottom margin, top-aligned columns. */
+  bare = input<boolean>(false);
 }

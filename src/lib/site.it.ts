@@ -8,9 +8,9 @@ import type { SiteData } from "./site.types";
 export const IT: SiteData = {
   PROFILE: {
     name: "Alessandro Bruno",
-    role: "Software Engineer — Rust / Backend",
-    shortRole: "Rust · Backend · Event-driven",
-    headline: "Servizi event-driven in Rust in produzione, dai consumer asincroni alle trace in Grafana.",
+    role: "Software Engineer — Systems & Product",
+    shortRole: "Backend · Full-stack · Event-driven",
+    headline: "Costruisco software in produzione dall'inizio alla fine, vicino a chi lo usa.",
     location: "Bologna, Italia",
     github: "https://github.com/alessandrobrunoh",
     website: "https://alessandrobrunoh.it",
@@ -18,17 +18,16 @@ export const IT: SiteData = {
     x: "",
     avatar: "/avatar.jpg",
     company: { name: "Luna S.r.l.", href: "https://lunapartner.it" },
-    bio: "Backend engineer Rust a Bologna. Da oltre un anno lavoro su microservizi event-driven in produzione in Luna S.r.l.: consumer asincroni su Valkey Streams, payload su S3, trace e log con OpenTelemetry verso Grafana, Loki e Tempo — tutto passato da code review senior. La mia tesi triennale, PETRA, è una piattaforma event-driven per la telemetria asincrona in tempo reale. Fuori dal lavoro costruisco strumenti un livello più in basso: ducklake-orm, un ORM Rust pubblicato su crates.io, e Mnemosyne, una cronologia semantica del codice basata su Tree-sitter.",
-    availability: "Disponibile per ruoli Rust e backend — da remoto o ibrido in Italia, con preavviso. Cittadino UE.",
+    bio: "Software engineer a Bologna. Da oltre un anno lavoro su sistemi in produzione in Luna S.r.l.: microservizi event-driven con consumer asincroni su Valkey Streams, una console operatore in Spring Boot e React, trace e log con OpenTelemetry verso Grafana, Loki e Tempo — tutto passato da code review senior. Scelgo lo strumento in base al problema, non il contrario: Rust, Java, TypeScript, Python, Angular o React. La mia tesi triennale, PETRA, è una piattaforma event-driven per la telemetria asincrona in tempo reale. Fuori dal lavoro costruisco strumenti un livello più in basso: ducklake-orm, un ORM pubblicato su crates.io, e Mnemosyne, una cronologia semantica del codice basata su Tree-sitter.",
+    availability: "Disponibile per ruoli da Software Engineer e Forward Deployed Engineer — backend, full-stack o a contatto con il cliente; da remoto o ibrido in Italia, con preavviso. Cittadino UE.",
   },
 
   TOC: [
     { n: "01", href: "#intro", label: "Intro" },
-    { n: "02", href: "#projects", label: "Progetti" },
-    { n: "03", href: "#experience", label: "Esperienza" },
-    { n: "04", href: "#oss", label: "Open Source" },
-    { n: "05", href: "#stack", label: "Stack" },
-    { n: "06", href: "#contact", label: "Contatti" },
+    { n: "02", href: "#experience", label: "Esperienza" },
+    { n: "03", href: "#work", label: "Lavori" },
+    { n: "04", href: "#approach", label: "Come lavoro" },
+    { n: "05", href: "#contact", label: "Contatti" },
   ],
 
   COMPANY: {
@@ -36,7 +35,7 @@ export const IT: SiteData = {
     href: "https://lunapartner.it",
     location: "Bologna, Italia",
     summary:
-      "In Luna S.r.l. ho iniziato su una piattaforma fleet e dopo due mesi sono passato al backend Rust in produzione del cliente, con code review senior. Oggi lavoro su quella piattaforma event-driven e su una nuova console operatore.",
+      "In Luna S.r.l. lavoro sui sistemi dei clienti. Ho iniziato su una piattaforma fleet e dopo due mesi sono passato al backend in produzione di un cliente, con code review senior. Oggi lavoro dentro quella piattaforma event-driven e costruisco una nuova console operatore per chi la gestisce.",
   },
 
   ROLES: [
@@ -44,10 +43,11 @@ export const IT: SiteData = {
       title: "Sviluppatore Software",
       dates: "Giu 2026 — presente",
       current: true,
+      caseId: "event-platform",
       bullets: [
-        "Servizi Rust event-driven in produzione per carichi dei clienti: consumer asincroni su Valkey Streams, payload su S3.",
-        "Trace e log con OpenTelemetry verso Grafana, Loki e Tempo.",
-        "Una nuova console operatore in Spring Boot e React — API e interfaccia.",
+        "Dentro la piattaforma in produzione di un cliente: servizi Rust event-driven che elaborano i suoi carichi — consumer asincroni su Valkey Streams, payload su S3.",
+        "Ho reso i servizi osservabili da capo a capo: trace e log con OpenTelemetry verso Grafana, Loki e Tempo, così i problemi si seguono tra i servizi invece di indovinarli.",
+        "Sto costruendo una nuova console operatore dall'inizio alla fine — API in Spring Boot e interfaccia React per chi gestisce la piattaforma ogni giorno.",
       ],
       tags: ["Rust", "Tokio", "Valkey Streams", "S3", "OpenTelemetry", "Spring Boot", "React"],
     },
@@ -57,8 +57,8 @@ export const IT: SiteData = {
       current: false,
       bullets: [
         "Piattaforma fleet in Spring Boot, Angular e React Native, con aggiornamenti live via WebSocket.",
-        "Dopo due mesi, passato al backend Rust del cliente con code review senior.",
-        "Branch Git impilati e diff piccoli e revisionabili come metodo di lavoro.",
+        "Dopo due mesi, passato al backend Rust in produzione di un cliente, rilasciando con code review senior.",
+        "Diff piccoli e revisionabili su branch impilati — l'abitudine che rende sicuro portare modifiche nel sistema di qualcun altro.",
       ],
       tags: ["Spring Boot", "Angular", "React Native", "WebSocket", "Rust"],
     },
@@ -103,6 +103,7 @@ export const IT: SiteData = {
       id: "eivar",
       name: "Eivar-Online",
       blurb: "Prototipo multiplayer: simulazione Rust server-authoritative, stato replicato, predizione lato client.",
+      problem: "Un multiplayer si rompe appena ci si fida del client. Volevo capire se i pattern event-driven del lavoro potessero tenere coerente un unico mondo condiviso tra molti giocatori.",
       href: "https://github.com/alessandrobrunoh/Eivar-Online",
       stars: GITHUB_STATS.stars["Eivar-Online"] ?? 0,
       lang: "Rust",
@@ -122,7 +123,8 @@ export const IT: SiteData = {
     {
       id: "mnemosyne",
       name: "Mnemosyne",
-      blurb: "Cronologia semantica del codice, local-first: simboli e modifiche strutturali via Tree-sitter, non diff per righe.",
+      blurb: "Cronologia semantica del codice, local-first: simboli e modifiche strutturali via Tree-sitter, non diff per righe — interrogabile dagli agenti AI via MCP.",
+      problem: "Git ricorda solo quello che committi. Tra un commit e l'altro il lavoro si perde, e i diff per righe non dicono quale funzione è cambiata né come. Volevo una cronologia locale che capisca la struttura del codice, interrogabile anche dagli strumenti AI.",
       href: "https://github.com/alessandrobrunoh/Mnemosyne",
       stars: GITHUB_STATS.stars["Mnemosyne"] ?? 0,
       lang: "Rust",
@@ -143,6 +145,19 @@ export const IT: SiteData = {
       id: "ducklake",
       name: "ducklake-orm",
       blurb: "ORM Rust per DuckDB e DuckLake, pubblicato su crates.io — derive macro, query builder, pooling, migrazioni, time travel.",
+      problem: "DuckDB e DuckLake sono ottimi per l'analisi, ma usarli da Rust significava SQL scritto a mano e risultati poco tipizzati. Volevo l'ergonomia di un ORM senza nascondere quello che il database fa bene.",
+      decisions: [
+        {
+          title: "Errori tipizzati e default scopribili",
+          context: "Lo storage analitico è potente, ma la potenza da sola non rende uno strumento piacevole da usare in una giornata normale.",
+          choice: "Errori tipizzati, default che si scoprono dall'API e migrazioni dentro la libreria — così un nuovo utente può prevedere cosa succede senza aprire l'implementazione.",
+        },
+        {
+          title: "Sapere dove si ferma l'astrazione",
+          context: "Un ORM che nasconde tutto fa pagare a chi legge il prezzo della sua complessità.",
+          choice: "Derive macro e query builder coprono il percorso comune — filtri, ordinamento, limit, count, fetch_one. Oltre, parla il database, compreso il time travel di DuckLake.",
+        },
+      ],
       href: "https://github.com/alessandrobrunoh/ducklake-orm",
       stars: GITHUB_STATS.stars["ducklake-orm"] ?? 0,
       lang: "Rust",
@@ -162,6 +177,7 @@ export const IT: SiteData = {
       id: "weaklings",
       name: "Weaklings-Manager",
       blurb: "Piattaforma self-hosted per gilde di Albion — banca, divisione del loot, analisi delle battaglie, login Discord.",
+      problem: "Una gilda gestiva banca, divisione del loot ed eventi su fogli di calcolo e messaggi Discord. Serviva un unico strumento affidabile per gli ufficiali, con accessi legati ai ruoli che le persone avevano già su Discord.",
       href: "https://github.com/alessandrobrunoh/Weaklings-Manager",
       stars: GITHUB_STATS.stars["Weaklings-Manager"] ?? 0,
       lang: "Angular",
@@ -182,6 +198,7 @@ export const IT: SiteData = {
       id: "ketchapp",
       name: "KetchApp",
       blurb: "Produttività nello studio come microservizi. Pomodoro, piani con IA, notifiche asincrone.",
+      problem: "Un team universitario aveva bisogno di un'app di studio con sessioni Pomodoro, piani generati dall'AI e notifiche — costruita da più persone insieme senza pestarsi i piedi.",
       href: "https://github.com/orgs/ketchapp-for-study",
       lang: "Java",
       meta: "Org",
@@ -197,6 +214,7 @@ export const IT: SiteData = {
       id: "briscola",
       name: "Briscola Online",
       blurb: "Briscola in tempo reale via WebSocket. Multiplayer full-stack.",
+      problem: "Un gruppo di amici voleva giocare a Briscola online, insieme e in tempo reale, a un tavolo che si comportasse come quello vero.",
       href: "https://github.com/alessandrobrunoh/Progetto-Ingegneria-Web",
       stars: GITHUB_STATS.stars["Progetto-Ingegneria-Web"] ?? 0,
       lang: "Vue",
@@ -213,6 +231,7 @@ export const IT: SiteData = {
       id: "sdp",
       name: "Semantic Delta Protocol",
       blurb: "Modifiche al codice a livello di AST — Tree-sitter e hashing strutturale.",
+      problem: "I diff per righe perdono il codice quando si sposta o viene rinominato. Editor e strumenti devono seguire una funzione attraverso un refactor, non un numero di riga.",
       href: "https://github.com/alessandrobrunoh/Semantic-Delta-Protocol",
       lang: "Rust",
       meta: "Protocollo",
@@ -231,6 +250,7 @@ export const IT: SiteData = {
       id: "vapt",
       name: "VAPT Research",
       blurb: "Report di sicurezza su un fork di OWASP Juice Shop.",
+      problem: "Un corso di sicurezza chiedeva una vera valutazione, non un dump di scanner: trovare cosa è davvero sfruttabile in un'app volutamente vulnerabile e spiegare come correggerlo.",
       href: "https://github.com/alessandrobrunoh/Relazione-Sicurezza-Privacy",
       lang: "TypeScript",
       meta: "Ricerca",
@@ -315,46 +335,47 @@ export const IT: SiteData = {
 
   ],
 
-  BLOG: [
+  CASES: [
     {
-      slug: "publishing-a-crate-without-an-audience",
-      title: "Quando uno strumento dati diventa un prodotto",
-      subtitle: "ducklake-orm",
-      pitch:
-        "Le piccole decisioni di API e documentazione che trasformano lo storage a basso livello in qualcosa che le persone possono usare davvero.",
-      status: "Planned",
-      body: [
-        "Lo storage analitico è potente, ma la potenza da sola non rende piacevole uno strumento. Ho costruito ducklake-orm per esplorare il confine tra le capacità di DuckDB e un'API chiara per il lavoro quotidiano.",
-        "Le decisioni interessanti non riguardavano solo le query: errori tipizzati, valori predefiniti comprensibili, migrazioni e il punto in cui un'astrazione deve fermarsi e lasciare parlare il database.",
-        "Questa bozza ripercorrerà i compromessi che hanno modellato l'API, la documentazione che avrei voluto scrivere per prima e la differenza tra avvolgere un sistema e renderlo comprensibile.",
-        "Il test a cui torno è semplice: un nuovo utente riesce a prevedere cosa succede dopo senza aprire l'implementazione? Se no, l'astrazione sta ancora facendo pagare al lettore la propria complessità.",
+      id: "event-platform",
+      title: "Una piattaforma event-driven per un cliente",
+      role: "Sviluppatore Software · Luna S.r.l.",
+      era: "2025 — oggi",
+      blurb: "Lavoro dentro il backend in produzione di un cliente: consumer Rust su Valkey Streams, payload su S3, tracing da capo a capo e una console operatore per chi gestisce la piattaforma.",
+      problem: "Un cliente fa girare i suoi carichi su un backend event-driven. Il lavoro arriva come eventi, i payload stanno su S3, e ogni evento deve produrre il suo effetto una volta sola — sotto carico, con i retry — mentre chi gestisce la piattaforma deve poter vedere cosa è successo quando qualcosa va storto.",
+      built: [
+        "Consumer asincroni in Rust su Valkey Streams che leggono, elaborano e confermano gli eventi, con i payload su S3.",
+        "Tracing e logging con OpenTelemetry verso Grafana, Loki e Tempo, così un singolo evento si può seguire tra i servizi.",
+        "Una nuova console operatore — API in Spring Boot e interfaccia React — per chi gestisce la piattaforma ogni giorno.",
+        "Tutto rilasciato in diff piccoli e revisionabili, con code review senior.",
       ],
-    },
-    {
-      slug: "what-i-got-wrong-about-event-buses",
-      title: "Cosa ho sbagliato sugli event bus",
-      subtitle: "Valkey / tirocinio → assunzione",
-      pitch: "Le assunzioni che ho portato da un mondo request/response a uno event-driven, e dove si sono rotte.",
-      status: "Planned",
-      body: [
-        "Sono arrivato al ruolo di backend Rust da un mondo request/response — un'API Spring che rispondeva a una chiamata e andava avanti. L'event bus non funziona così, e le assunzioni che mi sono portato dietro erano sbagliate in modi che si sono visti solo sotto carico.",
-        "La prima: trattavo \"consegnato\" ed \"elaborato\" come lo stesso evento. Non lo sono, e il divario tra i due è dove vivono retry, duplicati e bug di ordinamento. Gli stream di Valkey rendono visibile quel divario, se sei disposto a guardarlo.",
-        "Questa è una bozza — il pezzo finito ripercorrerà il fallimento specifico che me l'ha insegnato, e come l'osservabilità (Grafana, Alloy, Loki, Tempo) abbia dovuto essere progettata fin dall'inizio prima che mi fidassi abbastanza del bus da costruirci sopra.",
-        "La regola pratica è diventata una piccola macchina a stati: leggi, elabora, conferma. Quando le transizioni sono esplicite, i retry smettono di sembrare casi limite e diventano parte del design.",
+      decisions: [
+        {
+          title: "Confermare dopo l'effetto, non dopo la lettura",
+          context: "Venivo da un mondo request/response, dove una chiamata riceve risposta e si dimentica. Su un event bus trattavo “consegnato” ed “elaborato” come la stessa cosa. Non lo sono: lo spazio tra i due è dove vivono retry, duplicati e problemi di ordinamento.",
+          choice: "Rendere ogni consumer una piccola macchina a stati esplicita — leggi, elabora, conferma — e confermare solo quando il lavoro è stato davvero fatto. I retry hanno smesso di essere casi limite e sono diventati parte del design.",
+          code: "// delivered is not processed\nlet message = stream.read().await?;\nif worker.handle(&message).await? {\n    stream.ack(message.id).await?;\n}",
+        },
+        {
+          title: "Prima l'osservabilità, poi la fiducia",
+          context: "Un event bus fallisce in silenzio: un messaggio mai elaborato può sembrare identico a uno elaborato.",
+          choice: "Trace e log con OpenTelemetry, verso Grafana, Loki e Tempo, prima di costruire altro sopra il bus — così ogni evento si segue da capo a capo e i problemi si trovano dalle prove, non dalle ipotesi.",
+        },
       ],
-    },
-    {
-      slug: "reading-a-zed-pr-end-to-end",
-      title: "Leggere una PR di Zed dall'inizio alla fine",
-      subtitle: "Open source, in pratica",
-      pitch: "Come una PR reale attraversa la review in una codebase in rapida evoluzione — cosa cercano davvero i reviewer.",
-      status: "Draft",
-      body: [
-        "Far unire l'estensione per il linguaggio JDL in zed-industries/extensions ha significato leggere il processo di review di Zed tanto quanto il codice — una codebase in rapida evoluzione con idee precise su come dovrebbe apparire un contributo prima ancora che un maintainer lo guardi.",
-        "La parte interessante non era il file della grammatica. Era osservare cosa segnalavano davvero i reviewer: naming che non rispettava le convenzioni esistenti, fixture di test mancanti, e scope creep in una PR che doveva fare una sola cosa.",
-        "Questa è ancora una bozza. Il pezzo finito ripercorrerà i commenti di review specifici su quella PR e su quella più recente ancora aperta (dynamic port forwarding), e cosa mi hanno insegnato sullo scrivere una PR che uno sconosciuto possa approvare rapidamente.",
-        "Una buona review è un esercizio di compressione: il comportamento deve essere evidente, il diff stretto e il reviewer deve trovarsi davanti a una decisione, non a dieci ipotesi.",
-      ]
+      learned: "Consegnare non è elaborare. Quando le transizioni sono esplicite e osservabili, un sistema event-driven diventa qualcosa su cui si può ragionare — e che si può spiegare a chi ci fa affidamento.",
+      stack: [
+        "Rust",
+        "Tokio",
+        "Valkey Streams",
+        "S3",
+        "OpenTelemetry",
+        "Grafana",
+        "Loki",
+        "Tempo",
+        "Spring Boot",
+        "React",
+      ],
+      confidentiality: "Lavoro per un cliente: il cliente, i suoi dati e i dettagli interni sono omessi di proposito.",
     },
   ],
 
@@ -397,6 +418,64 @@ export const IT: SiteData = {
     { name: "GitButler", product: "Client Git", href: "https://gitbutler.com", mark: "gitbutler" },
   ],
 
+  PRINCIPLES: [
+    {
+      tag: "Capire",
+      title: "Parto dal problema, non dallo stack",
+      body: "Prima di scegliere uno strumento capisco come lavorano davvero le persone che usano il sistema. Rust dove contano latenza e correttezza, Spring Boot o React dove è quello che il team usa già.",
+      detail: "Prima di toccare il codice voglio sapere chi gestisce il sistema, cosa lo rallenta e cosa significa “fatto” per lui. Il lavoro sprecato nasce quasi sempre dal risolvere il problema come viene descritto invece che come viene vissuto.",
+      practice: [
+        "Parlo con chi usa o gestisce il sistema prima di proporre modifiche.",
+        "Scrivo il problema in un breve paragrafo e lo faccio confermare.",
+        "Scelgo lo strumento noioso per default; quello affilato solo quando il problema lo chiede.",
+      ],
+    },
+    {
+      tag: "Rilasciare",
+      title: "Rilasci piccoli e frequenti",
+      body: "Diff piccoli e revisionabili su branch impilati. Facili da rivedere, facili da annullare, sicuri da portare dentro il sistema in produzione di qualcun altro.",
+      detail: "Le modifiche piccole sono più facili da rivedere, da capire e da annullare. Nel sistema in produzione di qualcun altro conta più della velocità sulla carta.",
+      practice: [
+        "Un solo argomento per diff, su branch impilati.",
+        "Una descrizione della PR che dice cosa cambia, perché e come verificarlo.",
+        "Meglio piccoli passaggi graduali che rilasci tutto-in-una-volta.",
+      ],
+    },
+    {
+      tag: "Osservare",
+      title: "Osservabile dal primo giorno",
+      body: "Trace, log e metriche arrivano insieme alla feature, non dopo l'incidente. Quando qualcosa si rompe da un cliente, le prove battono le ipotesi.",
+      detail: "Se un sistema non sa dirti cosa ha fatto, finisci per tirare a indovinare. Considero trace, log e metriche parte della feature, non un ticket da fare dopo.",
+      practice: [
+        "Propago il contesto delle trace tra servizi e code.",
+        "Loggo la decisione presa da un servizio, non solo che è partito.",
+        "Prima di rilasciare so quale dashboard risponde a “funziona?”.",
+      ],
+    },
+    {
+      tag: "Possedere",
+      title: "Mi prendo tutta la fetta",
+      body: "Dall'API allo schermo al deploy. Preferisco possedere una fetta sottile dall'inizio alla fine che uno strato spesso a metà.",
+      detail: "Preferisco prendere una fetta sottile dall’API allo schermo al deploy piuttosto che uno strato spesso consegnato a metà. Possedere tutto il percorso è il modo in cui si gestiscono i casi limite.",
+      practice: [
+        "Progetto l’API insieme all’interfaccia che la usa.",
+        "La porto in produzione e la osservo lì, non solo in CI.",
+        "Quando qualcosa si rompe lo sistemo — poi sistemo il motivo per cui si è rotto.",
+      ],
+    },
+    {
+      tag: "Condividere",
+      title: "Lo metto per iscritto",
+      body: "Decisioni, compromessi e runbook in linguaggio semplice, così il prossimo engineer — o il cliente — può andare avanti senza di me nella stanza.",
+      detail: "Il lavoro che vive solo nella mia testa è un rischio per il team e per il cliente. Mettere le cose per iscritto è il modo in cui un sistema sopravvive a chi l’ha costruito.",
+      practice: [
+        "Registro le decisioni non ovvie e le alternative scartate.",
+        "Tengo i runbook accanto al codice che descrivono.",
+        "Spiego i compromessi in linguaggio semplice, anche per chi non è tecnico.",
+      ],
+    },
+  ],
+
   UI: {
     skipToContent: "Vai al contenuto",
     tocIndex: "Indice",
@@ -413,9 +492,9 @@ export const IT: SiteData = {
       stack: "Stack",
       futureProjects: "Esplorazioni",
       contact: "Contatti",
+      work: "Lavori",
+      approach: "Come lavoro",
     },
-    backToBlog: "← Torna al Blog",
-    postNotFound: "Articolo non trovato.",
     close: "Chiudi",
     toggleTheme: "Cambia tema colore",
     openMenu: "Apri il menu",

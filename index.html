@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Alessandro Bruno — Software Engineer, Rust / Backend</title>
+    <title>Alessandro Bruno — Software Engineer</title>
     <meta
       name="description"
-      content="Rust backend engineer in Bologna. Production event-driven services on Tokio, Valkey Streams and OpenTelemetry; ducklake-orm on crates.io; thesis on real-time telemetry. Open to Rust and backend roles."
+      content="Software engineer in Bologna building production systems end to end: event-driven services, APIs and interfaces in Rust, Java, TypeScript and more. Open to Software Engineer and Forward Deployed Engineer roles."
     />
     <meta name="author" content="Alessandro Bruno" />
     <link rel="canonical" href="https://alessandrobrunoh.it/" />
@@ -14,27 +14,31 @@
     <!-- Link previews: without these, sharing the site anywhere shows a blank card. -->
     <meta property="og:type" content="profile" />
     <meta property="og:site_name" content="Alessandro Bruno" />
-    <meta property="og:title" content="Alessandro Bruno — Software Engineer, Rust / Backend" />
+    <meta property="og:title" content="Alessandro Bruno — Software Engineer" />
     <meta
       property="og:description"
-      content="Rust backend engineer in Bologna: production event-driven services and ducklake-orm on crates.io. Open to Rust and backend roles."
+      content="Software engineer in Bologna building production systems end to end, in whatever stack the problem needs. Open to Software Engineer and Forward Deployed Engineer roles."
     />
     <meta property="og:url" content="https://alessandrobrunoh.it/" />
     <meta property="og:image" content="https://alessandrobrunoh.it/og.jpg" />
-    <meta property="og:image:alt" content="Alessandro Bruno — Software Engineer, Rust / Backend" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Alessandro Bruno — Software Engineer" />
     <meta property="og:locale" content="en_GB" />
     <meta property="og:locale:alternate" content="it_IT" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Alessandro Bruno — Software Engineer, Rust / Backend" />
+    <meta name="twitter:title" content="Alessandro Bruno — Software Engineer" />
     <meta
       name="twitter:description"
-      content="Rust backend engineer in Bologna: production event-driven services and ducklake-orm on crates.io. Open to Rust and backend roles."
+      content="Software engineer in Bologna building production systems end to end, in whatever stack the problem needs. Open to Software Engineer and Forward Deployed Engineer roles."
     />
     <meta name="twitter:image" content="https://alessandrobrunoh.it/og.jpg" />
 
-    <meta name="theme-color" content="#eceef4" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#12141a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!-- Helps search engines connect the name to the profiles and the employer. -->
     <script type="application/ld+json">
@@ -45,21 +49,22 @@
         "url": "https://alessandrobrunoh.it/",
         "image": "https://alessandrobrunoh.it/avatar.jpg",
         "email": "mailto:alessandro.brunoh@gmail.com",
-        "jobTitle": "Software Engineer — Rust / Backend",
+        "jobTitle": "Software Engineer",
         "worksFor": { "@type": "Organization", "name": "Luna S.r.l.", "url": "https://lunapartner.it" },
         "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Bologna" },
         "address": { "@type": "PostalAddress", "addressLocality": "Bologna", "addressCountry": "IT" },
         "knowsLanguage": ["it", "en"],
-        "knowsAbout": ["Rust", "Tokio", "Event-driven architecture", "Valkey Streams", "OpenTelemetry", "Spring Boot", "React", "Tree-sitter"],
+        "knowsAbout": ["Software engineering", "Forward deployed engineering", "Systems integration", "Event-driven architecture", "Rust", "Java", "Spring Boot", "TypeScript", "Angular", "React", "Python", "PostgreSQL", "OpenTelemetry"],
         "sameAs": ["https://github.com/alessandrobrunoh"]
       }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Fonts load without blocking first paint; the system serif/mono stand in for a moment. -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&display=swap" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&display=swap" /></noscript>
+    <!-- Fonts load without blocking first paint; the system sans stands in for a moment. -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&amp;display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&amp;display=swap" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&amp;display=swap" /></noscript>
+    <link rel="preload" as="image" href="/brand/ab-monogram.webp" type="image/webp" fetchpriority="high" />
     <script>
       (function () {
         try {
@@ -71,7 +76,12 @@
             var hour = new Date().getUTCHours();
             dark = !(hour >= 6 && hour < 20);
           }
-          if (dark) document.documentElement.classList.add("dark");
+          if (dark) {
+            document.documentElement.classList.add("dark");
+            // White mark in the tab while the site is dark (theme.ts keeps it in sync after load).
+            document.querySelector('link[rel="icon"][type="image/svg+xml"]').href = "/favicon-dark.svg";
+            document.querySelector('link[rel="icon"][type="image/png"]').href = "/favicon-dark-32.png";
+          }
         } catch (e) {}
       })();
     </script>

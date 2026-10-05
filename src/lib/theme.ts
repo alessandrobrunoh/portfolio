@@ -8,8 +8,8 @@ export const THEME_CHANGE_EVENT = "portfolio:theme-change";
 export const LIGHT_START_HOUR_UTC = 6;
 export const DARK_START_HOUR_UTC = 20;
 
-const LIGHT_THEME_COLOR = "#eceef4";
-const DARK_THEME_COLOR = "#0b0c10";
+const LIGHT_THEME_COLOR = "#ffffff";
+const DARK_THEME_COLOR = "#000000";
 
 let refreshTimer: ReturnType<typeof setTimeout> | undefined;
 let visibilityBound = false;
@@ -63,9 +63,21 @@ export function syncThemeColor(resolved = resolveTheme()) {
     ?.setAttribute("content", resolved === "dark" ? DARK_THEME_COLOR : LIGHT_THEME_COLOR);
 }
 
+/** The tab icon follows the site theme: black mark on light, white mark on dark. */
+export function syncFavicon(resolved = resolveTheme()) {
+  const dark = resolved === "dark";
+  document
+    .querySelector('link[rel="icon"][type="image/svg+xml"]')
+    ?.setAttribute("href", dark ? "/favicon-dark.svg" : "/favicon.svg");
+  document
+    .querySelector('link[rel="icon"][type="image/png"]')
+    ?.setAttribute("href", dark ? "/favicon-dark-32.png" : "/favicon-32.png");
+}
+
 export function applyResolvedTheme(resolved: ResolvedTheme) {
   document.documentElement.classList.toggle("dark", resolved === "dark");
   syncThemeColor(resolved);
+  syncFavicon(resolved);
 }
 
 function notifyThemeChange() {
@@ -103,9 +115,15 @@ export function toggleThemeFromPointer(event: MouseEvent) {
   root.style.setProperty("--vt-r", `${Math.ceil(radius)}px`);
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const doc = document as Document & { startViewTransition?: (cb: () => void) => void };
+  const doc = document as Document & {
+    startViewTransition?: (cb: () => void) => { finished: Promise<void> };
+  };
   if (!reduced && typeof doc.startViewTransition === "function") {
-    doc.startViewTransition(toggleThemeOverride);
+    // Marks this transition as a theme change, so it gets the circular reveal, not the route fade.
+    root.classList.add("theme-vt");
+    doc
+      .startViewTransition(toggleThemeOverride)
+      .finished.finally(() => root.classList.remove("theme-vt"));
     return;
   }
   toggleThemeOverride();

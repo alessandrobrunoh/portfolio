@@ -1,7 +1,9 @@
 import { Component, computed } from "@angular/core";
-import { KeybindComponent } from "./keybind.component";
+import { RouterLink } from "@angular/router";
+import { IconComponent } from "./icon.component";
 import { SectionHeadComponent } from "./section-head.component";
 import { COMPANY, EDUCATION, ROLES, UI, lang } from "../lib/site";
+import type { Impact } from "../lib/site.types";
 
 type RoadmapStep = {
   era: string;
@@ -10,43 +12,66 @@ type RoadmapStep = {
   bullets?: readonly string[];
   note?: string;
   tags?: readonly string[];
+  impact?: readonly Impact[];
+  caseId?: string;
   current: boolean;
 };
 
 /** Built from the live (language-switched) data, so it must be read after every setLanguage. */
 function buildRoadmap(): RoadmapStep[] {
   return [
+    ...ROLES.map((role) => ({ era: role.dates, title: role.title, org: `${COMPANY.name} · ${COMPANY.location}`, bullets: role.bullets, tags: role.tags, impact: role.impact, caseId: role.caseId, current: role.current })),
     { era: EDUCATION.dates, title: EDUCATION.school, org: `${EDUCATION.degree} · ${EDUCATION.native}`, note: EDUCATION.thesis, current: false },
-    ...ROLES.slice().reverse().map((role) => ({ era: role.dates, title: role.title, org: `${COMPANY.name} · ${COMPANY.location}`, bullets: role.bullets, tags: role.tags, current: role.current })),
   ];
 }
 
 @Component({
   selector: "app-experience",
   standalone: true,
-  imports: [KeybindComponent, SectionHeadComponent],
+  imports: [IconComponent, RouterLink, SectionHeadComponent],
   template: `
-    <section id="experience" class="scroll-mt-20 border-t border-fg/10 pt-14">
-      <div class="flex flex-wrap items-end justify-between gap-4">
-        <app-section-head n="03" [title]="ui.sectionTitles.experience" />
-        <span class="mb-8 font-mono text-caption tracking-mono text-muted">{{ lang() === 'it' ? 'percorso / decisioni' : 'timeline / decisions' }}</span>
-      </div>
-      <p class="mb-10 max-w-prose font-serif text-lede text-muted">{{ company.summary }}</p>
+    <section id="experience" class="container-x section scroll-mt-16">
+      <app-section-head n="02" [title]="ui.sectionTitles.experience" [kicker]="lang() === 'it' ? 'percorso / decisioni' : 'timeline / decisions'">
+        <p class="section-lede">{{ company.summary }}</p>
+      </app-section-head>
 
-      <ol class="roadmap-list">
-        @for (step of roadmap(); track step.title; let i = $index) {
-          <li class="roadmap-row reveal-row" [class.roadmap-row-current]="step.current">
-            <div class="roadmap-year" [attr.data-tooltip]="step.current ? 'Current position' : 'Milestone'">{{ step.era }}</div>
-            <div class="roadmap-spine" aria-hidden="true"><span>{{ (i + 1).toString().padStart(2, '0') }}</span></div>
-            <article class="roadmap-copy group">
-              <div class="flex flex-wrap items-start justify-between gap-4">
-                <div><h3 class="font-display text-heading-sm text-fg transition-colors group-hover:text-accent">{{
- step.title }}</h3><p class="mt-1 font-serif text-small text-muted">{{ step.org }}</p></div>
-                @if (step.current) { <span class="roadmap-now">now</span> }
-              </div>
-              @if (step.bullets) { <ul class="mt-5 grid gap-2 sm:grid-cols-2">@for (item of step.bullets; track item) { <li class="flex gap-3 font-serif text-small text-muted"><span class="mt-2 size-1 shrink-0 rounded-full bg-accent" aria-hidden="true"></span>{{ item }}</li> }</ul> }
-              @if (step.note) { <blockquote class="mt-5 max-w-2xl border-t border-fg/10 pt-4 font-serif text-small italic text-muted">{{ step.note }}</blockquote> }
-              @if (step.tags) { <ul class="mt-5 flex flex-wrap gap-1.5">@for (tag of step.tags; track tag) { <li><app-keybind>{{ tag }}</app-keybind></li> }</ul> }
+      <ol class="tl">
+        @for (step of roadmap(); track step.title) {
+          <li class="tl-row reveal-on-scroll" [class.is-current]="step.current">
+            <div class="tl-era">
+              {{ step.era }}
+              @if (step.current) { <span class="pill-now"><span class="size-1.5 rounded-full bg-signal" aria-hidden="true"></span>{{ lang() === 'it' ? 'ora' : 'now' }}</span> }
+            </div>
+            <div class="tl-spine" aria-hidden="true"><span class="tl-node"></span></div>
+            <article class="tl-body">
+              <h3 class="tl-title">{{ step.title }}</h3>
+              <p class="mt-1.5 text-small text-muted">{{ step.org }}</p>
+              @if (step.bullets) {
+                <ul class="tl-bullets mt-5 grid gap-x-8 gap-y-2.5 md:grid-cols-2">
+                  @for (item of step.bullets; track item) { <li>{{ item }}</li> }
+                </ul>
+              }
+              @if (step.impact?.length) {
+                <dl class="impact-row mt-5">
+                  @for (m of step.impact; track m.label) {
+                    <div><dt>{{ m.label }}</dt><dd>{{ m.value }}</dd></div>
+                  }
+                </dl>
+              }
+              @if (step.note) {
+                <blockquote class="mt-5 max-w-2xl border-l border-silver/50 pl-4 text-small text-muted">{{ step.note }}</blockquote>
+              }
+              @if (step.caseId) {
+                <a [routerLink]="['/work', step.caseId]" class="case-link mt-5">
+                  <span>{{ lang() === 'it' ? 'Leggi il caso' : 'Read the case study' }}</span>
+                  <svg appIcon="arrow-right" class="size-4"></svg>
+                </a>
+              }
+              @if (step.tags) {
+                <ul class="mt-5 flex flex-wrap gap-1.5">
+                  @for (tag of step.tags; track tag; let ci = $index) { <li class="chip" [style.--ci]="ci">{{ tag }}</li> }
+                </ul>
+              }
             </article>
           </li>
         }
