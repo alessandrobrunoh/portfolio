@@ -1,14 +1,14 @@
-import { Component, ElementRef, Injector, OnDestroy, afterNextRender, computed, inject, signal, viewChild } from "@angular/core";
+import { Component, ElementRef, ErrorHandler, Injector, OnDestroy, afterNextRender, computed, inject, signal, viewChild } from "@angular/core";
 import { SectionHeadComponent } from "./section-head.component";
 import { PRINCIPLES, UI, lang } from "../lib/site";
 
-/** Node positions on the 1000×140 wave: each sits at the start of its column, rising to the last. */
+/** Node positions on the 1000×64 wave: each sits at the centre of its column, rising to the last. */
 const NODES: readonly [number, number][] = [
-  [14, 104],
-  [214, 58],
-  [414, 92],
-  [614, 46],
-  [814, 22],
+  [100, 50],
+  [300, 28],
+  [500, 44],
+  [700, 22],
+  [900, 10],
 ];
 
 /** A smooth curve through the nodes (Catmull-Rom → cubic Bézier), extended to both edges. */
@@ -45,94 +45,68 @@ function wavePath(points: readonly [number, number][]): string {
         </p>
       </app-section-head>
 
-      <div class="journey reveal-on-scroll">
-        <!-- Misty waves and a soft sphere: the same quiet shapes as the brand, no imagery. -->
-        <svg class="journey-mist" viewBox="0 0 1200 260" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M0 170 C 220 120, 420 210, 640 160 S 1000 110, 1200 150 L 1200 260 L 0 260 Z" />
-          <path d="M0 210 C 260 170, 520 240, 760 200 S 1060 170, 1200 195 L 1200 260 L 0 260 Z" />
-        </svg>
-        <span class="journey-sphere" aria-hidden="true"></span>
-
-        <div #stage id="journey-stage" class="journey-stage" [attr.aria-busy]="transitioning()" [style.--journey-direction]="direction()">
-          @if (selected(); as s) {
-            <div class="journey-focus">
-              <div class="journey-focus-toolbar">
-                <button type="button" class="journey-back" (click)="close()" [disabled]="transitioning()">
-                  <span aria-hidden="true">←</span>
-                  {{ lang() === 'it' ? 'Tutti i checkpoint' : 'All checkpoints' }}
+      <div class="journey reveal-on-scroll" [class.has-selection]="open() !== null">
+        <nav class="journey-path" [attr.aria-label]="lang() === 'it' ? 'Il mio modo di lavorare' : 'How I work'">
+          <svg class="journey-wave" viewBox="0 0 1000 64" preserveAspectRatio="none" aria-hidden="true">
+            <path class="journey-wave-base" [attr.d]="path" />
+            <path class="journey-wave-line" [attr.d]="path" pathLength="1" />
+          </svg>
+          <span class="journey-active-node" [class.is-visible]="open() !== null" [style.left.%]="(open() ?? 0) * 20 + 10" [style.top.px]="nodes[open() ?? 0][1]" aria-hidden="true"></span>
+          <ol class="journey-steps">
+            @for (p of principles; track $index; let i = $index) {
+              <li class="journey-step" [class.is-active]="open() === i">
+                <button type="button" class="journey-hit" [id]="'journey-checkpoint-' + i" (click)="select(i)" [disabled]="transitioning()" [attr.aria-expanded]="open() === i" aria-controls="journey-stage">
+                  <span class="journey-node" [style.top.px]="nodes[i][1]" aria-hidden="true"><span>0{{ i + 1 }}</span></span>
+                  <span class="journey-tag">{{ p.tag }}</span>
                 </button>
-                <span class="meta-mono">0{{ (open() ?? 0) + 1 }} / 0{{ principles.length }}</span>
-              </div>
-              <nav class="journey-checkpoints" [attr.aria-label]="lang() === 'it' ? 'Checkpoint' : 'Checkpoints'" [style.--checkpoint-count]="principles.length" [style.--checkpoint-index]="open()">
-                <span class="journey-checkpoint-indicator" aria-hidden="true"></span>
-                @for (p of principles; track $index; let i = $index) {
-                  <button type="button" class="journey-checkpoint" [class.is-active]="open() === i" [attr.aria-pressed]="open() === i" [attr.aria-label]="'0' + (i + 1) + ' · ' + p.tag" aria-controls="journey-description" [disabled]="transitioning()" (click)="select(i)">
-                    <span class="journey-checkpoint-number">0{{ i + 1 }}</span>
-                    <span class="journey-checkpoint-label">{{ p.tag }}</span>
-                  </button>
-                }
-              </nav>
-              @for (index of [open()]; track index) {
-                <article id="journey-description" class="journey-detail-card" aria-labelledby="journey-detail-title">
-                  <div class="journey-detail-heading">
-                    <span class="journey-detail-number" aria-hidden="true">0{{ (open() ?? 0) + 1 }}</span>
-                    <div>
-                      <p class="journey-tag">{{ s.tag }}</p>
-                      <h3 #detailTitle id="journey-detail-title" tabindex="-1" class="mt-3 text-title font-semibold tracking-tight text-fg">{{ s.title }}</h3>
-                    </div>
-                  </div>
-                  <div class="journey-detail-copy">
-                    <p class="text-lede text-muted">{{ s.detail }}</p>
-                    <div class="journey-practice">
-                      <p class="eyebrow">{{ lang() === 'it' ? 'In pratica' : 'In practice' }}</p>
-                      <ol>
-                        @for (item of s.practice; track item; let i = $index) {
-                          <li><span aria-hidden="true">0{{ i + 1 }}</span><p>{{ item }}</p></li>
-                        }
-                      </ol>
-                    </div>
-                  </div>
-                </article>
-              }
-              <div class="journey-focus-footer">
-                <button type="button" class="journey-back" [disabled]="transitioning()" (click)="go(-1)"><span aria-hidden="true">←</span>{{ lang() === 'it' ? 'Precedente' : 'Previous' }}</button>
-                <button type="button" class="journey-back" [disabled]="transitioning()" (click)="go(1)">{{ lang() === 'it' ? 'Successivo' : 'Next' }}<span aria-hidden="true">→</span></button>
-              </div>
-            </div>
-          } @else {
-            <div class="journey-scroller">
-              <div class="journey-track">
-                <svg class="journey-wave" viewBox="0 0 1000 140" preserveAspectRatio="none" aria-hidden="true">
-                  <path class="journey-wave-base" [attr.d]="path" />
-                  <path class="journey-wave-line" [attr.d]="path" pathLength="1" />
-                </svg>
-                <ol class="journey-steps">
-                  @for (p of principles; track p.title; let i = $index; let last = $last) {
-                    <li class="journey-step" [style.--i]="i" [class.is-last]="last">
-                      <button
-                        type="button"
-                        class="journey-hit"
-                        (click)="select(i)"
-                        [disabled]="transitioning()"
-                        [id]="'journey-checkpoint-' + i"
-                            aria-controls="journey-stage"
-                      >
-                        <span class="journey-node" [style.top.px]="nodes[i][1]" aria-hidden="true"></span>
-                        <span class="journey-tag">{{ p.tag }}</span>
-                        <span class="journey-title">{{ p.title }}</span>
-                        <span class="journey-body">{{ p.body }}</span>
-                        <span class="journey-more">
-                          {{ lang() === 'it' ? 'Scopri di più' : 'Read more' }}
-                          <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
-                        </span>
-                      </button>
-                    </li>
-                  }
-                </ol>
-              </div>
-            </div>
+              </li>
+            }
+          </ol>
+        </nav>
 
-            <p class="journey-hint">{{ lang() === 'it' ? 'Scegli un checkpoint per esplorare il mio modo di lavorare.' : 'Choose a checkpoint to explore how I work.' }}</p>
+        <div #stage id="journey-stage" class="journey-stage" [attr.aria-busy]="transitioning()" [style.--journey-direction]="direction()" [style.--journey-origin]="((open() ?? 2) - 2) * 24 + 'px'">
+          @if (selected(); as selected) {
+            @for (index of [open()]; track index) {
+              <article class="journey-detail-card" aria-labelledby="journey-detail-title">
+                <div class="journey-detail-topline">
+                  <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>Checkpoint 0{{ (open() ?? 0) + 1 }}</p>
+                  <button type="button" class="journey-close" (click)="close()" [disabled]="transitioning()" [attr.aria-label]="lang() === 'it' ? 'Torna a tutti i checkpoint' : 'Back to all checkpoints'">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="size-4" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6" /></svg>
+                  </button>
+                </div>
+                <div class="journey-detail-layout">
+                  <div class="journey-detail-intro">
+                    <h3 #detailTitle id="journey-detail-title" tabindex="-1">{{ selected.title }}</h3>
+                    <p>{{ selected.detail }}</p>
+                  </div>
+                  <div class="journey-practice">
+                    <p class="eyebrow">{{ lang() === 'it' ? 'In pratica' : 'In practice' }}</p>
+                    <ol>
+                      @for (item of selected.practice; track item; let i = $index) {
+                        <li><span aria-hidden="true">0{{ i + 1 }}</span><p>{{ item }}</p></li>
+                      }
+                    </ol>
+                  </div>
+                </div>
+                <div class="journey-detail-footer">
+                  <span class="meta-mono">0{{ (open() ?? 0) + 1 }} / 0{{ principles.length }}</span>
+                  <div class="flex gap-2">
+                    <button type="button" class="journey-close" [disabled]="transitioning()" (click)="go(-1)" [attr.aria-label]="lang() === 'it' ? 'Checkpoint precedente' : 'Previous checkpoint'">←</button>
+                    <button type="button" class="journey-close" [disabled]="transitioning()" (click)="go(1)" [attr.aria-label]="lang() === 'it' ? 'Checkpoint successivo' : 'Next checkpoint'">→</button>
+                  </div>
+                </div>
+              </article>
+            }
+          } @else {
+            <div class="journey-overview">
+              @for (p of principles; track $index; let i = $index) {
+                <button type="button" class="journey-summary" (click)="select(i)" [disabled]="transitioning()" aria-controls="journey-stage">
+                  <span class="journey-title">{{ p.title }}</span>
+                  <span class="journey-body">{{ p.body }}</span>
+                  <span class="journey-more">{{ lang() === 'it' ? 'Esplora' : 'Explore' }}<span aria-hidden="true">↗</span></span>
+                </button>
+              }
+            </div>
           }
         </div>
       </div>
@@ -161,6 +135,7 @@ export class ApproachComponent implements OnDestroy {
   private readonly injector = inject(Injector);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private animation: Animation | null = null;
+  private readonly errorHandler = inject(ErrorHandler);
   private destroyed = false;
 
   protected select(index: number) {
@@ -201,6 +176,7 @@ export class ApproachComponent implements OnDestroy {
       afterNextRender(() => {
         this.animation?.cancel();
         this.animation = null;
+        if (element) element.scrollTop = 0;
         this.transitioning.set(false);
         if (index === null) {
           this.host.nativeElement.querySelector<HTMLElement>(`#journey-checkpoint-${previous}`)?.focus({ preventScroll: true });
@@ -212,7 +188,7 @@ export class ApproachComponent implements OnDestroy {
       this.animation?.cancel();
       this.animation = null;
       this.transitioning.set(false);
-      if (!(error instanceof DOMException && error.name === "AbortError")) throw error;
+      if (!(error instanceof DOMException && error.name === "AbortError")) this.errorHandler.handleError(error);
     }
   }
 
