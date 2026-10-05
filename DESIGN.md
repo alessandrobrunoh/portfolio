@@ -86,18 +86,18 @@ The mark files are rasters wrapped in SVG (~1.3MB soft, ~95KB mono), so the site
 
 ## 3. Color
 
-Light is the home of the brand. Dark is a deeper night than the brand's `#0F172A` section colour (`#05080F`, still blue-black, never pure black), used for the footer and as the optional theme.
+Light is the home of the brand. Dark is **OLED black**: the page is `#000000`, so on OLED screens those pixels are simply off. Surfaces lift just enough (`#0A0A0C`, `#131317`) to read; borders are neutral grays. Used for the footer and the dark theme.
 
 | Role (CSS var) | Light | Dark | Use |
 |---|---|---|---|
-| `--canvas` | `#FFFFFF` | `#05080F` | Page |
-| `--subtle` | `#F8FAFC` | `#090D17` | Hero gradient, tech band, contact panel, hovers |
-| `--surface` | `#FFFFFF` | `#0C111D` | Cards, nav controls, menus |
-| `--surface-2` | `#F1F4F8` | `#121927` | Bar tracks, pressed states |
-| `--line` / `--line-2` / `--line-strong` | `#E5E7EB` / `#D7DCE3` / `#CBD5E1` | `#19212F` / `#212B3C` / `#2C384D` | Borders: subtle, standard, strong |
-| `--fg` | `#111827` | `#EEF2F7` | Headings, primary text |
-| `--muted` | `#4B5563` | `#9AA6B8` | Secondary text, ledes |
-| `--faint` | `#6B7280` | `#7C889B` | Captions, labels, meta |
+| `--canvas` | `#FFFFFF` | `#000000` | Page |
+| `--subtle` | `#F8FAFC` | `#050506` | Hero gradient, tech band, contact panel, hovers |
+| `--surface` | `#FFFFFF` | `#0A0A0C` | Cards, nav controls, menus |
+| `--surface-2` | `#F1F4F8` | `#131317` | Bar tracks, pressed states |
+| `--line` / `--line-2` / `--line-strong` | `#E5E7EB` / `#D7DCE3` / `#CBD5E1` | `#1C1C22` / `#25252D` / `#33333D` | Borders: subtle, standard, strong |
+| `--fg` | `#111827` | `#F2F2F5` | Headings, primary text |
+| `--muted` | `#4B5563` | `#A1A1AB` | Secondary text, ledes |
+| `--faint` | `#6B7280` | `#7F7F8A` | Captions, labels, meta |
 | `--signal` | `#3B82F6` | `#3B82F6` | The dot, focus rings, live dots, progress, spine, chip tints |
 | `--accent` | `#2563EB` | `#7CB1FF` | Blue **text**: links, indexes, active labels |
 | `--cta` / `--cta-hover` | `#2563EB` / `#1D4ED8` | `#3B82F6` / `#2563EB` | Primary button fill |
@@ -129,7 +129,7 @@ Inter only (variable, `opsz` 14–32, 300–700). Code blocks use the system mon
 
 - Container `max-width: 1200px` + gutters 20 / 24 / 32px. Sections `padding-block: clamp(72px … 96px)`.
 - **Nav** (64px, fixed): white at 86% + 10px blur, 1px bottom border. Left: monogram (+ wordmark from `xl`). Centre (from `lg`): `02 Experience · 03 Work · 04 How I work · 05 Contact`, active = `fg` + 4px blue dot. Right: one pill with language (globe + rolling `EN`/`IT`) and theme (sun → moon), then the **Contact** pill CTA; menu button below `lg`. Hides on scroll down, returns on scroll up. Right-click on the mark opens the brand menu (Copy logo as SVG, Copy wordmark as SVG, Brand guidelines).
-- **Hero:** exactly one screen (`min-height: 100svh`, height-aware spacing). Background: `--subtle` → white with two pale discs (the logo's own gray, a 7% blue tint) and a fine **64px engineering grid** behind the mark in both themes (6% ink, faded out radially from the logo). The grid is alive: its plane drifts one cell diagonally every 16s, the same grid in blue shows only inside a soft spot that glides across it over 14s, and thin blue **packets** run along a few grid lines like events on a stream. Left 7/12: company pill (the easter-egg switch, below), eyebrow `Software · Systems · Product`, display role, lede, **View work** (primary) · **Download CV** (secondary) · GitHub (ghost), availability. Right 5/12: the full logo. A Scroll cue sits bottom-left on desktop; on short phones the mark is hidden.
+- **Hero:** exactly one screen (`min-height: 100svh`, height-aware spacing). Background: `--subtle` → white with two pale discs (the logo's own gray, a 7% blue tint) and a fine **64px engineering grid** behind the mark in both themes (6% ink, faded out radially from the logo). The grid is alive but calm: the same grid in blue shows inside a soft spot that glides across it over 14s, and it **answers the pointer** — a blue lens (10rem) follows the cursor over the hero and every 64px cell the cursor enters lights up (soft blue fill, blue edge, glow) and fades over 1.1s, leaving a short trail. Mouse and pen only; off under reduced motion. Left 7/12, kept deliberately short: company pill (the easter-egg switch, below), the display role, one sentence, and two buttons only — **View work** (primary) and **Download CV** (secondary). Availability lives in Contact, GitHub in the nav sheet, contact and footer. Right 5/12: the full logo. A Scroll cue sits bottom-left on desktop; on short phones the mark is hidden.
 - **Below the fold:** three proof cards (In production / Published crate / Thesis), then the tech band (two marquees on `--subtle`, top left, bottom right; hovering pauses and swaps solid ↔ outline).
 - **Order:** 01 Intro (bio) → 02 Experience → 03 Work → 04 How I work → 05 Contact → footer. Experience leads because client production work is the strongest proof.
 
@@ -141,7 +141,7 @@ Inter only (variable, `opsz` 14–32, 300–700). Code blocks use the system mon
 - **Cards:** white, 1px `--line`, radius 20, padding 24 (lead up to 40), `shadow-sm` → `shadow-md` + 2px lift on hover.
 - **Timeline:** `11rem | 2.5rem | 1fr` — date, a 1px spine with a 12px ring node (current: filled blue, soft pulse), role with blue-dot bullets, chips, and "Read the case study →" when the role has a case.
 - **Work:** featured case card (problem first, numbered highlights), 2-up project cards, then the **Upstream / open source** list in one bordered card.
-- **How I work:** a journey. A rounded `--subtle` panel holds a soft wave (Catmull-Rom curve through five nodes, rising toward the last) over misty wave shapes and a soft sphere. Each step has a one-word tag in blue (Understand, Ship, Observe, Own, Share), a title and a sentence. When the panel is seen the wave draws itself in blue, each node pops in turn (260ms apart) and its text fades up; the last node is larger, filled and glows. Below `lg` it is a swipeable 80rem track.
+- **How I work:** a journey. A rounded `--subtle` panel holds a soft wave (Catmull-Rom curve through five nodes, rising toward the last) over misty wave shapes and a soft sphere. Each step has a one-word tag in blue (Understand, Ship, Observe, Own, Share), a title, a sentence and "Read more +". The whole step is a button: clicking it opens a detail card under the wave (height animates 0fr → 1fr) with a longer paragraph and three "In practice" points, previous/next/close controls, the chosen node filled blue and the other steps dimmed. When the panel is seen the wave draws itself in blue, each node pops in turn (260ms apart) and its text fades up; the last node is larger, filled and glows. Below `lg` it is a swipeable 80rem track.
 - **Experience entrance:** each row slides in from the left, its node pops, then title, org, bullets (staggered), case link and chips follow.
 - **Work entrance:** cards rise with a slight scale, staggered; highlights and chips follow inside. The featured card has a slow beam of blue light circling its border (`conic-gradient` on a registered `--beam` angle).
 - **Easter egg switch:** the company pill in the hero is a button styled as a toggle. On hover/focus the avatar (the knob) slides to the right end with a slight spring, the text shifts left, a blue play glyph appears and the pill tints blue. A click keeps it "on" and opens the **game hub**.

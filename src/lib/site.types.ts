@@ -129,6 +129,9 @@ export interface Principle {
   tag: string;
   title: string;
   body: string;
+  /** Shown when the step is opened: a longer paragraph and how it shows up in practice. */
+  detail: string;
+  practice: string[];
 }
 
 export interface StackGroup {

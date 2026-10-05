@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, computed, signal } from "@angular/core";
 import { SectionHeadComponent } from "./section-head.component";
 import { PRINCIPLES, UI, lang } from "../lib/site";
 
@@ -66,16 +66,64 @@ function wavePath(points: readonly [number, number][]): string {
             </svg>
             <ol class="journey-steps">
               @for (p of principles; track p.title; let i = $index; let last = $last) {
-                <li class="journey-step" [style.--i]="i" [class.is-last]="last">
-                  <span class="journey-node" [style.top.px]="nodes[i][1]" aria-hidden="true"></span>
-                  <p class="journey-tag">{{ p.tag }}</p>
-                  <h3 class="journey-title">{{ p.title }}</h3>
-                  <p class="journey-body">{{ p.body }}</p>
+                <li class="journey-step" [style.--i]="i" [class.is-last]="last" [class.is-open]="open() === i" [class.is-dimmed]="open() !== null && open() !== i">
+                  <button
+                    type="button"
+                    class="journey-hit"
+                    (click)="toggle(i)"
+                    [attr.aria-expanded]="open() === i"
+                    aria-controls="journey-detail"
+                  >
+                    <span class="journey-node" [style.top.px]="nodes[i][1]" aria-hidden="true"></span>
+                    <span class="journey-tag">{{ p.tag }}</span>
+                    <span class="journey-title">{{ p.title }}</span>
+                    <span class="journey-body">{{ p.body }}</span>
+                    <span class="journey-more">
+                      {{ open() === i ? (lang() === 'it' ? 'Chiudi' : 'Close') : (lang() === 'it' ? 'Scopri di più' : 'Read more') }}
+                      <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+                    </span>
+                  </button>
                 </li>
               }
             </ol>
           </div>
         </div>
+
+        <!-- The opened step: a longer explanation and how it shows up in practice. -->
+        <div id="journey-detail" class="journey-detail" [class.is-open]="selected() !== null" role="region" [attr.aria-label]="selected()?.title ?? null">
+          <div class="journey-detail-inner">
+            @if (selected(); as s) {
+              <!-- Re-created on every step change so the card animates in again. -->
+              @for (k of [open()]; track k) {
+              <div class="journey-detail-card">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <p class="journey-tag">0{{ (open() ?? 0) + 1 }} · {{ s.tag }}</p>
+                    <h3 class="mt-2 text-title font-semibold tracking-tight text-fg">{{ s.title }}</h3>
+                  </div>
+                  <div class="flex shrink-0 gap-1">
+                    <button type="button" class="nav-ctl" (click)="go(-1)" [attr.aria-label]="lang() === 'it' ? 'Passo precedente' : 'Previous step'">‹</button>
+                    <button type="button" class="nav-ctl" (click)="go(1)" [attr.aria-label]="lang() === 'it' ? 'Passo successivo' : 'Next step'">›</button>
+                    <button type="button" class="nav-ctl" (click)="toggle(open()!)" [attr.aria-label]="lang() === 'it' ? 'Chiudi' : 'Close'">✕</button>
+                  </div>
+                </div>
+                <div class="mt-5 grid gap-6 md:grid-cols-2">
+                  <p class="text-body text-muted">{{ s.detail }}</p>
+                  <div>
+                    <p class="eyebrow">{{ lang() === 'it' ? 'In pratica' : 'In practice' }}</p>
+                    <ul class="tl-bullets mt-3 grid gap-2.5">
+                      @for (item of s.practice; track item) { <li>{{ item }}</li> }
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              }
+            }
+          </div>
+        </div>
+        @if (open() === null) {
+          <p class="journey-hint">{{ lang() === 'it' ? 'Clicca un passo per approfondire.' : 'Click a step to read more.' }}</p>
+        }
       </div>
     </section>
   `,
@@ -86,4 +134,21 @@ export class ApproachComponent {
   protected readonly lang = lang;
   protected readonly nodes = NODES;
   protected readonly path = wavePath(NODES);
+
+  /** The step whose details are open, or null. */
+  protected readonly open = signal<number | null>(null);
+  protected readonly selected = computed(() => {
+    lang();
+    const i = this.open();
+    return i === null ? null : this.principles[i];
+  });
+
+  protected toggle(i: number) {
+    this.open.set(this.open() === i ? null : i);
+  }
+
+  protected go(delta: number) {
+    const n = this.principles.length;
+    this.open.set((((this.open() ?? 0) + delta) % n + n) % n);
+  }
 }

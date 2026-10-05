@@ -1,4 +1,4 @@
-import { Component, computed, output, signal } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, computed, inject, output, signal, viewChild } from "@angular/core";
 import { IconComponent } from "./icon.component";
 import { SectionHeadComponent } from "./section-head.component";
 
@@ -16,13 +16,11 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
         <div class="hero-backdrop" aria-hidden="true">
           <span class="hero-shape hero-shape-a"></span>
           <span class="hero-shape hero-shape-b"></span>
+          <!-- The grid answers the pointer: a blue lens follows it and the cells it crosses light up and fade. -->
           <div class="hero-grid">
-            <!-- The plane drifts one cell diagonally on a loop; packets run along its lines like events on a stream. -->
-            <div class="hero-grid-plane">
+            <div #plane class="hero-grid-plane">
               <span class="hero-grid-pulse"></span>
-              @for (p of packets; track $index) {
-                <span class="grid-packet" [class.is-h]="p.h" [style.--c]="p.c" [style.--r]="p.r" [style.--d]="p.d + 's'" [style.--delay]="p.delay + 's'"></span>
-              }
+              <span class="hero-grid-lens"></span>
             </div>
           </div>
         </div>
@@ -52,7 +50,6 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
             </button>
 
             <h1>
-              <span class="eyebrow hero-eyebrow">Software · Systems · Product</span>
               <span class="sr-only">{{ profile.name }} — </span>
               <span class="hero-title">
                 <span class="line"><span>{{ role().main }}</span></span>
@@ -73,16 +70,8 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
                 <svg appIcon="download" class="size-4"></svg>
                 {{ lang() === 'it' ? 'Scarica il CV' : 'Download CV' }}
               </a>
-              <a [href]="profile.github" target="_blank" rel="noreferrer" class="btn btn-quiet" aria-label="GitHub">
-                <svg appIcon="github" class="size-4"></svg>
-                <span class="hidden sm:inline" aria-hidden="true">GitHub</span>
-              </a>
             </div>
 
-            <p class="hero-availability stagger-in">
-              <span class="live-dot mt-[0.45rem]" aria-hidden="true"></span>
-              {{ profile.availability }}
-            </p>
           </div>
 
           <!-- Full logo: the soft monogram with the wordmark set live in Inter under it. -->
@@ -159,7 +148,7 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
     </section>
   `,
 })
-export class IntroComponent {
+export class IntroComponent implements AfterViewInit, OnDestroy {
   protected readonly profile = PROFILE;
   protected readonly education = EDUCATION;
   protected readonly ui = UI;
@@ -177,16 +166,58 @@ export class IntroComponent {
     return [[...new Set(first)], [...new Set(second)]];
   });
   /** "Software Engineer — Systems & Product" sets as two display lines; the second ends on the logo dot. */
-  /** Packets on the hero grid: column/row on the 64px lattice, duration and delay in seconds. */
-  protected readonly packets = [
-    { h: false, c: 15, r: 0, d: 6.5, delay: 0 },
-    { h: false, c: 19, r: 0, d: 8, delay: 2.4 },
-    { h: false, c: 22, r: 0, d: 7, delay: 4.6 },
-    { h: false, c: 4, r: 0, d: 7.5, delay: 1.2 },
-    { h: true, c: 0, r: 5, d: 9, delay: 0.8 },
-    { h: true, c: 0, r: 8, d: 10, delay: 3.6 },
-    { h: true, c: 0, r: 11, d: 8.5, delay: 6 },
-  ];
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly zone = inject(NgZone);
+  private readonly plane = viewChild<ElementRef<HTMLElement>>("plane");
+  private cleanup: (() => void) | null = null;
+
+  /**
+   * Grid hover: the lens follows the pointer (CSS vars on the plane) and every 64px cell the pointer
+   * enters gets a short-lived highlight that fades out, leaving a trail. Mouse and pen only.
+   */
+  ngAfterViewInit() {
+    if (typeof window === "undefined" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const hero = this.host.nativeElement.querySelector<HTMLElement>(".hero");
+    const plane = this.plane()?.nativeElement;
+    if (!hero || !plane) return;
+    let lastCell = "";
+    const move = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      const rect = plane.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      plane.style.setProperty("--mx", `${x}px`);
+      plane.style.setProperty("--my", `${y}px`);
+      plane.classList.add("is-hovering");
+      const cx = Math.floor(x / 64);
+      const cy = Math.floor(y / 64);
+      const key = `${cx}:${cy}`;
+      if (key === lastCell) return;
+      lastCell = key;
+      const cell = document.createElement("span");
+      cell.className = "grid-cell";
+      cell.style.left = `${cx * 64}px`;
+      cell.style.top = `${cy * 64}px`;
+      cell.addEventListener("animationend", () => cell.remove(), { once: true });
+      plane.appendChild(cell);
+    };
+    const leave = () => {
+      plane.classList.remove("is-hovering");
+      lastCell = "";
+    };
+    this.zone.runOutsideAngular(() => {
+      hero.addEventListener("pointermove", move);
+      hero.addEventListener("pointerleave", leave);
+    });
+    this.cleanup = () => {
+      hero.removeEventListener("pointermove", move);
+      hero.removeEventListener("pointerleave", leave);
+    };
+  }
+
+  ngOnDestroy() {
+    this.cleanup?.();
+  }
 
   /** Stays "on" after a click so the knob rests on the right while the game is open. */
   protected readonly switched = signal(false);

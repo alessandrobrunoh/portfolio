@@ -9,7 +9,7 @@ export const LIGHT_START_HOUR_UTC = 6;
 export const DARK_START_HOUR_UTC = 20;
 
 const LIGHT_THEME_COLOR = "#ffffff";
-const DARK_THEME_COLOR = "#05080f";
+const DARK_THEME_COLOR = "#000000";
 
 let refreshTimer: ReturnType<typeof setTimeout> | undefined;
 let visibilityBound = false;
