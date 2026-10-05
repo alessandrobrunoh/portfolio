@@ -80,7 +80,7 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.title.setTitle("Alessandro Bruno — Software Engineer, Rust / Backend");
+    this.title.setTitle("Alessandro Bruno — Software Engineer");
     const ids = TOC.map((item) => item.href.slice(1));
     const els = ids.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => el !== null);
     if (els.length === 0) return;

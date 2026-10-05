@@ -8,9 +8,9 @@ import type { SiteData } from "./site.types";
 export const IT: SiteData = {
   PROFILE: {
     name: "Alessandro Bruno",
-    role: "Software Engineer — Rust / Backend",
-    shortRole: "Rust · Backend · Event-driven",
-    headline: "Servizi event-driven in Rust in produzione, dai consumer asincroni alle trace in Grafana.",
+    role: "Software Engineer — Systems & Product",
+    shortRole: "Backend · Full-stack · Event-driven",
+    headline: "Progetto e rilascio software in produzione dall'inizio alla fine — servizi, API e interfacce, con lo stack che il problema richiede.",
     location: "Bologna, Italia",
     github: "https://github.com/alessandrobrunoh",
     website: "https://alessandrobrunoh.it",
@@ -18,8 +18,8 @@ export const IT: SiteData = {
     x: "",
     avatar: "/avatar.jpg",
     company: { name: "Luna S.r.l.", href: "https://lunapartner.it" },
-    bio: "Backend engineer Rust a Bologna. Da oltre un anno lavoro su microservizi event-driven in produzione in Luna S.r.l.: consumer asincroni su Valkey Streams, payload su S3, trace e log con OpenTelemetry verso Grafana, Loki e Tempo — tutto passato da code review senior. La mia tesi triennale, PETRA, è una piattaforma event-driven per la telemetria asincrona in tempo reale. Fuori dal lavoro costruisco strumenti un livello più in basso: ducklake-orm, un ORM Rust pubblicato su crates.io, e Mnemosyne, una cronologia semantica del codice basata su Tree-sitter.",
-    availability: "Disponibile per ruoli Rust e backend — da remoto o ibrido in Italia, con preavviso. Cittadino UE.",
+    bio: "Software engineer a Bologna. Da oltre un anno lavoro su sistemi in produzione in Luna S.r.l.: microservizi event-driven con consumer asincroni su Valkey Streams, una console operatore in Spring Boot e React, trace e log con OpenTelemetry verso Grafana, Loki e Tempo — tutto passato da code review senior. Scelgo lo strumento in base al problema, non il contrario: Rust, Java, TypeScript, Python, Angular o React. La mia tesi triennale, PETRA, è una piattaforma event-driven per la telemetria asincrona in tempo reale. Fuori dal lavoro costruisco strumenti un livello più in basso: ducklake-orm, un ORM pubblicato su crates.io, e Mnemosyne, una cronologia semantica del codice basata su Tree-sitter.",
+    availability: "Disponibile per ruoli da software engineer — backend, full-stack o sistemi; da remoto o ibrido in Italia, con preavviso. Cittadino UE.",
   },
 
   TOC: [

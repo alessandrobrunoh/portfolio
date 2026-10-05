@@ -4,9 +4,9 @@ import type { SiteData } from "./site.types";
 export const EN: SiteData = {
   PROFILE: {
     name: "Alessandro Bruno",
-    role: "Software Engineer — Rust / Backend",
-    shortRole: "Rust · Backend · Event-driven",
-    headline: "Production event-driven services in Rust, from async consumers to traces in Grafana.",
+    role: "Software Engineer — Systems & Product",
+    shortRole: "Backend · Full-stack · Event-driven",
+    headline: "I design and ship production software end to end — services, APIs and interfaces, in whatever stack the problem needs.",
     location: "Bologna, Italy",
     github: "https://github.com/alessandrobrunoh",
     website: "https://alessandrobrunoh.it",
@@ -14,8 +14,8 @@ export const EN: SiteData = {
     x: "",
     avatar: "/avatar.jpg",
     company: { name: "Luna S.r.l.", href: "https://lunapartner.it" },
-    bio: "Rust backend engineer based in Bologna. For over a year I have worked on production event-driven microservices at Luna S.r.l.: async consumers on Valkey Streams, payloads on S3, and traces and logs through OpenTelemetry into Grafana, Loki and Tempo — all shipped through senior code review. My B.Sc. thesis, PETRA, is an event-driven platform for real-time asynchronous telemetry. Outside work I build tools one layer down: ducklake-orm, a Rust ORM published on crates.io, and Mnemosyne, a semantic history for source code built on Tree-sitter.",
-    availability: "Open to Rust and backend roles — remote or hybrid in Italy, available with notice. EU citizen.",
+    bio: "Software engineer based in Bologna. For over a year I have worked on production systems at Luna S.r.l.: event-driven microservices with async consumers on Valkey Streams, an operator console on Spring Boot and React, and traces and logs through OpenTelemetry into Grafana, Loki and Tempo — all shipped through senior code review. I pick the tool for the problem, not the other way round: Rust, Java, TypeScript, Python, Angular or React. My B.Sc. thesis, PETRA, is an event-driven platform for real-time asynchronous telemetry. Outside work I build tools one layer down: ducklake-orm, an ORM published on crates.io, and Mnemosyne, a semantic history for source code built on Tree-sitter.",
+    availability: "Open to software engineering roles — backend, full-stack or systems; remote or hybrid in Italy, available with notice. EU citizen.",
   },
 
   TOC: [
