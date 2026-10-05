@@ -2234,7 +2234,11 @@ html.theme-vt::view-transition-new(root) {
     transform: translateY(-1px);
   }
 
-  /* Technology band: two rows of the actual stack, sliding in opposite directions with scroll. */
+  /*
+   * Technology band: two marquees of the actual stack. Top runs left, bottom runs right, both
+   * pause while the pointer is over the band. Each row holds its sequence twice and loops at
+   * -50%, so the seam never shows. Hovering a word swaps it: solid goes outline, outline goes solid.
+   */
   .tech-band {
     position: relative;
     overflow: hidden;
@@ -2247,15 +2251,30 @@ html.theme-vt::view-transition-new(root) {
   .tech-row {
     display: flex;
     width: max-content;
-    gap: 2.5rem;
     white-space: nowrap;
+    animation: tech-left 70s linear infinite;
+  }
+
+  .tech-row.is-ghost {
+    animation: tech-right 55s linear infinite;
+  }
+
+  .tech-band:hover .tech-row {
+    animation-play-state: paused;
   }
 
   .tech-row + .tech-row {
     margin-top: 1.25rem;
   }
 
-  .tech-row span {
+  /* The trailing padding equals the gap, so two sequences measure exactly 2× one. */
+  .tech-seq {
+    display: flex;
+    gap: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
+  .tech-seq span {
     display: inline-flex;
     align-items: center;
     gap: 2.5rem;
@@ -2263,9 +2282,14 @@ html.theme-vt::view-transition-new(root) {
     font-weight: 500;
     letter-spacing: -0.04em;
     color: var(--fg);
+    -webkit-text-stroke: 1px var(--fg);
+    cursor: default;
+    transition:
+      color 300ms var(--ease-out-quart),
+      -webkit-text-stroke-color 300ms var(--ease-out-quart);
   }
 
-  .tech-row span::after {
+  .tech-seq span::after {
     content: "";
     width: 0.5rem;
     height: 0.5rem;
@@ -2273,14 +2297,24 @@ html.theme-vt::view-transition-new(root) {
     background: var(--signal);
   }
 
-  .tech-row.is-ghost span {
+  .tech-row.is-ghost .tech-seq span {
     color: transparent;
-    -webkit-text-stroke: 1px color-mix(in srgb, var(--silver) 70%, transparent);
+    -webkit-text-stroke-color: color-mix(in srgb, var(--silver) 70%, transparent);
   }
 
-  .tech-row.is-ghost span::after {
+  .tech-row.is-ghost .tech-seq span::after {
     background: var(--silver);
     opacity: 0.6;
+  }
+
+  .tech-row .tech-seq span:hover {
+    color: transparent;
+    -webkit-text-stroke-color: var(--silver);
+  }
+
+  .tech-row.is-ghost .tech-seq span:hover {
+    color: var(--fg);
+    -webkit-text-stroke-color: var(--fg);
   }
 
   /* Timeline spine: a blue fill that follows you down each row. */
@@ -2342,16 +2376,6 @@ html.theme-vt::view-transition-new(root) {
     animation: photo-drift linear both;
     animation-timeline: scroll();
     animation-range: 0 100vh;
-  }
-
-  .tech-row {
-    animation: tech-left linear both;
-    animation-timeline: view();
-    animation-range: cover;
-  }
-
-  .tech-row.is-ghost {
-    animation-name: tech-right;
   }
 
   .tl-spine::after {
@@ -2416,11 +2440,11 @@ html.theme-vt::view-transition-new(root) {
 
 @keyframes tech-left {
   from { transform: translateX(0); }
-  to { transform: translateX(-28%); }
+  to { transform: translateX(-50%); }
 }
 
 @keyframes tech-right {
-  from { transform: translateX(-28%); }
+  from { transform: translateX(-50%); }
   to { transform: translateX(0); }
 }
 

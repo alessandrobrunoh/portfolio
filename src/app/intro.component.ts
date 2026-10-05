@@ -99,11 +99,19 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
         </div>
       </div>
 
-      <!-- The working set, not a badge wall: two rows of the real stack, sliding with scroll. -->
-      <div class="tech-band mt-16" aria-label="{{ lang() === 'it' ? 'Tecnologie' : 'Technologies' }}" role="group">
+      <!--
+        The working set, not a badge wall: two marquees of the real stack, the top one running left,
+        the bottom one right. Each row holds its sequence twice so a -50% loop is seamless; hovering
+        the band pauses it, hovering a word swaps it between solid and outline.
+      -->
+      <div class="tech-band mt-16" [attr.aria-label]="lang() === 'it' ? 'Tecnologie' : 'Technologies'" role="group">
         @for (row of techRows(); track $index; let odd = $odd) {
-          <div class="tech-row" [class.is-ghost]="odd" [attr.aria-hidden]="odd ? 'true' : null">
-            @for (t of row; track $index) { <span>{{ t }}</span> }
+          <div class="tech-row" [class.is-ghost]="odd">
+            @for (copy of [0, 1]; track copy) {
+              <div class="tech-seq" [attr.aria-hidden]="copy === 1 ? 'true' : null">
+                @for (t of row; track $index) { <span>{{ t }}</span> }
+              </div>
+            }
           </div>
         }
       </div>
@@ -132,17 +140,16 @@ export class IntroComponent {
   protected get published() {
     return CONTRIBUTIONS.find((c) => c.status === "Published");
   }
-  /** "Software Engineer — Systems & Product" sets as two display lines; the second ends on the logo dot. */
-  /** Languages and frameworks on one row, infrastructure on the other; each repeated to fill wide screens. */
+  /** Languages and frameworks on one row, infrastructure on the other (each list once; the template doubles it). */
   protected readonly techRows = computed(() => {
     lang();
     const split = (list: string, sep: string) => list.split(sep).map((t) => t.trim()).filter(Boolean);
     const [infra, ...code] = [...STACK.groups].reverse();
     const first = code.reverse().flatMap((g) => [...split(g.name, "&"), ...split(g.items, "·")]);
     const second = [...split(infra.items, "·"), ...split(infra.also ?? "", ",")];
-    const fill = (row: string[]) => [...row, ...row, ...row];
-    return [fill([...new Set(first)]), fill([...new Set(second)])];
+    return [[...new Set(first)], [...new Set(second)]];
   });
+  /** "Software Engineer — Systems & Product" sets as two display lines; the second ends on the logo dot. */
   protected readonly role = computed(() => {
     lang();
     const [main, sub] = PROFILE.role.split(" — ");
