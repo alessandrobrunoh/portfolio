@@ -147,7 +147,7 @@ It should feel like a software engineer's workbench, not an agency landing page:
 - Motion is slow and restrained (400–1400ms, ease-out). No bounce. `prefers-reduced-motion` disables choreography.
 - Bilingual EN/IT. Copy changes; the visual system does not.
 
-**Page shell.** Fixed 64px top nav. Full-bleed hero, then numbered sections (`01 Intro` → `06 Contact`) inside `.container-x` (max 76rem, 20/32px gutter), separated by a content-width hairline. Footer is always black (`#000`, dark tokens) with daily tools, the white full logo, a sign-off and the wordmark engraved at display size. A 2px blue gradient scroll-progress bar is pinned to the top. Subpages (project, blog) use the same nav plus a 14rem sticky "On this page" rail.
+**Page shell.** Fixed 64px top nav. Full-bleed hero, then numbered sections inside `.container-x` (max 76rem, 20/32px gutter), separated by a content-width hairline: `01 Intro` → `02 Experience` → `03 Work` → `04 How I work` → `05 Writing` → `06 Contact`. Experience comes first because client production work is the strongest proof, for Software Engineer and Forward Deployed Engineer roles alike. Footer is always black (`#000`, dark tokens) with daily tools, the white full logo, a sign-off and the wordmark engraved at display size. A 2px blue gradient scroll-progress bar is pinned to the top. Subpages (project, blog) use the same nav plus a 14rem sticky "On this page" rail.
 
 ## 2. Brand Assets in the Interface
 
@@ -259,22 +259,31 @@ Two columns from `lg` (5/12 + 7/12, bottom-aligned): eyebrow `NN —— KICKER` 
 `.chip`: mono, `surface-2`, line border, 6px radius (`chip-quiet`: transparent, muted). Level badges (`PROFICIENT`) are Manrope eyebrow pills. Status uses `.status-open|merged|published` dots, never colour words.
 
 ### Cards
-- **Project lead**: full-row `.card`, eyebrow `01 —— FEATURED`, heading-sm name, body, chips; right column lists highlights as mono-numbered hairline rows. Footer row: meta in accent mono + "Open the project ↗".
-- **Project card**: 2-up grid, index top-left, stars · year top-right, Title name, small blurb, language chip + meta, arrow that nudges up-right on hover.
-- **Stack card**: index + level badge, Title name, chips, "Also" eyebrow + muted list. Hover shows the blue catch-light (not a link, so no lift).
+- **Project lead**: full-row `.card`, eyebrow `01 —— FEATURED`, heading-sm name, then **The problem** (the case-study `problem`, in `fg`), chips; right column lists highlights as mono-numbered hairline rows. Footer row: meta in accent mono + "Read the case study ↗".
+- **Project card**: 2-up grid, index top-left, stars · year top-right, Title name, small blurb, language chip + meta (or a `chip-signal` "Published on crates.io" when the project is also a published contribution), arrow that nudges up-right on hover.
+- **Writing card**: 3-up (1-up below `lg`), Manrope subtitle eyebrow + status chip (Draft / Published, never hidden), Title, muted pitch, "Read ↗".
 - **Contact panel**: 24px radius `.card` with ambient glow and a 7–9% opacity metallic monogram watermark bottom-right; statement heading, lede, the email address as a large Inter link with a growing underline, Copy ghost button, and a three-column facts row.
 
 ### Timeline (Experience)
 Newest first. Grid `11rem | 2.5rem | 1fr`: mono era (+ `now` pill), a 1px spine with a 12px ring node (current = filled signal, pulsing), and the role (Title, org, blue-dot bullets in two columns, chips). Education closes the list with the thesis as a silver-ruled quote. On mobile the spine moves to a 1.25rem left column.
 
-### Open source list
-Hairline rows: status (dot + word) | title, `repo · PR #n` in mono, note | arrow. Hover pads the row in and tints it `surface`.
+### Work (`#work`)
+Projects and open source are one section. Open source alone was three rows, one of them a duplicate of a project card, so it reads as thin on its own; it returns as a separate section only with 4–5+ merged upstream contributions. Below the project grid, an **Upstream / open source** list of hairline rows: status (dot + word) | title, `repo · PR #n — note` in mono | arrow. Published crates are not repeated there; they get the badge on their project card.
+
+### How I work (`#approach`)
+Replaces the old Stack grid (tools are already in the tech band). Five numbered principles from `PRINCIPLES` as hairline rows: mono index | Title | muted body, with a faint signal wash on hover. Principles describe working habits, never claims about specific events.
+
+### Writing (`#writing`)
+The `BLOG` posts as cards linking to `/blog/:slug`. Drafts are labelled Draft.
+
+### Impact
+`Role.impact` and `Project.impact` (`{ value, label }[]`) render as large numbers with a muted label (`.impact-row`) in the timeline and in a **Result** block on case studies. They are optional and empty by default: only real, measured numbers go there.
 
 ### Footer
 Always black (`#000`) in both themes: the element carries `.dark`, so every token inside resolves to the dark set. A blue ambient glow bleeds in from the top edge. Daily-tools grid (4 → 2 columns), then the white full logo | "End of stream" sign-off | CV + Back to top, then `ALESSANDRO BRUNO` in Manrope 300 at display size, engraved (charcoal-to-black text fill) and rising into place as it enters, then a mono bottom bar (© year, location, Email, GitHub).
 
 ### Subpages
-Nav + `page-shell` (14rem rail + content). Rail links are small Inter with mono numbers; active = surface fill, line ring and a 2px inset signal edge. Project pages keep live GitHub metrics in `panel`/`card` surfaces with signal data bars; code blocks are a fixed charcoal editor palette in both themes.
+Project pages are case studies, in this order: Overview (name, blurb, source/demo) → **The problem** → **What I built** (body + numbered highlights) → **Result** (only with real `impact`) → **What I learned** → *Under the hood*: live README excerpt, repository metrics and the latest change set. The rail lists only the sections that render. Nav + `page-shell` (14rem rail + content). Rail links are small Inter with mono numbers; active = surface fill, line ring and a 2px inset signal edge. Project pages keep live GitHub metrics in `panel`/`card` surfaces with signal data bars; code blocks are a fixed charcoal editor palette in both themes.
 
 ## 7. Motion
 
@@ -302,6 +311,7 @@ Nav + `page-shell` (14rem rail + content). Rail links are small Inter with mono 
 ### Don't
 - **Don't** recreate `ab.` in text, stretch, recolour, outline, shadow or filter the logo files, or place the metallic mark on busy imagery without air around it.
 - **Don't** introduce a second accent colour, colourful gradient text, neon glows, or large blue fills. (The only gradient type is the footer engraving, charcoal to black.)
+- **Don't** invent numbers or claims. Impact figures, travel availability and customer outcomes appear only when they are real.
 - **Don't** position the person around one language. Facts can name Rust, Java or TypeScript; headlines, availability and calls to action stay technology-agnostic.
 - **Don't** add serif fonts, all-caps Inter headings, or bold (600+) display type.
 - **Don't** put glass, grain or resting drop shadows on cards.

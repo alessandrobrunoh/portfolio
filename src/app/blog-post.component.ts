@@ -113,8 +113,8 @@ export class BlogPostComponent implements AfterViewInit, OnDestroy {
 
   goBack(event: MouseEvent) {
     event.preventDefault();
-    this.router.navigate(["/"], { fragment: "blog" }).then(() => {
-      window.setTimeout(() => document.getElementById("blog")?.scrollIntoView({ behavior: "smooth" }), 0);
+    this.router.navigate(["/"], { fragment: "writing" }).then(() => {
+      window.setTimeout(() => document.getElementById("writing")?.scrollIntoView({ behavior: "smooth" }), 0);
     });
   }
 

@@ -7,7 +7,7 @@ import { IconComponent } from "./icon.component";
 import { KeybindComponent } from "./keybind.component";
 import { SiteNavComponent } from "./site-nav.component";
 import { TocComponent } from "./toc.component";
-import { FUTURE_PROJECTS, PROJECTS, UI } from "../lib/site";
+import { FUTURE_PROJECTS, PROJECTS, UI, lang } from "../lib/site";
 import { loadGithubProjectStats, type GithubProjectStats } from "../lib/github-project";
 import type { TocItem } from "../lib/site.types";
 
@@ -31,12 +31,12 @@ const PAGE_META = [
       <app-site-nav [home]="false" />
       @if (project(); as p) {
         <div class="container-x page-shell">
-          <app-toc [items]="headings" [active]="active()" />
+          <app-toc [items]="headings()" [active]="active()" />
           <main id="overview" class="min-w-0 scroll-mt-24">
             <div class="project-reveal flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4 meta-mono">
               <button type="button" class="inline-flex min-h-9 items-center gap-2 transition-colors hover:text-fg" (click)="goBack($event)">
                 <svg appIcon="arrow-left" class="size-3.5"></svg>
-                Back to Projects
+                {{ it() ? 'Torna ai lavori' : 'Back to Work' }}
               </button>
               <span>workspace / {{ p.id }}</span>
             </div>
@@ -50,7 +50,7 @@ const PAGE_META = [
                   @if (p.href) {
                     <a [href]="p.href" target="_blank" rel="noreferrer" class="btn btn-primary">
                       <svg appIcon="github" class="size-4"></svg>
-                      Source code
+                      {{ it() ? 'Codice sorgente' : 'Source code' }}
                     </a>
                   }
                   @if (demo(); as demoUrl) {
@@ -62,13 +62,48 @@ const PAGE_META = [
                   <span class="meta-mono">{{ p.stack.join(' · ') }}</span>
                 </div>
 
-                <section id="story" class="mt-16 scroll-mt-24">
-                  <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>README / overview</p>
+                <!-- Case study first: problem, what was built, result, lesson. The repository comes after. -->
+                @if (p.problem) {
+                  <section id="problem" class="mt-16 scroll-mt-24">
+                    <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>{{ it() ? 'Il problema' : 'The problem' }}</p>
+                    <p class="mt-4 max-w-prose text-lede text-fg">{{ p.problem }}</p>
+                  </section>
+                }
+
+                <section id="built" class="mt-16 scroll-mt-24">
+                  <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>{{ it() ? 'Cosa ho costruito' : 'What I built' }}</p>
+                  <p class="mt-4 max-w-prose text-body text-muted">{{ p.body }}</p>
+                  <ol class="project-highlights mt-6">
+                    @for (item of p.highlights; track item; let j = $index) {
+                      <li class="text-body"><span>0{{ j + 1 }}</span>{{ item }}</li>
+                    }
+                  </ol>
+                </section>
+
+                @if (p.impact?.length) {
+                  <section id="impact" class="mt-16 scroll-mt-24">
+                    <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>{{ it() ? 'Risultato' : 'Result' }}</p>
+                    <dl class="impact-row mt-5">
+                      @for (m of p.impact; track m.label) {
+                        <div><dt>{{ m.label }}</dt><dd>{{ m.value }}</dd></div>
+                      }
+                    </dl>
+                  </section>
+                }
+
+                <section id="lesson" class="mt-16 scroll-mt-24">
+                  <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>{{ it() ? 'Cosa ho imparato' : 'What I learned' }}</p>
+                  <p class="mt-4 max-w-prose text-lede text-fg">{{ p.learned }}</p>
+                </section>
+
+                <section id="story" class="mt-20 scroll-mt-24 border-t border-line pt-10">
+                  <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>{{ it() ? 'Sotto il cofano' : 'Under the hood' }}</p>
+                  <h2 class="mt-3 text-title font-medium tracking-tight text-fg">{{ it() ? 'Il codice' : 'The code' }}</h2>
                   @if (stats()?.readmeExcerpt; as readme) {
-                    <p class="mt-4 max-w-prose text-lede text-fg">{{ readme }}</p>
-                    <p class="mt-3 meta-mono">Source: live README from GitHub</p>
+                    <p class="mt-4 max-w-prose text-body text-muted">{{ readme }}</p>
+                    <p class="mt-3 meta-mono">{{ it() ? 'Fonte: README live da GitHub' : 'Source: live README from GitHub' }}</p>
                   } @else {
-                    <p class="mt-4 max-w-prose text-lede text-fg">{{ p.body }}</p>
+                    <p class="mt-4 max-w-prose text-body text-muted">{{ p.stack.join(' · ') }}</p>
                   }
                 </section>
 
@@ -162,19 +197,6 @@ const PAGE_META = [
                   </section>
                 }
 
-                <section id="highlights" class="mt-16 scroll-mt-24">
-                  <h2 class="text-title font-medium tracking-tight text-fg">What is inside</h2>
-                  <ol class="project-highlights mt-5">
-                    @for (item of p.highlights; track item; let j = $index) {
-                      <li class="text-body"><span>0{{ j + 1 }}</span>{{ item }}</li>
-                    }
-                  </ol>
-                </section>
-
-                <section id="lesson" class="mt-16 scroll-mt-24">
-                  <h2 class="text-title font-medium tracking-tight text-fg">What it taught me</h2>
-                  <p class="mt-4 max-w-prose text-lede text-muted">{{ p.learned }}</p>
-                </section>
               </article>
 
               <aside class="project-reveal self-start xl:sticky xl:top-24">
@@ -251,7 +273,7 @@ const PAGE_META = [
           <p class="text-title font-medium tracking-tight text-fg">Project not found<span class="brand-dot">.</span></p>
           <button type="button" class="btn btn-ghost mt-6" (click)="goBack($event)">
             <svg appIcon="arrow-left" class="size-4"></svg>
-            Back to Projects
+            {{ it() ? 'Torna ai lavori' : 'Back to Work' }}
           </button>
         </main>
       }
@@ -272,14 +294,23 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
   private observer: IntersectionObserver | null = null;
   private timeout: ReturnType<typeof setTimeout> | null = null;
   protected readonly ui = UI;
-  protected readonly headings: TocItem[] = [
-    { n: "01", href: "#overview", label: "Overview" },
-    { n: "02", href: "#story", label: "README" },
-    { n: "03", href: "#metrics", label: "Metrics" },
-    { n: "04", href: "#diff", label: "Git diff" },
-    { n: "05", href: "#highlights", label: "Inside" },
-    { n: "06", href: "#lesson", label: "Lesson" },
-  ];
+  protected readonly it = () => lang() === "it";
+  /** Case-study order in the rail; sections that do not render (no problem/impact/stats) are skipped. */
+  protected readonly headings = computed<TocItem[]>(() => {
+    const it = this.it();
+    const p = this.project();
+    const items = [
+      { id: "overview", label: it ? "Panoramica" : "Overview", show: true },
+      { id: "problem", label: it ? "Il problema" : "The problem", show: !!p?.problem },
+      { id: "built", label: it ? "Cosa ho costruito" : "What I built", show: true },
+      { id: "impact", label: it ? "Risultato" : "Result", show: !!p?.impact?.length },
+      { id: "lesson", label: it ? "Cosa ho imparato" : "What I learned", show: true },
+      { id: "story", label: it ? "Il codice" : "The code", show: true },
+      { id: "metrics", label: it ? "Metriche" : "Metrics", show: !!this.stats() },
+      { id: "diff", label: "Git diff", show: !!this.stats() },
+    ].filter((item) => item.show);
+    return items.map((item, i) => ({ n: String(i + 1).padStart(2, "0"), href: `#${item.id}`, label: item.label }));
+  });
 
   project = computed(() => [...PROJECTS, ...FUTURE_PROJECTS].find((item) => item.id === this.id()));
   /** Only shipped projects can have a live deployment. */
@@ -327,7 +358,7 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
 
   private setupObserver() {
     if (this.observer) return;
-    const sections = ["overview", "story", "metrics", "diff", "highlights", "lesson"]
+    const sections = ["overview", "problem", "built", "impact", "lesson", "story", "metrics", "diff"]
       .map((id) => document.getElementById(id))
       .filter((section): section is HTMLElement => section !== null);
     if (sections.length === 0) return;
@@ -360,8 +391,8 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
 
   goBack(event: MouseEvent) {
     event.preventDefault();
-    this.router.navigate(["/"], { fragment: "projects" }).then(() => {
-      window.setTimeout(() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" }), 0);
+    this.router.navigate(["/"], { fragment: "work" }).then(() => {
+      window.setTimeout(() => document.getElementById("work")?.scrollIntoView({ behavior: "smooth" }), 0);
     });
   }
 }

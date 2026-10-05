@@ -1,6 +1,7 @@
 import { Component, computed } from "@angular/core";
 import { SectionHeadComponent } from "./section-head.component";
 import { COMPANY, EDUCATION, ROLES, UI, lang } from "../lib/site";
+import type { Impact } from "../lib/site.types";
 
 type RoadmapStep = {
   era: string;
@@ -9,13 +10,14 @@ type RoadmapStep = {
   bullets?: readonly string[];
   note?: string;
   tags?: readonly string[];
+  impact?: readonly Impact[];
   current: boolean;
 };
 
 /** Built from the live (language-switched) data, so it must be read after every setLanguage. */
 function buildRoadmap(): RoadmapStep[] {
   return [
-    ...ROLES.map((role) => ({ era: role.dates, title: role.title, org: `${COMPANY.name} · ${COMPANY.location}`, bullets: role.bullets, tags: role.tags, current: role.current })),
+    ...ROLES.map((role) => ({ era: role.dates, title: role.title, org: `${COMPANY.name} · ${COMPANY.location}`, bullets: role.bullets, tags: role.tags, impact: role.impact, current: role.current })),
     { era: EDUCATION.dates, title: EDUCATION.school, org: `${EDUCATION.degree} · ${EDUCATION.native}`, note: EDUCATION.thesis, current: false },
   ];
 }
@@ -26,7 +28,7 @@ function buildRoadmap(): RoadmapStep[] {
   imports: [SectionHeadComponent],
   template: `
     <section id="experience" class="container-x section scroll-mt-16">
-      <app-section-head n="03" [title]="ui.sectionTitles.experience" [kicker]="lang() === 'it' ? 'percorso / decisioni' : 'timeline / decisions'">
+      <app-section-head n="02" [title]="ui.sectionTitles.experience" [kicker]="lang() === 'it' ? 'percorso / decisioni' : 'timeline / decisions'">
         <p class="section-lede">{{ company.summary }}</p>
       </app-section-head>
 
@@ -45,6 +47,13 @@ function buildRoadmap(): RoadmapStep[] {
                 <ul class="tl-bullets mt-5 grid gap-x-8 gap-y-2.5 md:grid-cols-2">
                   @for (item of step.bullets; track item) { <li>{{ item }}</li> }
                 </ul>
+              }
+              @if (step.impact?.length) {
+                <dl class="impact-row mt-5">
+                  @for (m of step.impact; track m.label) {
+                    <div><dt>{{ m.label }}</dt><dd>{{ m.value }}</dd></div>
+                  }
+                </dl>
               }
               @if (step.note) {
                 <blockquote class="mt-5 max-w-2xl border-l border-silver/50 pl-4 text-small text-muted">{{ step.note }}</blockquote>
