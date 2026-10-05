@@ -76,7 +76,12 @@
             var hour = new Date().getUTCHours();
             dark = !(hour >= 6 && hour < 20);
           }
-          if (dark) document.documentElement.classList.add("dark");
+          if (dark) {
+            document.documentElement.classList.add("dark");
+            // White mark in the tab while the site is dark (theme.ts keeps it in sync after load).
+            document.querySelector('link[rel="icon"][type="image/svg+xml"]').href = "/favicon-dark.svg";
+            document.querySelector('link[rel="icon"][type="image/png"]').href = "/favicon-dark-32.png";
+          }
         } catch (e) {}
       })();
     </script>

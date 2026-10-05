@@ -23,7 +23,8 @@ import { PROFILE, TOC, UI, lang, setLanguage, type Lang } from "../lib/site";
             [attr.aria-haspopup]="'menu'"
             [attr.aria-expanded]="brandMenu()"
           >
-            <img src="/brand/ab-monogram-metallic-160.webp" alt="" width="160" height="116" />
+            <img class="dark:hidden" src="/brand/ab-monogram-black-160.webp" alt="" width="160" height="114" />
+            <img class="hidden dark:block" src="/brand/ab-monogram-white-160.webp" alt="" width="160" height="114" />
             <span class="brand-wordmark hidden xl:inline" aria-hidden="true">{{ profile.name }}</span>
             <span class="sr-only">{{ profile.name }} — home</span>
           </a>

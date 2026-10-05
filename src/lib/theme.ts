@@ -63,9 +63,21 @@ export function syncThemeColor(resolved = resolveTheme()) {
     ?.setAttribute("content", resolved === "dark" ? DARK_THEME_COLOR : LIGHT_THEME_COLOR);
 }
 
+/** The tab icon follows the site theme: black mark on light, white mark on dark. */
+export function syncFavicon(resolved = resolveTheme()) {
+  const dark = resolved === "dark";
+  document
+    .querySelector('link[rel="icon"][type="image/svg+xml"]')
+    ?.setAttribute("href", dark ? "/favicon-dark.svg" : "/favicon.svg");
+  document
+    .querySelector('link[rel="icon"][type="image/png"]')
+    ?.setAttribute("href", dark ? "/favicon-dark-32.png" : "/favicon-32.png");
+}
+
 export function applyResolvedTheme(resolved: ResolvedTheme) {
   document.documentElement.classList.toggle("dark", resolved === "dark");
   syncThemeColor(resolved);
+  syncFavicon(resolved);
 }
 
 function notifyThemeChange() {

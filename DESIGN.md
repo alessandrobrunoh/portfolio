@@ -155,13 +155,13 @@ Source files live in `public/logos/` (official SVGs, each a wrapped raster). The
 
 | Use | File | Size |
 |---|---|---|
-| Nav mark (every page) | `brand/ab-monogram-metallic-160.webp` | 30px tall |
+| Nav mark (every page) | `brand/ab-monogram-black-160.webp` (light) / `brand/ab-monogram-white-160.webp` (dark) | 30px tall |
 | Hero mark, contact watermark, sheen mask | `brand/ab-monogram-metallic.webp` (960w) | up to 30rem wide |
 | Footer (always black) | `brand/ab-logo-white-full.webp` | 13.5rem wide |
 | Light documents / spare | `brand/ab-logo-black-full.webp` | — |
 | Spare / documents | `brand/ab-logo-metallic-full.webp`, `brand/ab-monogram-{white,black}-160.webp` | — |
 | Light hero backdrop | `brand/hero-light.webp` (from `public/hero.png`, sphere cropped out) | cover |
-| Favicon | `favicon.svg` (128px) and `favicon-32.png`: black monochrome monogram, no wordmark, transparent; `apple-touch-icon.png`: same mark on white (iOS fills transparency with black) | — |
+| Favicon | `favicon.svg` / `favicon-32.png`: black monochrome monogram, no wordmark, transparent; swapped to `favicon-dark.svg` / `favicon-dark-32.png` (white) while the site is dark (`syncFavicon` in theme.ts + the inline boot script); `apple-touch-icon.png`: same mark on white (iOS fills transparency with black) | — |
 | Share card | `og.jpg` (1200×630, metallic full logo on `#0B0D10` with blue ambient light) | — |
 
 Regenerate derivatives from `public/logos/*.svg` when the official files change; never edit the derivatives by hand.
@@ -238,7 +238,7 @@ Flat at rest. Depth comes from one surface step (`canvas → surface → surface
 ## 6. Components
 
 ### Navigation (`app-site-nav`)
-Fixed, 64px. Transparent over the hero; once scrolled, `--nav-bg` + 14px blur + bottom hairline. Left: metallic monogram (30px) + Manrope wordmark from `xl`. Centre (from `lg`): sections as `02 Projects` (mono number + Inter 14px); the active one turns `fg` with a 4px signal dot under it. Right: one hairline capsule holding the language control (globe + `EN`/`IT` that rolls like a split-flap; the globe turns 90°) and the theme toggle (a sun whose core grows while a disc slides in to cut a crescent and the rays spin out), then primary "Email me" (from `sm`) and the menu button (below `lg`). The bar tucks away while scrolling down past 320px and returns on any scroll up. The mobile sheet is opaque canvas with large Inter links and email/GitHub buttons; Escape closes it. On subpages the same links point to `/#section`.
+Fixed, 64px. Transparent over the hero; once scrolled, `--nav-bg` + 14px blur + bottom hairline. Left: flat monogram (30px; black on light, white on dark, per BRAND §18 dark navbar) + Manrope wordmark from `xl`. Centre (from `lg`): sections as `02 Projects` (mono number + Inter 14px); the active one turns `fg` with a 4px signal dot under it. Right: one hairline capsule holding the language control (globe + `EN`/`IT` that rolls like a split-flap; the globe turns 90°) and the theme toggle (a sun whose core grows while a disc slides in to cut a crescent and the rays spin out), then primary "Email me" (from `sm`) and the menu button (below `lg`). The bar tucks away while scrolling down past 320px and returns on any scroll up. The mobile sheet is opaque canvas with large Inter links and email/GitHub buttons; Escape closes it. On subpages the same links point to `/#section`.
 
 ### Brand menu (right-click on the nav mark)
 `contextmenu` on the monogram opens a 15.5rem menu under it (surface, line border, 12px radius, dialog shadow, 220ms scale-in): **Copy logo as SVG** (`/logos/ab-monogram-metallic.svg`), **Copy wordmark as SVG** (`/logos/ab-logo-metallic-full.svg`), separator, **Brand guidelines →** (`/brand`). The SVG markup goes to the clipboard as text (fetched inside a `ClipboardItem` promise so Safari keeps the user activation); the item shows a check + "Copied" for 900ms, then the menu closes and focus returns to the mark. If the clipboard is blocked the file opens in a new tab. Keyboard: the context-menu key / Shift+F10 opens it, arrows/Home/End move, Escape or Tab closes, outside click closes. Left-click still goes home.
