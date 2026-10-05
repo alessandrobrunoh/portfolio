@@ -1,14 +1,14 @@
-import { Component, computed, signal } from "@angular/core";
+import { Component, ElementRef, ErrorHandler, Injector, OnDestroy, afterNextRender, computed, inject, signal, viewChild } from "@angular/core";
 import { SectionHeadComponent } from "./section-head.component";
 import { PRINCIPLES, UI, lang } from "../lib/site";
 
-/** Node positions on the 1000×140 wave: each sits at the start of its column, rising to the last. */
+/** Node positions on the 1000×64 wave: each sits at the centre of its column, rising to the last. */
 const NODES: readonly [number, number][] = [
-  [14, 104],
-  [214, 58],
-  [414, 92],
-  [614, 46],
-  [814, 22],
+  [100, 50],
+  [300, 28],
+  [500, 44],
+  [700, 22],
+  [900, 10],
 ];
 
 /** A smooth curve through the nodes (Catmull-Rom → cubic Bézier), extended to both edges. */
@@ -29,11 +29,6 @@ function wavePath(points: readonly [number, number][]): string {
   return d;
 }
 
-/**
- * "How I work" as a journey: a soft wave runs through five steps and rises toward the last.
- * When the section is seen, the wave draws itself, each node lights up in turn and its text
- * fades in; the final step keeps a gentle glow. Narrow screens get a swipeable track.
- */
 @Component({
   selector: "app-approach",
   standalone: true,
@@ -50,85 +45,75 @@ function wavePath(points: readonly [number, number][]): string {
         </p>
       </app-section-head>
 
-      <div class="journey reveal-on-scroll">
-        <!-- Misty waves and a soft sphere: the same quiet shapes as the brand, no imagery. -->
-        <svg class="journey-mist" viewBox="0 0 1200 260" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M0 170 C 220 120, 420 210, 640 160 S 1000 110, 1200 150 L 1200 260 L 0 260 Z" />
-          <path d="M0 210 C 260 170, 520 240, 760 200 S 1060 170, 1200 195 L 1200 260 L 0 260 Z" />
-        </svg>
-        <span class="journey-sphere" aria-hidden="true"></span>
-
-        <div class="journey-scroller">
-          <div class="journey-track">
-            <svg class="journey-wave" viewBox="0 0 1000 140" preserveAspectRatio="none" aria-hidden="true">
-              <path class="journey-wave-base" [attr.d]="path" />
-              <path class="journey-wave-line" [attr.d]="path" pathLength="1" />
-            </svg>
-            <ol class="journey-steps">
-              @for (p of principles; track p.title; let i = $index; let last = $last) {
-                <li class="journey-step" [style.--i]="i" [class.is-last]="last" [class.is-open]="open() === i" [class.is-dimmed]="open() !== null && open() !== i">
-                  <button
-                    type="button"
-                    class="journey-hit"
-                    (click)="toggle(i)"
-                    [attr.aria-expanded]="open() === i"
-                    aria-controls="journey-detail"
-                  >
-                    <span class="journey-node" [style.top.px]="nodes[i][1]" aria-hidden="true"></span>
-                    <span class="journey-tag">{{ p.tag }}</span>
-                    <span class="journey-title">{{ p.title }}</span>
-                    <span class="journey-body">{{ p.body }}</span>
-                    <span class="journey-more">
-                      {{ open() === i ? (lang() === 'it' ? 'Chiudi' : 'Close') : (lang() === 'it' ? 'Scopri di più' : 'Read more') }}
-                      <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
-                    </span>
-                  </button>
-                </li>
-              }
-            </ol>
-          </div>
-        </div>
-
-        <!-- The opened step: a longer explanation and how it shows up in practice. -->
-        <div id="journey-detail" class="journey-detail" [class.is-open]="selected() !== null" role="region" [attr.aria-label]="selected()?.title ?? null">
-          <div class="journey-detail-inner">
-            @if (selected(); as s) {
-              <!-- Re-created on every step change so the card animates in again. -->
-              @for (k of [open()]; track k) {
-              <div class="journey-detail-card">
-                <div class="flex items-start justify-between gap-4">
-                  <div>
-                    <p class="journey-tag">0{{ (open() ?? 0) + 1 }} · {{ s.tag }}</p>
-                    <h3 class="mt-2 text-title font-semibold tracking-tight text-fg">{{ s.title }}</h3>
-                  </div>
-                  <div class="flex shrink-0 gap-1">
-                    <button type="button" class="nav-ctl" (click)="go(-1)" [attr.aria-label]="lang() === 'it' ? 'Passo precedente' : 'Previous step'">‹</button>
-                    <button type="button" class="nav-ctl" (click)="go(1)" [attr.aria-label]="lang() === 'it' ? 'Passo successivo' : 'Next step'">›</button>
-                    <button type="button" class="nav-ctl" (click)="toggle(open()!)" [attr.aria-label]="lang() === 'it' ? 'Chiudi' : 'Close'">✕</button>
-                  </div>
-                </div>
-                <div class="mt-5 grid gap-6 md:grid-cols-2">
-                  <p class="text-body text-muted">{{ s.detail }}</p>
-                  <div>
-                    <p class="eyebrow">{{ lang() === 'it' ? 'In pratica' : 'In practice' }}</p>
-                    <ul class="tl-bullets mt-3 grid gap-2.5">
-                      @for (item of s.practice; track item) { <li>{{ item }}</li> }
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              }
+      <div class="journey reveal-on-scroll" [class.has-selection]="open() !== null">
+        <nav class="journey-path" [attr.aria-label]="lang() === 'it' ? 'Il mio modo di lavorare' : 'How I work'">
+          <svg class="journey-wave" viewBox="0 0 1000 64" preserveAspectRatio="none" aria-hidden="true">
+            <path class="journey-wave-base" [attr.d]="path" />
+            <path class="journey-wave-line" [attr.d]="path" pathLength="1" />
+          </svg>
+          <span class="journey-active-node" [class.is-visible]="open() !== null" [style.left.%]="(open() ?? 0) * 20 + 10" [style.top.px]="nodes[open() ?? 0][1]" aria-hidden="true"></span>
+          <ol class="journey-steps">
+            @for (p of principles; track $index; let i = $index) {
+              <li class="journey-step" [class.is-active]="open() === i">
+                <button type="button" class="journey-hit" [id]="'journey-checkpoint-' + i" (click)="select(i)" [disabled]="transitioning()" [attr.aria-expanded]="open() === i" aria-controls="journey-stage">
+                  <span class="journey-node" [style.top.px]="nodes[i][1]" aria-hidden="true"><span>0{{ i + 1 }}</span></span>
+                  <span class="journey-tag">{{ p.tag }}</span>
+                </button>
+              </li>
             }
-          </div>
+          </ol>
+        </nav>
+
+        <div #stage id="journey-stage" class="journey-stage" [attr.aria-busy]="transitioning()" [style.--journey-direction]="direction()" [style.--journey-origin]="((open() ?? 2) - 2) * 24 + 'px'">
+          @if (selected(); as selected) {
+            @for (index of [open()]; track index) {
+              <article class="journey-detail-card" aria-labelledby="journey-detail-title">
+                <div class="journey-detail-topline">
+                  <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>Checkpoint 0{{ (open() ?? 0) + 1 }}</p>
+                  <button type="button" class="journey-close" (click)="close()" [disabled]="transitioning()" [attr.aria-label]="lang() === 'it' ? 'Torna a tutti i checkpoint' : 'Back to all checkpoints'">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="size-4" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6" /></svg>
+                  </button>
+                </div>
+                <div class="journey-detail-layout">
+                  <div class="journey-detail-intro">
+                    <h3 #detailTitle id="journey-detail-title" tabindex="-1">{{ selected.title }}</h3>
+                    <p>{{ selected.detail }}</p>
+                  </div>
+                  <div class="journey-practice">
+                    <p class="eyebrow">{{ lang() === 'it' ? 'In pratica' : 'In practice' }}</p>
+                    <ol>
+                      @for (item of selected.practice; track item; let i = $index) {
+                        <li><span aria-hidden="true">0{{ i + 1 }}</span><p>{{ item }}</p></li>
+                      }
+                    </ol>
+                  </div>
+                </div>
+                <div class="journey-detail-footer">
+                  <span class="meta-mono">0{{ (open() ?? 0) + 1 }} / 0{{ principles.length }}</span>
+                  <div class="flex gap-2">
+                    <button type="button" class="journey-close" [disabled]="transitioning()" (click)="go(-1)" [attr.aria-label]="lang() === 'it' ? 'Checkpoint precedente' : 'Previous checkpoint'">←</button>
+                    <button type="button" class="journey-close" [disabled]="transitioning()" (click)="go(1)" [attr.aria-label]="lang() === 'it' ? 'Checkpoint successivo' : 'Next checkpoint'">→</button>
+                  </div>
+                </div>
+              </article>
+            }
+          } @else {
+            <div class="journey-overview">
+              @for (p of principles; track $index; let i = $index) {
+                <button type="button" class="journey-summary" (click)="select(i)" [disabled]="transitioning()" aria-controls="journey-stage">
+                  <span class="journey-title">{{ p.title }}</span>
+                  <span class="journey-body">{{ p.body }}</span>
+                  <span class="journey-more">{{ lang() === 'it' ? 'Esplora' : 'Explore' }}<span aria-hidden="true">↗</span></span>
+                </button>
+              }
+            </div>
+          }
         </div>
-        @if (open() === null) {
-          <p class="journey-hint">{{ lang() === 'it' ? 'Clicca un passo per approfondire.' : 'Click a step to read more.' }}</p>
-        }
       </div>
     </section>
   `,
 })
-export class ApproachComponent {
+export class ApproachComponent implements OnDestroy {
   protected readonly principles = PRINCIPLES;
   protected readonly ui = UI;
   protected readonly lang = lang;
@@ -143,12 +128,72 @@ export class ApproachComponent {
     return i === null ? null : this.principles[i];
   });
 
-  protected toggle(i: number) {
-    this.open.set(this.open() === i ? null : i);
+  protected readonly direction = signal(1);
+  protected readonly transitioning = signal(false);
+  private readonly stage = viewChild<ElementRef<HTMLElement>>("stage");
+  private readonly detailTitle = viewChild<ElementRef<HTMLElement>>("detailTitle");
+  private readonly injector = inject(Injector);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private animation: Animation | null = null;
+  private readonly errorHandler = inject(ErrorHandler);
+  private destroyed = false;
+
+  protected select(index: number) {
+    if (index === this.open() || this.transitioning()) return;
+    void this.changeView(index);
+  }
+
+  protected close() {
+    if (this.transitioning()) return;
+    void this.changeView(null);
   }
 
   protected go(delta: number) {
-    const n = this.principles.length;
-    this.open.set((((this.open() ?? 0) + delta) % n + n) % n);
+    const count = this.principles.length;
+    const index = (((this.open() ?? 0) + delta) % count + count) % count;
+    if (this.transitioning()) return;
+    void this.changeView(index, delta);
+  }
+
+  private async changeView(index: number | null, movement?: number) {
+    const previous = this.open();
+    const direction = movement ?? (index === null ? -1 : index - (previous ?? -1));
+    this.direction.set(direction < 0 ? -1 : 1);
+    this.transitioning.set(true);
+    const element = this.stage()?.nativeElement;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    try {
+      if (element && !reducedMotion) {
+        this.animation = element.animate(
+          [{ opacity: 1, transform: "translateX(0)" }, { opacity: 0, transform: `translateX(${-this.direction() * 24}px)` }],
+          { duration: 160, easing: "ease-in", fill: "forwards" },
+        );
+        await this.animation.finished;
+      }
+      if (this.destroyed) return;
+      this.open.set(index);
+      afterNextRender(() => {
+        this.animation?.cancel();
+        this.animation = null;
+        if (element) element.scrollTop = 0;
+        this.transitioning.set(false);
+        if (index === null) {
+          this.host.nativeElement.querySelector<HTMLElement>(`#journey-checkpoint-${previous}`)?.focus({ preventScroll: true });
+        } else {
+          this.detailTitle()?.nativeElement.focus({ preventScroll: true });
+        }
+      }, { injector: this.injector });
+    } catch (error) {
+      this.animation?.cancel();
+      this.animation = null;
+      this.transitioning.set(false);
+      if (!(error instanceof DOMException && error.name === "AbortError")) this.errorHandler.handleError(error);
+    }
+  }
+
+  ngOnDestroy() {
+    this.destroyed = true;
+    this.animation?.cancel();
   }
 }

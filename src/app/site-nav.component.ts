@@ -11,7 +11,7 @@ import { PROFILE, TOC, UI, lang, setLanguage, type Lang } from "../lib/site";
   standalone: true,
   imports: [IconComponent, RouterLink, ThemeToggleComponent],
   template: `
-    <header class="site-nav" [class.is-scrolled]="scrolled()" [class.is-hidden]="hidden() && !menuOpen()" [class.is-open]="menuOpen()">
+    <header class="site-nav" [class.is-scrolled]="scrolled()" [class.is-open]="menuOpen()">
       <div class="container-x site-nav-inner">
         <div class="relative">
           <a
@@ -23,7 +23,7 @@ import { PROFILE, TOC, UI, lang, setLanguage, type Lang } from "../lib/site";
             [attr.aria-haspopup]="'menu'"
             [attr.aria-expanded]="brandMenu()"
           >
-            <img class="dark:hidden" src="/brand/ab-monogram-160.webp" alt="" width="160" height="111" />
+            <img class="dark:hidden" src="/brand/ab-monogram-black.webp" alt="" width="160" height="111" />
             <img class="hidden dark:block" src="/brand/ab-monogram-white-160.webp" alt="" width="160" height="111" />
             <span class="brand-wordmark hidden xl:inline" aria-hidden="true">{{ profile.name }}</span>
             <span class="sr-only">{{ profile.name }} — home</span>
@@ -128,8 +128,6 @@ export class SiteNavComponent implements OnInit {
   protected readonly lang = lang;
   protected readonly scrolled = signal(false);
   protected readonly menuOpen = signal(false);
-  /** Tucks away while reading down, comes back on any scroll up. */
-  protected readonly hidden = signal(false);
   private lastY = 0;
   private readonly appRef = inject(ApplicationRef);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -157,7 +155,6 @@ export class SiteNavComponent implements OnInit {
     this.scrolled.set(y > 8);
     if (this.brandMenu() && Math.abs(y - this.lastY) > 24) this.closeBrandMenu(false);
     if (Math.abs(y - this.lastY) < 6) return;
-    this.hidden.set(y > this.lastY && y > 320);
     this.lastY = y;
   }
 
@@ -177,7 +174,6 @@ export class SiteNavComponent implements OnInit {
     event.preventDefault();
     this.copied.set(null);
     this.brandMenu.set(true);
-    this.hidden.set(false);
     // Focus the first item once it renders, so the keyboard path works too.
     setTimeout(() => this.items()[0]?.focus());
   }

@@ -104,8 +104,8 @@ export const BRAND_ASSETS: BrandAsset[] = [
   },
 ];
 
-export const LOGO_SVG = "/brand/ab-soft-minimal-monogram.svg";
-export const WORDMARK_SVG = "/brand/ab-soft-minimal-wordmark.svg";
+export const LOGO_SVG = "/brand/ab-soft-minimal-monogram-black.svg";
+export const WORDMARK_SVG = "/brand/ab-soft-minimal-wordmark-black.svg";
 
 /**
  * Copies an SVG file's markup to the clipboard. The fetch happens inside a ClipboardItem promise
