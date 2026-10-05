@@ -161,7 +161,7 @@ Source files live in `public/logos/` (official SVGs, each a wrapped raster). The
 | Light documents / spare | `brand/ab-logo-black-full.webp` | — |
 | Spare / documents | `brand/ab-logo-metallic-full.webp`, `brand/ab-monogram-{white,black}-160.webp` | — |
 | Light hero backdrop | `brand/hero-light.webp` (from `public/hero.png`, sphere cropped out) | cover |
-| Favicon | `favicon.svg` (128px metallic on `#0B0D10`), `favicon-32.png`, `apple-touch-icon.png` | — |
+| Favicon | `favicon.svg` (128px) and `favicon-32.png`: black monochrome monogram, no wordmark, transparent; `apple-touch-icon.png`: same mark on white (iOS fills transparency with black) | — |
 | Share card | `og.jpg` (1200×630, metallic full logo on `#0B0D10` with blue ambient light) | — |
 
 Regenerate derivatives from `public/logos/*.svg` when the official files change; never edit the derivatives by hand.
