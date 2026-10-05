@@ -6,9 +6,10 @@ import type { TocItem } from "../lib/site.types";
 @Component({
   selector: "app-toc",
   standalone: true,
+  host: { class: "page-toc" },
   template: `
-    <aside class="hidden lg:block">
-      <div class="sticky top-24">
+    <aside>
+      <div>
         <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>{{ lang() === 'it' ? 'In questa pagina' : 'On this page' }}</p>
         <nav [attr.aria-label]="lang() === 'it' ? 'In questa pagina' : 'On this page'" class="mt-4 flex flex-col gap-1">
           @for (item of items(); track item.href) {
