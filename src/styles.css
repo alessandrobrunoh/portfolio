@@ -8,7 +8,9 @@
  * Canonical brand values come from BRAND.md; DESIGN.md explains how they are used.
  */
 
-@theme {
+/* inline: utilities read the role variables where they are used, so a subtree that carries
+   .dark (the footer) resolves to the dark set even when the page is light. */
+@theme inline {
   --color-canvas: var(--canvas);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
