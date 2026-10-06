@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, inject, signal, viewChild } from "@angular/core";
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, inject, signal } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 import { ContactComponent } from "./contact.component";
 import { ExperienceComponent } from "./experience.component";
 import { FooterComponent } from "./footer.component";
 import { IconComponent } from "./icon.component";
-import { GameHubComponent } from "./game-hub.component";
+
 import { IntroComponent } from "./intro.component";
 import { ProjectsComponent } from "./projects.component";
 import { ApproachComponent } from "./approach.component";
@@ -19,7 +19,7 @@ import { TOC, UI, lang } from "../lib/site";
     ExperienceComponent,
     FooterComponent,
     IconComponent,
-    GameHubComponent,
+
     IntroComponent,
     ProjectsComponent,
     SiteNavComponent,
@@ -36,7 +36,7 @@ import { TOC, UI, lang } from "../lib/site";
       </a>
       <app-site-nav [active]="active()" />
       <main>
-        <app-intro (playRequested)="gameOpen.set(true)" />
+        <app-intro />
         <app-experience />
         <app-projects />
         <app-approach />
@@ -44,9 +44,6 @@ import { TOC, UI, lang } from "../lib/site";
       </main>
       <app-footer />
 
-      @if (gameOpen()) {
-        <app-game-hub (closed)="closeGame()" />
-      }
 
       <button
         type="button"
@@ -63,9 +60,7 @@ import { TOC, UI, lang } from "../lib/site";
 export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
   active = signal("#intro");
   showScrollTop = signal(false);
-  /** The easter-egg game, opened from the switch in the hero. */
-  protected readonly gameOpen = signal(false);
-  private readonly intro = viewChild(IntroComponent);
+
   protected readonly ui = UI;
   protected readonly lang = lang;
   private observer: IntersectionObserver | null = null;
@@ -79,12 +74,6 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
-  protected closeGame() {
-    this.gameOpen.set(false);
-    this.intro()?.reset();
-    // Back to where the game was opened from.
-    document.querySelector<HTMLElement>(".hero-switch")?.focus();
-  }
 
   scrollToTop() {
     if (typeof window !== "undefined") {

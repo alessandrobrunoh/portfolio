@@ -16,7 +16,7 @@ const LOCAL_TIME = new Intl.DateTimeFormat("en-GB", {
   template: `
     <section id="contact" class="container-x section scroll-mt-16">
       <div class="reveal-on-scroll"><div class="card contact-panel" appSpotlight>
-                <img class="contact-panel-mark" src="/brand/ab-monogram-black.webp" alt="" width="960" height="666" loading="lazy" aria-hidden="true" />
+        <img class="contact-panel-mark" src="/brand/ab-monogram.webp" alt="" width="960" height="666" loading="lazy" aria-hidden="true" />
 
         <p class="eyebrow">
           <span class="eyebrow-index">05</span>

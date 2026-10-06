@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, computed, inject, output, signal, viewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, computed, inject, viewChild } from "@angular/core";
 import { IconComponent } from "./icon.component";
 import { SectionHeadComponent } from "./section-head.component";
 
@@ -27,27 +27,6 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
 
         <div class="container-x hero-inner">
           <div class="hero-copy min-w-0">
-            <!--
-              Easter egg: the pill is a switch. Hover or focus slides the avatar to the right like a
-              toggle knob and reveals a play glyph; clicking opens the mini-game.
-            -->
-            <button
-              type="button"
-              class="hero-meta hero-switch stagger-in"
-              [class.is-on]="switched()"
-              (click)="play()"
-              [attr.aria-label]="(lang() === 'it' ? 'Easter egg: gioca a un minigioco — ' : 'Easter egg: play a mini-game — ') + profile.company.name + ', ' + profile.location"
-            >
-              <span class="hero-switch-play" aria-hidden="true">
-                <svg viewBox="0 0 24 24" class="size-3.5" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" /></svg>
-              </span>
-              <span class="hero-switch-text">
-                <strong>{{ profile.company.name }}</strong>
-                <span class="sep" aria-hidden="true"></span>
-                <span>{{ profile.location }}</span>
-              </span>
-              <img class="hero-switch-knob" [src]="profile.avatar" alt="" width="56" height="56" />
-            </button>
 
             <h1>
               <span class="sr-only">{{ profile.name }} — </span>
@@ -96,7 +75,7 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
           <div>
             <dt class="eyebrow">{{ lang() === 'it' ? 'In produzione' : 'In production' }}</dt>
             <dd class="value">{{ lang() === 'it' ? '1+ anno' : '1+ year' }}</dd>
-            <dd class="note">{{ lang() === 'it' ? 'servizi event-driven in ' : 'event-driven services at ' }}{{ profile.company.name }}</dd>
+            <dd class="note">{{ lang() === 'it' ? 'backend, web e mobile in ' : 'backend, web and mobile at ' }}{{ profile.company.name }}</dd>
           </div>
           @if (published; as c) {
             <div>
@@ -108,7 +87,7 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
           <div>
             <dt class="eyebrow">{{ lang() === 'it' ? 'Tesi' : 'Thesis' }}</dt>
             <dd class="value">PETRA</dd>
-            <dd class="note">{{ lang() === 'it' ? 'telemetria event-driven in tempo reale' : 'real-time event-driven telemetry' }}</dd>
+            <dd class="note">{{ lang() === 'it' ? 'telemetria e analisi in tempo reale' : 'real-time telemetry and analysis' }}</dd>
           </div>
         </dl>
       </div>
@@ -217,19 +196,6 @@ export class IntroComponent implements AfterViewInit, OnDestroy {
     this.cleanup?.();
   }
 
-  /** Stays "on" after a click so the knob rests on the right while the game is open. */
-  protected readonly switched = signal(false);
-  readonly playRequested = output<void>();
-
-  protected play() {
-    this.switched.set(true);
-    this.playRequested.emit();
-  }
-
-  /** Called by the page when the game closes. */
-  reset() {
-    this.switched.set(false);
-  }
 
   protected readonly role = computed(() => {
     lang();

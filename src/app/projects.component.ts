@@ -12,11 +12,11 @@ import { CONTRIBUTIONS, PROJECTS, UI, lang } from "../lib/site";
   template: `
     <section id="work" class="container-x section scroll-mt-16">
       <app-section-head n="03" [title]="ui.sectionTitles.work" [kicker]="lang() === 'it' ? 'casi / 2024—oggi' : 'case studies / 2024—now'">
-        <p class="section-lede">{{ lang() === 'it' ? 'Problemi reali, per persone reali: chi aveva il problema, cosa ho costruito, cosa ho imparato. Più i contributi upstream ad altri progetti.' : 'Real problems for real people: who had the problem, what I built, what I learned. Plus what I have sent upstream to other projects.' }}</p>
+        <p class="section-lede">{{ lang() === 'it' ? 'Dal web ai giochi multiplayer, dagli strumenti per sviluppatori ai database e alla sicurezza. Problemi diversi, stack diversi: cosa ho costruito e cosa ho imparato, più i contributi open source.' : 'From web apps to multiplayer games, developer tools, databases and security. Different problems, different stacks: what I built and what I learned, plus open-source contributions.' }}</p>
       </app-section-head>
 
       <ul class="project-grid">
-        @for (p of projects.slice(0, maxProjects); track p.id; let i = $index; let first = $first) {
+        @for (p of projects.slice(0, 5); track p.id; let i = $index; let first = $first) {
           @if (first) {
             <li class="lead reveal-on-scroll">
               <a [routerLink]="['/projects', p.id]" class="card card-link project-card project-lead" appSpotlight>
@@ -104,8 +104,6 @@ export class ProjectsComponent {
   protected readonly projects = PROJECTS;
   protected readonly ui = UI;
   protected readonly lang = lang;
-  /** The home page shows a short list; every project keeps its own page. */
-  protected readonly maxProjects = 5;
 
   /** Contributions to other people's repositories; published crates are already project cards. */
   protected readonly upstream = computed(() => {
