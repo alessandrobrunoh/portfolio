@@ -35,12 +35,12 @@ function wavePath(points: readonly [number, number][]): string {
   imports: [SectionHeadComponent],
   template: `
     <section id="approach" class="container-x section scroll-mt-16">
-      <app-section-head n="04" [title]="ui.sectionTitles.approach" [kicker]="lang() === 'it' ? 'principi / pratica' : 'principles / practice'">
+      <app-section-head n="04" [title]="ui.sectionTitles.approach" [kicker]="lang() === 'it' ? 'dal problema alla consegna' : 'from problem to delivery'">
         <p class="section-lede">
           {{
             lang() === 'it'
-              ? 'Gli strumenti cambiano da un cliente all’altro. Il modo di lavorare no: è quello che porto in ogni team e in ogni sistema.'
-              : 'Tools change from one client to the next. The way of working does not: it is what I bring into every team and every system.'
+              ? 'Prima capisco, poi pianifico. Costruisco per piccoli passi, rivedo ogni modifica e condivido il contesto: un percorso che funziona con stack e team diversi.'
+              : 'Understand first, then plan. Build in small steps, review every change and share the context: a workflow that travels across stacks and teams.'
           }}
         </p>
       </app-section-head>
