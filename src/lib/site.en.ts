@@ -96,6 +96,25 @@ export const EN: SiteData = {
 
   PROJECTS: [
     {
+      id: "trama",
+      name: "Trama",
+      blurb: "Coordination for software teams working with coding agents — issues, workstreams, decisions and artifacts in one shared workflow.",
+      problem: "Coding agents can move quickly, but teams need shared context and visible progress. Trama connects the work, decisions and artifacts so the outcome does not get lost in chat.",
+      href: "https://github.com/alessandrobrunoh/trama",
+      lang: "Platform",
+      meta: "Coding-agent workflow",
+      featured: true,
+      year: "2026",
+      stack: ["Issues", "Workstreams", "MCP", "CLI"],
+      highlights: [
+        "Keep issues, workstreams, decisions and artifacts connected",
+        "Give people and coding agents a shared view of the work",
+        "Carry project context across repositories and Delta threads",
+      ],
+      learned: "Agent-assisted work needs durable context: outcomes, decisions and progress should stay connected beyond a single conversation.",
+      body: "Trama is a coordination layer for software teams that work with coding agents. It keeps issues, workstreams, decisions and artifacts connected, giving people and agents a shared place to plan and follow the work.",
+    },
+    {
       id: "eivar",
       name: "Eivar-Online",
       blurb: "Multiplayer prototype: server-authoritative Rust simulation, replicated state, client-side prediction.",
@@ -183,21 +202,6 @@ export const EN: SiteData = {
       highlights: ["Guild bank and loot splits", "Event sessions with battle analytics", "Discord login with role-based access"],
       learned: "A real domain with real users: auth, bank, compositions, and a bot that had to stay up for a guild — not a demo.",
       body: "A Rust/Axum API, an Angular dashboard, and a Discord bot — covering bank, compositions, siphoned-energy tracking, and live Albion data. Built for a guild that needed a real tool, not a spreadsheet.",
-    },
-    {
-      id: "ketchapp",
-      name: "KetchApp",
-      blurb: "Study productivity as microservices. Pomodoro, AI plans, async notifications.",
-      problem: "A university team needed a study app with Pomodoro sessions, AI-generated plans and notifications — built by several people at once without stepping on each other.",
-      href: "https://github.com/orgs/ketchapp-for-study",
-      lang: "Java",
-      meta: "Org",
-      featured: false,
-      year: "2025",
-      stack: ["Rust", "Java", "Kafka", "Auth"],
-      highlights: ["Auth API in Rust", "Kafka-backed notifications", "Split services instead of a monolith"],
-      learned: "Where a monolith breaks. Auth in Rust, notifications on Kafka, and the seams you only see once the pieces move.",
-      body: "University team project that became my first real microservices cut: a Rust auth API, a Java Kafka path, and async notifications for Pomodoro and study plans. The org still holds the split.",
     },
     {
       id: "briscola",
