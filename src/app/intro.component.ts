@@ -138,11 +138,11 @@ export class IntroComponent implements AfterViewInit, OnDestroy {
     lang();
     const split = (list: string, sep: string) => list.split(sep).map((t) => t.trim()).filter(Boolean);
     const [infra, ...code] = [...STACK.groups].reverse();
-    const first = code.reverse().flatMap((g) => [...split(g.name, "&"), ...split(g.items, "·")]);
+    const first = ["Trama", ...code.reverse().flatMap((g) => [...split(g.name, "&"), ...split(g.items, "·")])];
     const second = [...split(infra.items, "·"), ...split(infra.also ?? "", ",")];
     return [[...new Set(first)], [...new Set(second)]];
   });
-  /** "Software Engineer — Systems & Product" sets as two display lines; the second ends on the logo dot. */
+  /** "Software Engineer — in production" sets as two display lines; the second ends on the logo dot. */
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly zone = inject(NgZone);
   private readonly plane = viewChild<ElementRef<HTMLElement>>("plane");

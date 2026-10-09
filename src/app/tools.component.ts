@@ -22,7 +22,12 @@ import { TOOLS, lang } from "../lib/site";
                 <svg [appMark]="tool.mark" class="size-7"></svg>
               </span>
               <span class="min-w-0">
-                <span class="block text-small font-medium text-fg">{{ tool.name }}</span>
+                <span class="tool-name text-small font-medium text-fg">
+                  {{ tool.name }}
+                  @if (tool.mine) {
+                    <span class="tool-mine">{{ lang() === 'it' ? 'mio' : 'built' }}</span>
+                  }
+                </span>
                 <span class="block meta-mono">{{ tool.product }}</span>
               </span>
             </a>

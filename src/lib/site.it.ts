@@ -8,9 +8,9 @@ import type { SiteData } from "./site.types";
 export const IT: SiteData = {
   PROFILE: {
     name: "Alessandro Bruno",
-    role: "Software Engineer — Systems & Product",
+    role: "Software Engineer — in produzione",
     shortRole: "Backend · Web & mobile · Tool per sviluppatori",
-    headline: "Costruisco software in produzione dall'inizio alla fine, vicino a chi lo usa.",
+    headline: "Costruisco il software, e cosa costruire lo decido con chi lo deve usare.",
     location: "Bologna, Italia",
     github: "https://github.com/alessandrobrunoh",
     website: "https://alessandrobrunoh.it",
@@ -18,7 +18,7 @@ export const IT: SiteData = {
     x: "",
     avatar: "/avatar.jpg",
     company: { name: "Luna S.r.l.", href: "https://lunapartner.it" },
-    bio: "Software engineer a Bologna: lavoro su backend, interfacce web e mobile, database e strumenti per sviluppatori. Uso Rust, Java, TypeScript, JavaScript, Python e SQL, scegliendo il linguaggio in base al problema invece di adattare ogni progetto allo stesso stack. In Luna S.r.l. ho lavorato su software fleet con Spring Boot, Angular e React Native, servizi Rust in produzione e una console operatore con Spring Boot e React — sempre con code review senior. I miei progetti spaziano dai giochi multiplayer con Bevy e Vue a ducklake-orm, un ORM pubblicato su crates.io, e Mnemosyne, uno strumento local-first per la cronologia del codice basato su Tree-sitter. La mia tesi triennale, PETRA, esplora telemetria e analisi in tempo reale; il lavoro universitario sulla sicurezza riguarda valutazione delle vulnerabilità e correzioni.",
+    bio: "Sono un software engineer a Bologna. Mi incuriosisce capire come funziona davvero un sistema, e non mi piace lasciare un problema a metà. In Luna S.r.l. lavoro sul software dei clienti, quello già in produzione. Una parte importante del lavoro è sedersi con loro e decidere insieme cosa vale la pena costruire. Per conto mio faccio gli strumenti che mi mancavano. Trama è quello principale. Mi sono laureato all'Università di Bologna nel 2026, con una tesi sulla telemetria in tempo reale: PETRA.",
     availability: "Disponibile per ruoli da Software Engineer e Forward Deployed Engineer — backend, full-stack o a contatto con il cliente; da remoto o ibrido in Italia, con preavviso. Cittadino UE.",
   },
 
@@ -35,7 +35,7 @@ export const IT: SiteData = {
     href: "https://lunapartner.it",
     location: "Bologna, Italia",
     summary:
-      "In Luna S.r.l. lavoro su diversi aspetti del software dei clienti: una piattaforma fleet con Java/Spring Boot, Angular e React Native, servizi in produzione in Rust e una nuova console operatore con API Spring Boot e interfaccia React. Mi occupo di logica applicativa, dati, interfacce e osservabilità, con code review senior.",
+      "In Luna S.r.l. lavoro su diversi aspetti del software dei clienti: una piattaforma fleet con Java/Spring Boot, Angular e React Native, servizi in produzione in Rust e una nuova console operatore con API Spring Boot e interfaccia React. Prima di implementare discuto le opzioni con il cliente: cosa fare adesso, cosa può aspettare, e quanto costa ogni scelta a chi gestisce la piattaforma. Il codice passa da una code review senior.",
   },
 
   ROLES: [
@@ -48,6 +48,7 @@ export const IT: SiteData = {
         "Dentro la piattaforma in produzione di un cliente: servizi Rust event-driven che elaborano i suoi carichi — consumer asincroni su Valkey Streams, payload su S3.",
         "Ho reso i servizi osservabili da capo a capo: trace e log con OpenTelemetry verso Grafana, Loki e Tempo, così i problemi si seguono tra i servizi invece di indovinarli.",
         "Sto costruendo una nuova console operatore dall'inizio alla fine — API in Spring Boot e interfaccia React per chi gestisce la piattaforma ogni giorno.",
+        "Le scelte di implementazione le discuto con il cliente prima di scriverle: cosa costruire, cosa lasciare, e cosa si rompe per chi opera la piattaforma se scegliamo male.",
       ],
       tags: ["Rust", "Tokio", "Valkey Streams", "S3", "OpenTelemetry", "Spring Boot", "React"],
     },
@@ -99,6 +100,46 @@ export const IT: SiteData = {
   ],
 
   PROJECTS: [
+    {
+      id: "trama",
+      name: "Trama",
+      blurb: "Lo strato che manca tra un problema segnalato e una correzione rilasciata. Le issue restano. Un workstream porta l'esito, con decisioni e artefatti attaccati.",
+      problem: "I tracker danno per scontato che un ticket sia una persona e una pull request. Non regge quando più bug hanno la stessa causa, il lavoro attraversa più repository e una parte la fa un agente. Il perché di una scelta finisce in una chat che un mese dopo non trova più nessuno.",
+      decisions: [
+        {
+          title: "Tieni l'issue. Aggiungi il workstream.",
+          context: "I team i ticket li conoscono già. Sostituirli il primo giorno è il modo più rapido per far ignorare uno strumento nuovo. Il ticket resta un buon modo per dire che qualcosa non va. È un cattivo modo per dire come un team, o un team e un agente, sistemerà più cose insieme.",
+          choice: "L'issue resta l'unità di domanda, con una chiave tipo BUG-142. Il workstream è l'esito a cui ci si impegna, tipo AUTH-42, e può raccogliere le issue che condividono la causa. Lo stato viene dai fatti: criteri soddisfatti, pull request unite, domande ancora aperte. Si può comunque fissare a mano, quando serve.",
+        },
+        {
+          title: "Non copiare la sessione di lavoro nel tracker",
+          context: "L'implementazione vive già nell'editor, nel thread dell'agente e in Git. Una seconda copia invecchia, e costringe a riscrivere un lavoro già fatto.",
+          choice: "Trama tiene quello che serve anche a chi quel thread non lo apre: l'obiettivo, chi ne risponde, la decisione, l'artefatto. La discussione resta dove è avvenuto il lavoro. Una decisione si promuove solo se deve sopravvivere alla sessione. Se una funzione sembra 'documenta di nuovo Delta', non ci entra.",
+        },
+        {
+          title: "Niente progressi inventati",
+          context: "Una percentuale sembra precisa e di solito non lo è. La telemetria di un agente e una barra 'fatto all'84%' sono contabilità, non un fatto che si può verificare.",
+          choice: "Mostrare quello che si osserva: issue collegate e risolte, pull request aperte o unite, CI, una review in attesa. Suggerire un cambio di stato quando i fatti lo reggono. Non far finta che lo strumento sappia più di quanto ha misurato.",
+        },
+      ],
+      href: "https://github.com/alessandrobrunoh/trama",
+      stars: GITHUB_STATS.stars["trama"] ?? 0,
+      lang: "TypeScript",
+      meta: "Live",
+      featured: true,
+      year: "2026",
+      demo: "https://trama.alessandrobrunoh.it",
+      stack: ["Angular", "NestJS", "PostgreSQL", "Rust"],
+      highlights: [
+        "Le issue restano. Un workstream raggruppa quelle che condividono un esito",
+        "Decisioni e artefatti, dalle pull request ai deploy, restano accanto a quell'esito",
+        "Gli agenti sono membri. Una coda di attenzione mostra dove deve ancora decidere una persona",
+        "Un Postgres e tre immagini piccole. Self-hosted, non una piattaforma da noleggiare",
+      ],
+      learned:
+        "La parte difficile è stato il confine. Trama aiuta quando spiega l'esito, e dà fastidio nel momento in cui chiede di riscrivere un lavoro già fatto altrove.",
+      body: "Trama è uno strato di coordinamento, con il sorgente disponibile, per team che rilasciano con persone e agenti. Il nome è la trama di un tessuto: il filo che attraversa il telaio e tiene insieme trefoli separati. Le issue restano il modo familiare di registrare un bug, una richiesta o una segnalazione. Il workstream è l'unità nuova, l'esito a cui un team si impegna, con criteri di accettazione, contributori e dipendenze. Le decisioni sono registri a sé, non un paragrafo perso in un thread. Gli artefatti sono la prova: pull request, build, report di test, deploy, con lo stato di CI e review. Un agente bloccato fa una domanda a una persona e aspetta, invece di indovinare. Persone e agenti sono entrambi attori, con token a scope stretto e una traccia. GitHub, GitLab e Bitbucket gli mandano pull request e webhook. Un server MCP in Rust, una novantina di tool, permette a un agente di leggere e modificare il workspace senza tenere dati propri. L'autorità resta l'API.",
+    },
     {
       id: "eivar",
       name: "Eivar-Online",
@@ -361,8 +402,13 @@ export const IT: SiteData = {
           context: "Un event bus fallisce in silenzio: un messaggio mai elaborato può sembrare identico a uno elaborato.",
           choice: "Trace e log con OpenTelemetry, verso Grafana, Loki e Tempo, prima di costruire altro sopra il bus — così ogni evento si segue da capo a capo e i problemi si trovano dalle prove, non dalle ipotesi.",
         },
+        {
+          title: "Scegliere con il cliente, non dopo",
+          context: "Questo è il sistema in produzione di qualcun altro. Un design che a me sembra pulito e a chi lo gestisce sembra sbagliato non è un buon design, e il costo di una scelta io non lo vedo bene come lo vedono loro.",
+          choice: "Metto le opzioni sul tavolo con loro: cosa fare adesso, cosa può aspettare, e cosa si rompe se indoviniamo. Ne scegliamo una, poi la scrivo. Le decisioni tecniche qui sopra sono uscite da quelle conversazioni, non da un ticket lanciato oltre un muro.",
+        },
       ],
-      learned: "Consegnare non è elaborare. Quando le transizioni sono esplicite e osservabili, un sistema event-driven diventa qualcosa su cui si può ragionare — e che si può spiegare a chi ci fa affidamento.",
+      learned: "Consegnare non è elaborare. Quando le transizioni sono esplicite e osservabili, un sistema event-driven diventa qualcosa su cui si può ragionare, e che si può spiegare a chi ci fa affidamento. Lo stesso vale per le scelte: si difendono meglio se il cliente era nella stanza quando le abbiamo prese.",
       stack: [
         "Rust",
         "Tokio",
@@ -415,7 +461,7 @@ export const IT: SiteData = {
     { name: "OpenAI", product: "GPT 6 Sol", href: "https://openai.com", mark: "openai" },
     { name: "Zed", product: "IDE", href: "https://zed.dev", mark: "zed" },
     { name: "Delta", product: "IDE Agente", href: "https://delta.dev", mark: "delta" },
-    { name: "GitButler", product: "Client Git", href: "https://gitbutler.com", mark: "gitbutler" },
+    { name: "Trama", product: "Workstream", href: "https://trama.alessandrobrunoh.it", mark: "trama", mine: true },
   ],
 
   PRINCIPLES: [
@@ -423,22 +469,23 @@ export const IT: SiteData = {
       tag: "Capire",
       title: "Trovo il problema reale",
       body: "Prima del codice, capisco a chi serve, come lavora e cosa rende utile il risultato. Lo stack viene dopo il contesto.",
-      detail: "Parto dalle persone e dal codice esistente: flussi, vincoli, cosa funziona già e cosa manca. Voglio una definizione condivisa del problema prima di proporre una soluzione, che sia un’interfaccia, un’API o uno strumento per sviluppatori.",
+      detail: "Parto dalle persone e dal codice esistente: flussi, vincoli, cosa funziona già e cosa manca. Sul lavoro per un cliente quella conversazione è il lavoro. Guardiamo le opzioni insieme, compreso quanto costa ciascuna, e ne scegliamo una prima che io la costruisca.",
       practice: [
         "Parlo con chi usa o mantiene il software.",
+        "Con un cliente, metto sul tavolo le opzioni e il loro costo prima di scegliere.",
         "Leggo il codice esistente e seguo il flusso interessato dalla modifica.",
         "Chiarisco risultato atteso, vincoli e domande ancora aperte.",
       ],
     },
     {
       tag: "Pianificare",
-      title: "Rendo chiaro il prossimo passo",
-      body: "Trasformo l’obiettivo in passi piccoli e verificabili. Decido cosa rientra nella modifica, cosa può aspettare e come capire se funziona.",
-      detail: "Un piano deve semplificare il lavoro, non diventare un altro progetto. Divido la soluzione in incrementi completi, esplicito dipendenze e compromessi e scelgo strumenti adatti alla codebase e al team.",
+      title: "Scrivo il problema",
+      body: "Il problema diventa un'issue in Trama prima di diventare codice. Poi decido cosa rientra nella modifica, cosa può aspettare e come capire se funziona.",
+      detail: "Se non è un'issue, è ancora una conversazione. In Trama quell'issue è il registro. Quando più issue condividono un esito diventano un workstream, con criteri di accettazione verificabili, non un mucchio di ticket. Da lì divido la soluzione in incrementi, esplicito dipendenze e compromessi e scelgo strumenti adatti alla codebase e al team.",
       practice: [
-        "Definisco perimetro e criteri di accettazione prima di implementare.",
-        "Divido il lavoro in modifiche piccole con un ordine chiaro.",
-        "Individuo i rischi e come verificare ogni passo.",
+        "Apro l'issue in Trama prima di implementare.",
+        "Raggruppo in un workstream le issue che condividono un esito, con criteri che si possono verificare.",
+        "Divido il lavoro in modifiche piccole con un ordine chiaro, e decido come verificare ogni passo.",
       ],
     },
     {
@@ -466,12 +513,12 @@ export const IT: SiteData = {
     {
       tag: "Condividere",
       title: "Lascio contesto, non solo codice",
-      body: "Spiego cosa è cambiato, perché e come verificarlo. Rendo il lavoro facile da riprendere, anche per chi non usa i miei strumenti.",
-      detail: "Delta.dev fa parte del mio workflow, ma il passaggio di consegne non deve dipendere da quello. Porto il contesto utile nelle pull request e nella documentazione: decisioni, compromessi, risultati dei test e punti ancora aperti. Un altro sviluppatore deve poter capire e continuare il lavoro con il proprio editor e un normale workflow Git.",
+      body: "Spiego cosa è cambiato, perché e come verificarlo. Una decisione che deve durare va sul workstream in Trama, non solo in una chat.",
+      detail: "Delta è dove avviene l'implementazione, anche quando il codice lo scrive un agente e io lo revisiono. Il passaggio di consegne non deve dipendere da quel thread. Sul workstream in Trama lascio quello che serve a chi non lo apre: la decisione, la pull request, cosa è ancora aperto. Si può continuare con il proprio editor e un normale workflow Git.",
       practice: [
-        "Riassumo nella PR il problema, la soluzione e le ragioni della scelta.",
-        "Includo verifiche riproducibili e documento le decisioni importanti accanto al codice.",
-        "Esplicito domande aperte e prossimi passi, senza dipendere da una conversazione privata con un agente.",
+        "Attacco la pull request al workstream, e ci registro una decisione quando serve a chi Delta non lo apre.",
+        "Includo verifiche riproducibili accanto al codice.",
+        "Esplicito le domande aperte. Non le lascio solo in una conversazione con un agente.",
       ],
     },
   ],

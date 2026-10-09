@@ -39,8 +39,8 @@ function wavePath(points: readonly [number, number][]): string {
         <p class="section-lede">
           {{
             lang() === 'it'
-              ? 'Prima capisco, poi pianifico. Costruisco per piccoli passi, rivedo ogni modifica e condivido il contesto: un percorso che funziona con stack e team diversi.'
-              : 'Understand first, then plan. Build in small steps, review every change and share the context: a workflow that travels across stacks and teams.'
+              ? "Il problema diventa un'issue in Trama prima del codice. Poi pianifico, costruisco per piccoli passi, rivedo ogni modifica e lascio la decisione dove la trova chi arriva dopo."
+              : 'The problem becomes an issue in Trama before I write code. Then I plan, build in small steps, review every change and leave the decision where the next person can find it.'
           }}
         </p>
       </app-section-head>
