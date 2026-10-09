@@ -192,13 +192,15 @@ export interface Pulse {
   phases: PulsePhase[];
 }
 
-export type MarkName = "openai" | "zed" | "delta" | "gitbutler";
+export type MarkName = "openai" | "zed" | "delta" | "trama";
 
 export interface Tool {
   name: string;
   product: string;
   href: string;
   mark: MarkName;
+  /** Quiet mark on a tool I built, not a sponsorship. */
+  mine?: boolean;
 }
 
 /** Static UI chrome — section titles, sidebar labels, button/aria copy —

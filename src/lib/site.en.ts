@@ -4,9 +4,9 @@ import type { SiteData } from "./site.types";
 export const EN: SiteData = {
   PROFILE: {
     name: "Alessandro Bruno",
-    role: "Software Engineer — Systems & Product",
+    role: "Software Engineer — in production",
     shortRole: "Backend · Web & mobile · Developer tools",
-    headline: "I build production software end to end, close to the people who use it.",
+    headline: "I build the software, and I work out what to build with the people who have to use it.",
     location: "Bologna, Italy",
     github: "https://github.com/alessandrobrunoh",
     website: "https://alessandrobrunoh.it",
@@ -14,7 +14,7 @@ export const EN: SiteData = {
     x: "",
     avatar: "/avatar.jpg",
     company: { name: "Luna S.r.l.", href: "https://lunapartner.it" },
-    bio: "Software engineer based in Bologna, working across backend systems, web and mobile interfaces, databases and developer tools. I use Rust, Java, TypeScript, JavaScript, Python and SQL, choosing the language for the problem rather than fitting every project into one stack. At Luna S.r.l. I have worked on fleet software with Spring Boot, Angular and React Native, production Rust services, and an operator console with Spring Boot and React — with senior code review throughout. My own projects range from multiplayer games with Bevy and Vue to ducklake-orm, an ORM published on crates.io, and Mnemosyne, a local-first code-history tool built on Tree-sitter. My B.Sc. thesis, PETRA, explores real-time telemetry and analysis; my security coursework covers vulnerability assessment and remediation.",
+    bio: "I'm a software engineer in Bologna. I get curious about how a system actually works, and I don't like leaving a problem half done. At Luna S.r.l. I work on client software that is already in production. A good part of that job is sitting with the client and deciding, together, what is worth building. On my own time I make the tools I was missing. Trama is the main one. I graduated from the University of Bologna in 2026, with a thesis on real-time telemetry called PETRA.",
     availability: "Open to Software Engineer and Forward Deployed Engineer roles — backend, full-stack or customer-facing; remote or hybrid in Italy, available with notice. EU citizen.",
   },
 
@@ -31,7 +31,7 @@ export const EN: SiteData = {
     href: "https://lunapartner.it",
     location: "Bologna, Italy",
     summary:
-      "At Luna S.r.l. I work across client software: a fleet platform with Java/Spring Boot, Angular and React Native; production services in Rust; and a new operator console with Spring Boot APIs and a React interface. My work spans application logic, data, interfaces and observability, under senior code review.",
+      "At Luna S.r.l. I work across client software: a fleet platform with Java/Spring Boot, Angular and React Native; production services in Rust; and a new operator console with Spring Boot APIs and a React interface. Before I implement, I talk the options through with the client: what to build now, what can wait, and what each choice costs the people running the platform. The code is reviewed by a senior.",
   },
 
   ROLES: [
@@ -44,6 +44,7 @@ export const EN: SiteData = {
         "Embedded on a client's production platform: event-driven Rust services that process their workloads — async consumers on Valkey Streams, payloads on S3.",
         "Made the services observable end to end: traces and logs through OpenTelemetry into Grafana, Loki and Tempo, so problems are traced across services instead of guessed.",
         "Building a new operator console end to end — Spring Boot APIs and a React UI for the people who run the platform day to day.",
+        "I go through the implementation choices with the client before writing them: what to build, what to leave, and what fails for the people who operate the platform if we pick wrong.",
       ],
       tags: ["Rust", "Tokio", "Valkey Streams", "S3", "OpenTelemetry", "Spring Boot", "React"],
     },
@@ -98,21 +99,42 @@ export const EN: SiteData = {
     {
       id: "trama",
       name: "Trama",
-      blurb: "Coordination for software teams working with coding agents — issues, workstreams, decisions and artifacts in one shared workflow.",
-      problem: "Coding agents can move quickly, but teams need shared context and visible progress. Trama connects the work, decisions and artifacts so the outcome does not get lost in chat.",
+      blurb: "The missing layer between a reported problem and a shipped fix. Issues stay. A workstream carries the outcome, with the decisions and the artifacts attached.",
+      problem: "Issue trackers assume one ticket is one person and one pull request. That falls apart when several bugs share a cause, the work crosses repositories, and a coding agent does part of the job. The reason for a choice ends up in a chat nobody can find a month later.",
+      decisions: [
+        {
+          title: "Keep the issue. Add the workstream.",
+          context: "Teams already know tickets. Replacing that on day one is how a new tool gets ignored. The ticket is still a good way to say that something is wrong. It is a bad way to say how a team, or a team and an agent, will actually fix several things at once.",
+          choice: "An issue stays the unit of demand, keyed like BUG-142. A workstream is the outcome you commit to, keyed like AUTH-42, and it can hold the issues that share a root cause. Its state comes from facts: criteria met, pull requests merged, questions still open. You can still pin it by hand when you need to.",
+        },
+        {
+          title: "Don't copy the coding session into the tracker",
+          context: "The implementation already lives in the editor, the agent thread and Git. A second copy goes stale, and it makes people write down work they already did.",
+          choice: "Trama keeps what someone still needs if they never open that thread: the objective, who is accountable, the decision, the artifact. The discussion stays where the work happened. A decision is promoted only when it should outlive the session. If a feature feels like documenting Delta again, it doesn't belong.",
+        },
+        {
+          title: "No invented progress",
+          context: "A percentage looks precise and usually isn't. Agent telemetry and an '84% done' bar are bookkeeping, not a fact you can check.",
+          choice: "Show what you can observe: issues linked and resolved, pull requests open or merged, CI, a review waiting. Suggest a state change when the facts support it. Don't pretend the tool knows more than it measured.",
+        },
+      ],
       href: "https://github.com/alessandrobrunoh/trama",
-      lang: "Platform",
-      meta: "Coding-agent workflow",
+      stars: GITHUB_STATS.stars["trama"] ?? 0,
+      lang: "TypeScript",
+      meta: "Live",
       featured: true,
       year: "2026",
-      stack: ["Issues", "Workstreams", "MCP", "CLI"],
+      demo: "https://trama.alessandrobrunoh.it",
+      stack: ["Angular", "NestJS", "PostgreSQL", "Rust"],
       highlights: [
-        "Keep issues, workstreams, decisions and artifacts connected",
-        "Give people and coding agents a shared view of the work",
-        "Carry project context across repositories and Delta threads",
+        "Issues stay first-class. A workstream groups the ones that share an outcome",
+        "Decisions and artifacts, from pull requests to deploys, stay next to that outcome",
+        "Agents are members. An attention queue shows where a person still has to decide",
+        "One Postgres and three small images. Self-hosted, not a platform you have to rent",
       ],
-      learned: "Agent-assisted work needs durable context: outcomes, decisions and progress should stay connected beyond a single conversation.",
-      body: "Trama is a coordination layer for software teams that work with coding agents. It keeps issues, workstreams, decisions and artifacts connected, giving people and agents a shared place to plan and follow the work.",
+      learned:
+        "The hard part was the boundary. Trama helps when it explains the outcome, and it gets in the way the moment it asks you to write down work you already did somewhere else.",
+      body: "Trama is a source-available coordination layer for teams that ship with people and coding agents. The name is Italian for weft: the thread that runs across a loom and turns separate strands into one fabric. Issues remain the familiar way to record a bug, a request or a finding. A workstream is the new unit, the outcome a team commits to, with acceptance criteria, contributors and dependencies. Decisions are records in their own right, not a paragraph lost in a thread. Artifacts are the proof: pull requests, builds, test reports, deployments, with CI and review state attached. An agent that is blocked asks a person and waits, instead of guessing. Humans and agents are both actors, with scoped tokens and a trail. GitHub, GitLab and Bitbucket feed it pull requests and webhooks. A Rust MCP server, about ninety tools, lets an agent read and change the workspace without holding any data of its own. The API stays the authority.",
     },
     {
       id: "eivar",
@@ -345,8 +367,13 @@ export const EN: SiteData = {
           context: "An event bus fails quietly: a message that was never processed can look exactly like one that was.",
           choice: "Traces and logs went in through OpenTelemetry, into Grafana, Loki and Tempo, before more was built on top of the bus — so every event can be followed end to end, and problems are found from evidence rather than guesses.",
         },
+        {
+          title: "Choose with the client, not after the fact",
+          context: "This is someone else's production system. A design that looks clean to me and wrong to the people who run it is not a good design, and I don't see the cost of a choice as clearly as they do.",
+          choice: "I put the options on the table with them: what to build now, what can wait, and what fails if we guess. We pick one, then I write it. The technical decisions above came out of those conversations, not from a ticket thrown over a wall.",
+        },
       ],
-      learned: "Delivery is not processing. Once the transitions are explicit and observable, an event-driven system becomes something you can reason about — and explain to the people who depend on it.",
+      learned: "Delivery is not processing. Once the transitions are explicit and observable, an event-driven system becomes something you can reason about, and explain to the people who depend on it. The same is true of the choices: they are easier to defend when the client was in the room when we made them.",
       stack: [
         "Rust",
         "Tokio",
@@ -399,7 +426,7 @@ export const EN: SiteData = {
     { name: "OpenAI", product: "GPT 6 Sol", href: "https://openai.com", mark: "openai" },
     { name: "Zed", product: "IDE", href: "https://zed.dev", mark: "zed" },
     { name: "Delta", product: "Agent IDE", href: "https://delta.dev", mark: "delta" },
-    { name: "GitButler", product: "Git client", href: "https://gitbutler.com", mark: "gitbutler" },
+    { name: "Trama", product: "Workstreams", href: "https://trama.alessandrobrunoh.it", mark: "trama", mine: true },
   ],
 
   PRINCIPLES: [
@@ -407,22 +434,23 @@ export const EN: SiteData = {
       tag: "Understand",
       title: "Find the real problem",
       body: "Before writing code, I understand who needs it, how they work and what a useful result looks like. The stack comes after the context.",
-      detail: "I start with the people and the existing code: workflows, constraints, what already works and where it falls short. I want a shared definition of the problem before proposing a solution, whether it is an interface, an API or a developer tool.",
+      detail: "I start with the people and the existing code: workflows, constraints, what already works and where it falls short. On client work that conversation is the job. We look at the options together, including what each one costs, and we pick one before I build it.",
       practice: [
         "Talk to the people who use or maintain the software.",
+        "With a client, put the options and their cost on the table before choosing.",
         "Read the existing code and trace the affected workflow.",
         "Agree on the expected outcome, constraints and open questions.",
       ],
     },
     {
       tag: "Plan",
-      title: "Make the next step clear",
-      body: "Turn the goal into small, testable steps. Decide what belongs in the change, what can wait and how to know it works.",
-      detail: "A plan should make the work easier, not become another project. I break the solution into end-to-end slices, make dependencies and trade-offs explicit, and choose tools that suit the codebase and the team.",
+      title: "Write the problem down",
+      body: "The problem becomes an issue in Trama before it becomes code. Then I decide what belongs in the change, what can wait, and how to know it works.",
+      detail: "If it is not an issue, it is still a conversation. In Trama that issue is the record. When several issues share an outcome they become one workstream, with acceptance criteria you can check, not a pile of tickets. From there I break the solution into slices, make dependencies and trade-offs explicit, and choose tools that suit the codebase and the team.",
       practice: [
-        "Define the scope and acceptance criteria before implementation.",
-        "Split the work into small changes with a clear order.",
-        "Identify risks and decide how to test each step.",
+        "Open the issue in Trama before implementation.",
+        "Group issues that share an outcome into one workstream, with criteria you can check.",
+        "Split the work into small changes with a clear order, and decide how to test each step.",
       ],
     },
     {
@@ -450,12 +478,12 @@ export const EN: SiteData = {
     {
       tag: "Share",
       title: "Leave context, not just code",
-      body: "Explain what changed, why and how to verify it. Make the work easy to pick up, whether the next developer uses my tools or not.",
-      detail: "Delta.dev is part of my workflow, but the handoff should not depend on it. I carry the useful context into pull requests and documentation: decisions, trade-offs, test results and anything still open. Another developer should be able to understand and continue the work with their own editor and a normal Git workflow.",
+      body: "Explain what changed, why and how to verify it. A decision that should last goes on the workstream in Trama, not only in a chat.",
+      detail: "Delta is where the implementation happens, including when an agent writes the code and I review it. The handoff should not depend on that thread. On the workstream in Trama I leave what someone still needs if they never open it: the decision, the pull request, what is still open. They can continue with their own editor and a normal Git workflow.",
       practice: [
-        "Summarize the problem, the solution and the reasons behind it in the PR.",
-        "Include reproducible checks and document important decisions next to the code.",
-        "Make remaining questions and next steps explicit, without relying on a private agent conversation.",
+        "Attach the pull request to the workstream, and record a decision there when someone who never opens Delta still needs it.",
+        "Include reproducible checks next to the code.",
+        "Make remaining questions explicit. Do not leave them only in an agent conversation.",
       ],
     },
   ],

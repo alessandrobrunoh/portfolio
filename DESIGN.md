@@ -1,6 +1,6 @@
 ---
 name: Alessandro Bruno
-description: Personal site of a Software Engineer (Systems & Product) — the soft-minimal ab. identity on screen: white space, soft gray-blue surfaces, Deep Ink text, one Primary Blue.
+description: Personal site of a Software Engineer — the soft-minimal ab. identity on screen: white space, soft gray-blue surfaces, Deep Ink text, one Primary Blue.
 colors:
   page: "#FFFFFF"
   subtle: "#F8FAFC"
@@ -45,7 +45,7 @@ motion: { durations: "120 / 180 / 240 / 320ms", easing: "ease-out (cubic-bezier(
 
 # Design System: Alessandro Bruno
 
-Personal site of Alessandro Bruno, Software Engineer (Systems & Product). This file is how the **soft-minimal** brand becomes the site. The brand itself — logo files, clear space, minimum sizes, incorrect usage — is defined in [`BRAND.md`](./BRAND.md); if they disagree about the logo, `BRAND.md` wins. Canonical tokens live in `src/styles.css` (`:root` / `.dark` and `@theme inline`); if prose and code disagree, the CSS wins.
+Personal site of Alessandro Bruno, Software Engineer. This file is how the **soft-minimal** brand becomes the site. The brand itself — logo files, clear space, minimum sizes, incorrect usage — is defined in [`BRAND.md`](./BRAND.md); if they disagree about the logo, `BRAND.md` wins. Canonical tokens live in `src/styles.css` (`:root` / `.dark` and `@theme inline`); if prose and code disagree, the CSS wins.
 
 ## 1. Intent
 
@@ -110,7 +110,7 @@ Light is the home of the brand. Dark is **OLED black**: the page is `#000000`, s
 
 Inter only (variable, `opsz` 14–32, 300–700). Code blocks use the system monospace (`--font-code`).
 
-- **Display** (600, `clamp(2.5 → 5rem)`, −0.035em): the hero role on exactly two lines (`Software Engineer` / `Systems & Product.`), the second in `--faint` 500, ending on the blue dot.
+- **Display** (600, `clamp(2.5 → 5rem)`, −0.035em): the hero role on exactly two lines (`Software Engineer` / `in production.`), the second in `--faint` 500, ending on the blue dot. The second line has to stay about as short as the first: each line is a masked span, and a wrap gets clipped.
 - **Heading** (600, `clamp(2.25 → 3.5rem)`, −0.035em): section titles, ending on the blue dot.
 - **Title** (600, 1.5rem, −0.03em): cards, roles, subpage h2.
 - **Lede / Body / Small** (400; 1.125 / 1 / 0.875rem; 1.6): never below 16px for running text.

@@ -2140,6 +2140,20 @@ html.theme-vt::view-transition-new(root) {
     opacity: 1;
   }
 
+  .tool-name {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+
+  /* A word, not a star: on this site a star already means GitHub stars. */
+  .tool-mine {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+  }
+
   @media (max-width: 767px) {
     .tool-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
