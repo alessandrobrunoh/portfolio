@@ -236,22 +236,6 @@ export const IT: SiteData = {
       body: "Un'API Rust/Axum, una dashboard Angular e un bot Discord — che coprono banca, composizioni, tracciamento dell'energia sifonata e dati live di Albion. Costruito per una gilda che aveva bisogno di uno strumento vero, non di un foglio di calcolo.",
     },
     {
-      id: "ketchapp",
-      name: "KetchApp",
-      blurb: "Produttività nello studio come microservizi. Pomodoro, piani con IA, notifiche asincrone.",
-      problem: "Un team universitario aveva bisogno di un'app di studio con sessioni Pomodoro, piani generati dall'AI e notifiche — costruita da più persone insieme senza pestarsi i piedi.",
-      href: "https://github.com/orgs/ketchapp-for-study",
-      lang: "Java",
-      meta: "Org",
-      featured: false,
-      year: "2025",
-      stack: ["Rust", "Java", "Kafka", "Auth"],
-      highlights: ["API di autenticazione in Rust", "Notifiche basate su Kafka", "Servizi separati invece di un monolite"],
-      learned:
-        "Dove si rompe un monolite. Autenticazione in Rust, notifiche su Kafka, e le giunture che si vedono solo quando i pezzi iniziano a muoversi.",
-      body: "Progetto universitario di gruppo diventato il mio primo vero taglio a microservizi: un'API di autenticazione in Rust, un percorso Java su Kafka, e notifiche asincrone per Pomodoro e piani di studio. L'organizzazione mantiene ancora questa suddivisione.",
-    },
-    {
       id: "briscola",
       name: "Briscola Online",
       blurb: "Briscola in tempo reale via WebSocket. Multiplayer full-stack.",

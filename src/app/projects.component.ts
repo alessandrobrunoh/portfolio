@@ -16,7 +16,7 @@ import { CONTRIBUTIONS, PROJECTS, UI, lang } from "../lib/site";
       </app-section-head>
 
       <ul class="project-grid">
-        @for (p of projects.slice(0, 6); track p.id; let i = $index; let first = $first) {
+        @for (p of projects.slice(0, 5); track p.id; let i = $index; let first = $first) {
           @if (first) {
             <li class="lead reveal-on-scroll">
               <a [routerLink]="['/projects', p.id]" class="card card-link project-card project-lead" appSpotlight>
