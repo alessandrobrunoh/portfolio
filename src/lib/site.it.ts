@@ -250,6 +250,41 @@ export const IT: SiteData = {
       body: "Un'API Rust/Axum, una dashboard Angular e un bot Discord — che coprono banca, composizioni, tracciamento dell'energia sifonata e dati live di Albion. Costruito per una gilda che aveva bisogno di uno strumento vero, non di un foglio di calcolo.",
     },
     {
+      id: "traingame",
+      name: "TrainGame",
+      blurb: "Una simulazione di vita su un treno senza fine: centinaia di NPC con un lavoro, un'economia chiusa e bande, e un LLM che propone una novità al giorno, che il motore verifica prima che diventi reale.",
+      problem: "Volevo un mondo che continuasse a cambiare senza dover scrivere io ogni oggetto ed evento, e senza consegnare il gioco a un modello linguistico. Un modello è bravo con le idee e pessimo con le regole: lasciato solo inventa oggetti che non esistono, rompe l'economia, e due partite dallo stesso salvataggio non vanno mai allo stesso modo.",
+      decisions: [
+        {
+          title: "L'AI propone, il motore decide",
+          context: "Se il modello scrive direttamente il mondo, ogni risposta sbagliata diventa un bug nel salvataggio, e la simulazione smette di essere riproducibile.",
+          choice: "La simulazione non chiama mai il modello. Il Narratore legge un riassunto compatto del treno e chiede una novità al giorno: un oggetto, una ricetta, un lavoro o un evento. Un primo controllo scarta le risposte con la forma sbagliata e concede al modello un nuovo tentativo. Poi il Custode, dentro la simulazione, verifica la bozza sui cataloghi reali e la applica a un minuto di gioco fissato in anticipo, oppure la rifiuta con un motivo. Se il modello è in ritardo, i cervelli veloci vanno avanti.",
+        },
+        {
+          title: "Decidere solo quando un'azione finisce",
+          context: "Un treno con centinaia di NPC non può far prendere una decisione a ciascuno a ogni frame, e le carrozze fuori schermo devono comunque vivere.",
+          choice: "Un NPC sa solo in quale carrozza si trova e quale azione sta facendo fino a quando. Decide di nuovo solo quando l'azione finisce: le carrozze fuori schermo non devono mai recuperare, e il renderer traduce carrozza, azione e postazione in sprite.",
+        },
+      ],
+      href: "https://github.com/alessandrobrunoh/train-game-test",
+      stars: GITHUB_STATS.stars["train-game-test"] ?? 0,
+      lang: "Rust",
+      meta: "In corso",
+      featured: true,
+      year: "2026",
+      stack: ["Bevy", "Simulazione deterministica", "SQLite", "LLM"],
+      gallery: [{ src: "/projects/traingame/train-game.webp", alt: "Una carrozza dormitorio e la mensa del treno, con NPC che parlano, mangiano e cucinano" }],
+      highlights: [
+        "Simulazione deterministica senza dipendenze grafiche né di AI",
+        "Economia chiusa: cibo, merci, salari e tasse, con prezzi che crescono con la distanza da dove un oggetto viene prodotto",
+        "Un LLM propone una novità al giorno; il motore la convalida, o la rifiuta con un motivo",
+        "Ogni evento in SQLite e ogni risposta del modello registrata, così una partita si rigioca identica",
+      ],
+      learned:
+        "Dove tracciare il confine tra un modello e un motore di regole: il modello è una fonte di proposte con un budget, uno schema e un ripiego, mai l'autorità. La stessa idea degli agenti in Trama, dentro un gioco.",
+      body: "Un workspace Rust di sei crate: sim, il mondo deterministico senza grafica; game, il front end in Bevy; history, ogni evento in SQLite, così i morti restano consultabili e gli alberi genealogici attraversano le generazioni; llm, un client compatibile con OpenAI con budget di chiamate, registrazione e replay; narrator, i prompt e i controlli attorno al modello; e sim-laya, un cervello opzionale per gli NPC basato su un piccolo modello di scelta eseguito con candle. Le persone mangiano a turni, fanno la coda in una mensa piena, lavorano, commerciano, si sposano, litigano e formano bande che estorcono e proteggono i propri membri. Senza un modello configurato, il gioco gira interamente sui cervelli veloci.",
+    },
+    {
       id: "briscola",
       name: "Briscola Online",
       blurb: "Briscola in tempo reale via WebSocket. Multiplayer full-stack.",

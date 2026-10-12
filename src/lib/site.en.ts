@@ -240,6 +240,41 @@ export const EN: SiteData = {
       body: "A Rust/Axum API, an Angular dashboard, and a Discord bot — covering bank, compositions, siphoned-energy tracking, and live Albion data. Built for a guild that needed a real tool, not a spreadsheet.",
     },
     {
+      id: "traingame",
+      name: "TrainGame",
+      blurb: "A life sim on an endless train: hundreds of NPCs with jobs, a closed economy and gangs, and an LLM that proposes one novelty a day, which the engine checks before it becomes real.",
+      problem: "I wanted a world that keeps changing without me writing every item and event, and without handing the game to a language model. A model is good at ideas and bad at rules: left alone it invents items that don't exist, breaks the economy, and no two runs of the same save match.",
+      decisions: [
+        {
+          title: "The AI proposes, the engine decides",
+          context: "If the model writes the world directly, every bad answer becomes a bug in the save, and the simulation stops being reproducible.",
+          choice: "The simulation never calls the model. The Narratore reads a compact summary of the train and asks for one novelty a day: an item, a recipe, a job or an event. A precheck rejects answers with the wrong shape and gives the model one retry. Then the Custode, inside the simulation, checks the draft against the live catalogs and applies it at a game minute fixed in advance, or refuses it with a reason. If the model is late, the fast brains carry on.",
+        },
+        {
+          title: "Decide only when an action ends",
+          context: "A train with hundreds of NPCs can't run a decision for each of them every frame, and the carriages off screen still have to live.",
+          choice: "An NPC only knows which carriage it is in and which action it performs until when. It decides again only when that action ends, so off-screen carriages never need catching up, and the renderer maps carriage, action and station to sprites.",
+        },
+      ],
+      href: "https://github.com/alessandrobrunoh/train-game-test",
+      stars: GITHUB_STATS.stars["train-game-test"] ?? 0,
+      lang: "Rust",
+      meta: "In progress",
+      featured: true,
+      year: "2026",
+      stack: ["Bevy", "Deterministic simulation", "SQLite", "LLM"],
+      gallery: [{ src: "/projects/traingame/train-game.webp", alt: "A dormitory carriage and the canteen of the train, with NPCs talking, eating and cooking" }],
+      highlights: [
+        "Deterministic simulation with no graphics or AI dependencies",
+        "Closed economy: food, goods, wages and taxes, with prices that grow with distance from where an item is made",
+        "An LLM proposes one novelty a day; the engine validates it, or refuses it with a reason",
+        "Every event in SQLite, and every model answer recorded, so a game replays identically",
+      ],
+      learned:
+        "Where to draw the line between a model and a rule engine: the model is a source of proposals with a budget, a schema and a fallback, never the authority. The same idea as the agents in Trama, inside a game.",
+      body: "A Rust workspace of six crates: sim, the deterministic world with no graphics; game, the Bevy front end; history, every event in SQLite, so the dead stay queryable and family trees span generations; llm, an OpenAI-compatible client with a call budget, recording and replay; narrator, the prompts and checks around the model; and sim-laya, an optional NPC brain on a small choice model run with candle. People eat in meal shifts, queue in a full canteen, work, trade, marry, quarrel and form gangs that extort and protect their members. With no model configured, the game runs entirely on its fast brains.",
+    },
+    {
       id: "briscola",
       name: "Briscola Online",
       blurb: "Real-time Briscola over WebSockets. Full-stack multiplayer.",

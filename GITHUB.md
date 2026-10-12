@@ -36,6 +36,7 @@ Software engineer in Bologna, backend first. At [Luna S.r.l.](https://lunapartne
 | [ducklake-orm](https://github.com/alessandrobrunoh/ducklake-orm) | Rust ORM for DuckDB and DuckLake, [published on crates.io](https://crates.io/crates/ducklake-orm). Derive macros, typed queries, migrations, time travel. 39 integration tests. | Rust · DuckDB · proc-macro |
 | [Mnemosyne](https://github.com/alessandrobrunoh/Mnemosyne) | Local-first semantic history for source code. Tracks symbols with Tree-sitter, not line diffs; queryable by AI agents over MCP. | Rust · Tree-sitter · redb |
 | [Eivar-Online](https://github.com/alessandrobrunoh/Eivar-Online) | Multiplayer prototype: server-authoritative simulation, replicated state, client-side prediction. | Rust · Bevy · SpacetimeDB |
+| [TrainGame](https://github.com/alessandrobrunoh/train-game-test) | Life sim on an endless train: hundreds of NPCs, a closed economy and gangs. An LLM proposes one novelty a day; the deterministic engine validates it or refuses it. | Rust · Bevy · SQLite · LLM |
 | [Weaklings-Manager](https://github.com/alessandrobrunoh/Weaklings-Manager) | Guild platform for Albion Online: bank, loot splits, battle analytics, Discord login. Used by about 50 players. | Rust/Axum · PostgreSQL · Angular |
 
 ## Open source
