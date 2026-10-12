@@ -14,8 +14,8 @@ export const EN: SiteData = {
     x: "",
     avatar: "/avatar.jpg",
     company: { name: "Luna S.r.l.", href: "https://lunapartner.it" },
-    bio: "I'm a software engineer in Bologna. I get curious about how a system actually works, and I don't like leaving a problem half done. At Luna S.r.l. I work on client software that is already in production. A good part of that job is sitting with the client and deciding, together, what is worth building. On my own time I make the tools I was missing. Trama is the main one. I graduated from the University of Bologna in 2026, with a thesis on real-time telemetry called PETRA.",
-    availability: "Open to Software Engineer and Forward Deployed Engineer roles — backend, full-stack or customer-facing; remote or hybrid in Italy, available with notice. EU citizen.",
+    bio: "I'm a software engineer in Bologna. I get curious about how a system actually works, and I don't like leaving a problem half done. Backend is where I am most at home, and I move to web, mobile or tooling when the problem asks for it. At Luna S.r.l. I work on client software that is already in production. A good part of that job is sitting with the client and deciding, together, what is worth building. On my own time I make the tools I was missing. Trama is the main one. I graduated from the University of Bologna in 2026, with a thesis on real-time telemetry called PETRA.",
+    availability: "Open to Software Engineer and Forward Deployed Engineer roles — backend first, also full-stack or customer-facing. Italy and the rest of Europe, remote or hybrid; available with notice. EU citizen.",
   },
 
   TOC: [
@@ -31,7 +31,7 @@ export const EN: SiteData = {
     href: "https://lunapartner.it",
     location: "Bologna, Italy",
     summary:
-      "At Luna S.r.l. I work across client software: a fleet platform with Java/Spring Boot, Angular and React Native; production services in Rust; and a new operator console with Spring Boot APIs and a React interface. Before I implement, I talk the options through with the client: what to build now, what can wait, and what each choice costs the people running the platform. The code is reviewed by a senior.",
+      "At Luna S.r.l. I work across client software: a fleet platform with Java/Spring Boot, Angular and React Native; an event-driven Rust platform I designed for a client; and a new operator console with Spring Boot APIs and a React interface. Before I implement, I talk the options through with the client: what to build now, what can wait, and what each choice costs the people running the platform. The code is reviewed by a senior.",
   },
 
   ROLES: [
@@ -41,7 +41,7 @@ export const EN: SiteData = {
       current: true,
       caseId: "event-platform",
       bullets: [
-        "Embedded on a client's production platform: event-driven Rust services that process their workloads — async consumers on Valkey Streams, payloads on S3.",
+        "Designed the event-driven Rust platform for a client project, and build it with a team of 5–10: async consumers on Valkey Streams, payloads on S3.",
         "Made the services observable end to end: traces and logs through OpenTelemetry into Grafana, Loki and Tempo, so problems are traced across services instead of guessed.",
         "Building a new operator console end to end — Spring Boot APIs and a React UI for the people who run the platform day to day.",
         "I go through the implementation choices with the client before writing them: what to build, what to leave, and what fails for the people who operate the platform if we pick wrong.",
@@ -58,6 +58,7 @@ export const EN: SiteData = {
         "Small, reviewable diffs on stacked branches — the habit that makes changes safe to land in someone else's system.",
       ],
       tags: ["Spring Boot", "Angular", "React Native", "WebSocket", "Rust"],
+      impact: [{ value: "~200", label: "Vehicles on the fleet platform today" }],
     },
   ],
 
@@ -84,7 +85,7 @@ export const EN: SiteData = {
       title: "Port forwarding UI and live SSH forwards",
       repo: "zed-industries/zed",
       href: "https://github.com/zed-industries/zed/pull/55248",
-      note: "Add or remove forwards on remote sessions without reconnecting.",
+      note: "Add or remove forwards on remote sessions without reconnecting. Finished; waiting for maintainer review.",
     },
     {
       status: "Merged",
@@ -174,8 +175,8 @@ export const EN: SiteData = {
         "Daemon, CLI and TUI over a content-addressed storage workspace",
         "Exposed to AI tools through MCP",
       ],
-      learned: "Shipping a daemon people actually run. Content-addressed storage, a TUI, and the discipline of keeping every byte on-device.",
-      body: "The local-history tool I wanted as a daily driver. A daemon watches saves, a TUI and CLI search and restore, and nothing leaves the machine. Still the project that taught me how to ship a Rust tool people actually run.",
+      learned: "Shipping a daemon I run every day. Content-addressed storage, a TUI, and the discipline of keeping every byte on-device.",
+      body: "The local-history tool I wanted as a daily driver. A daemon watches saves, a TUI and CLI search and restore, and nothing leaves the machine. Still the project that taught me what it takes for a Rust tool to stay running all day, every day.",
     },
     {
       id: "ducklake",
@@ -205,6 +206,7 @@ export const EN: SiteData = {
         "Derive macros map structs to tables with zero boilerplate",
         "Type-safe filters, order_by, limit, count, fetch_one",
         "Pooling, migrations, and DuckLake time travel",
+        "39 integration tests against a real DuckDB",
       ],
       learned: "The layer under the query: typed boundaries, data ergonomics, and what it takes to make analytical storage feel like a product.",
       body: "A lightweight Rust ORM for DuckDB, built to make analytical storage feel approachable without hiding the useful parts. The work is about typed boundaries, data ergonomics, and the small API decisions that make a tool pleasant to keep using.",
@@ -222,6 +224,7 @@ export const EN: SiteData = {
       year: "2026",
       stack: ["Axum", "PostgreSQL", "Angular", "Discord"],
       highlights: ["Guild bank and loot splits", "Event sessions with battle analytics", "Discord login with role-based access"],
+      impact: [{ value: "~50", label: "People using it: the 30-member guild, plus players from outside it" }],
       learned: "A real domain with real users: auth, bank, compositions, and a bot that had to stay up for a guild — not a demo.",
       body: "A Rust/Axum API, an Angular dashboard, and a Discord bot — covering bank, compositions, siphoned-energy tracking, and live Albion data. Built for a guild that needed a real tool, not a spreadsheet.",
     },
@@ -280,66 +283,27 @@ export const EN: SiteData = {
         name: "Rust",
         level: "Proficient",
         items: "Tokio · Axum · SQLx · Tree-sitter · Bevy",
-        also: "Actix, SeaORM, Diesel, clap, ratatui, Leptos, Dioxus, GPUI, wasm-bindgen",
       },
       {
         name: "TypeScript",
         level: "Competent",
         items: "Angular · React · React Native · Node",
-        also: "Svelte, Expo, NestJS, Tailwind CSS",
       },
       {
         name: "Java & Python",
         level: "Competent",
         items: "Spring Boot · Hibernate · Maven",
-        also: "JHipster, Gradle, Kafka, Python",
       },
       {
         name: "Infrastructure",
         level: "",
         items: "Docker · PostgreSQL · Valkey · S3 · OpenTelemetry · Grafana",
-        also: "Linux, Loki, Tempo, Alloy, Redis, DuckLake, Kubernetes",
+        also: "Linux, Loki, Tempo, Alloy, Redis, DuckLake",
       },
     ],
   },
 
-  FUTURE_PROJECTS: [
-    {
-      id: "solana-dex",
-      name: "Mini DEX on Solana",
-      blurb: "On-chain order matching under blockchain constraints.",
-      href: "",
-      lang: "Solana",
-      meta: "Planned",
-      year: "Next",
-      stack: ["Rust", "Solana", "Anchor"],
-      highlights: [
-        "On-chain order book with matching logic in a program",
-        "Account-model constraints instead of a free-form database",
-        "Compute-budget limits force every instruction to be lean",
-      ],
-      learned: "How on-chain matching holds up under Solana's account model and compute limits — not just the theory.",
-      body: "A DEX order matcher written as a Solana program. The interesting part isn't the matching logic — it's building it inside an account model and compute budget that make you justify every byte and every instruction.",
-    },
-    {
-      id: "btree-db",
-      name: "Mini database engine with a B-Tree",
-      blurb: "Storage internals — the layer beneath ORMs.",
-      href: "https://github.com/alessandrobrunoh/mini-db-btree",
-      lang: "Rust",
-      meta: "Planned",
-      year: "Next",
-      stack: ["Rust", "B-Tree", "Storage"],
-      highlights: [
-        "Page splits, reads, and writes on raw disk pages",
-        "No ORM in between — the storage layer itself",
-        "A ground-up look at what ducklake-orm sits on top of",
-      ],
-      learned: "What a B-Tree actually does on disk — page splits, reads, and writes — instead of just calling one through an ORM.",
-      body: "A small database engine built around a B-Tree, from scratch. After publishing an ORM, this is the layer beneath it: how data actually gets organized, split, and found on disk.",
-    },
-
-  ],
+  FUTURE_PROJECTS: [],
 
   CASES: [
     {
@@ -347,7 +311,7 @@ export const EN: SiteData = {
       title: "An event-driven platform for a client",
       role: "Software Developer · Luna S.r.l.",
       era: "2025 — present",
-      blurb: "Working inside a client's production backend: Rust consumers on Valkey Streams, payloads on S3, end-to-end tracing, and an operator console for the people who run it.",
+      blurb: "I designed a client's event-driven backend in Rust: consumers on Valkey Streams, payloads on S3, end-to-end tracing, and an operator console for the people who run it.",
       problem: "A client runs its workloads through an event-driven backend. Work arrives as events, payloads live on S3, and every event has to be processed exactly once in effect — under load, with retries — while the people operating the platform need to see what happened when something goes wrong.",
       built: [
         "Async Rust consumers on Valkey Streams that read, handle and acknowledge events, with payloads on S3.",
@@ -386,7 +350,7 @@ export const EN: SiteData = {
         "Spring Boot",
         "React",
       ],
-      confidentiality: "Client work: the client, its data and internal details are left out on purpose.",
+      confidentiality: "Client work under NDA: the client, its data and internal details are left out on purpose.",
     },
   ],
 
@@ -468,7 +432,7 @@ export const EN: SiteData = {
       tag: "Review",
       title: "Read it like someone else wrote it",
       body: "Question the implementation, test the edge cases and make each diff easy to review. Writing code is only part of the work; checking it matters just as much.",
-      detail: "Recently I have started using Delta.dev to write code with AI agents, with a strong focus on review. I treat generated code as a proposal, not a finished result: I read the diff, check the design, run tests and ask for changes. The same discipline applies to code I write myself and to review with teammates.",
+      detail: "Through university and the first half of my internship I wrote all of my code by hand. Then coding agents arrived and I moved over gradually: today I write code with agents in Delta.dev, and the time I used to spend typing goes into specifying the change and reviewing it. Having written it by hand first is what lets me see when a proposal is wrong. I treat generated code as a proposal, not a finished result: I read the diff, check the design, run tests and ask for changes. The same discipline applies to code I write myself and to review with teammates.",
       practice: [
         "Read every diff for correctness, clarity and unintended changes.",
         "Run relevant tests and check failure paths, not only the happy path.",
