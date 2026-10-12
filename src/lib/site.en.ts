@@ -174,6 +174,23 @@ export const EN: SiteData = {
       name: "Mnemosyne",
       blurb: "Local-first semantic history for source code: symbols and structural changes via Tree-sitter, not line diffs — queryable by AI agents over MCP.",
       problem: "Git only remembers what you commit. Between commits work gets lost, and line diffs cannot say which function changed or how. I wanted a local history that understands code structure — and that AI tools can query.",
+      decisions: [
+        {
+          title: "Identity from the code, not from the name",
+          context: "A line diff sees a renamed function as one deletion and one insertion, so its history stops at the rename.",
+          choice: "Tree-sitter parses each save, and every function, struct or class gets a structural hash of its body. Same name with a new hash is an edit; a new name with the same hash is a rename, so the history follows the function. The price: a rename and an edit in the same save look like a delete and an add, and only languages with a bundled grammar, fourteen today, get symbol history. Other files are still saved and restorable as plain content.",
+        },
+        {
+          title: "Store each chunk once, rebuild files on demand",
+          context: "A local history saves far more often than anyone commits. A full snapshot of every save would fill the disk with copies of the same code.",
+          choice: "Each save is split into chunks along the code structure, and each chunk is stored once under its BLAKE3 hash, compressed with zstd. redb keeps the index of snapshots and symbols in one file, with no server. An old version is reassembled from its chunks when you ask for it. The cost is on the way out: reading an old file does more work than opening a snapshot, and because chunks are shared, deleting history needs a garbage collector, not a file delete. If history ever had to be shared across machines, I would keep the content-addressed objects, which travel as they are, and redesign the single-file index.",
+        },
+        {
+          title: "Never lose a save, never slow one down",
+          context: "File watchers miss events, and editors and formatters can write the same file several times in a second.",
+          choice: "Saves are debounced per file, and the delay grows from one to ten seconds while a file keeps changing, so a burst becomes one snapshot. A poll every 30 seconds catches what the watcher missed, and a scan every minute finds new files. History can lag a save by a few seconds; in exchange, the daemon stays out of the way while you type.",
+        },
+      ],
       href: "https://github.com/alessandrobrunoh/Mnemosyne",
       stars: GITHUB_STATS.stars["Mnemosyne"] ?? 0,
       lang: "Rust",
@@ -369,7 +386,7 @@ export const EN: SiteData = {
         {
           title: "Acknowledge after the side effect, not after the read",
           context: "I came from a request/response world, where a call is answered and forgotten. On an event bus I treated “delivered” and “processed” as the same thing. They are not: the gap between them is where retries, duplicates and ordering bugs live.",
-          choice: "Make each consumer an explicit small state machine — read, handle, acknowledge — and acknowledge only once the work has actually happened. Retries stopped being edge cases and became part of the design.",
+          choice: "Make each consumer an explicit small state machine — read, handle, acknowledge — and acknowledge only once the work has actually happened. Retries stopped being edge cases and became part of the design. The cost is one I accept on purpose: if a consumer stops after the work but before the acknowledgement, the event comes back. Delivery is at least once, so every handler has to be safe to run twice.",
           code: "// delivered is not processed\nlet message = stream.read().await?;\nif worker.handle(&message).await? {\n    stream.ack(message.id).await?;\n}",
         },
         {
