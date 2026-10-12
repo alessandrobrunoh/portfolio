@@ -79,6 +79,15 @@ const PAGE_META = [
                       <li class="text-body"><span>0{{ j + 1 }}</span>{{ item }}</li>
                     }
                   </ol>
+                  @if (gallery().length) {
+                    <div class="mt-8 grid gap-4 sm:grid-cols-2">
+                      @for (shot of gallery(); track shot.src) {
+                        <figure class="overflow-hidden rounded-lg border border-line bg-surface">
+                          <img [src]="shot.src" [alt]="shot.alt" loading="lazy" decoding="async" class="block h-auto w-full" />
+                        </figure>
+                      }
+                    </div>
+                  }
                 </section>
 
                 @if (p.decisions?.length) {
@@ -327,6 +336,8 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
   });
 
   project = computed(() => [...PROJECTS, ...FUTURE_PROJECTS].find((item) => item.id === this.id()));
+  /** Planned projects have no screenshots, so only shipped ones are looked up. */
+  protected readonly gallery = computed(() => PROJECTS.find((item) => item.id === this.id())?.gallery ?? []);
   /** Only shipped projects can have a live deployment. */
   protected readonly demo = computed(() => {
     const current = this.project();
