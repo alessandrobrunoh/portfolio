@@ -79,6 +79,15 @@ const PAGE_META = [
                       <li class="text-body"><span>0{{ j + 1 }}</span>{{ item }}</li>
                     }
                   </ol>
+                  @if (gallery().length) {
+                    <div class="mt-8 grid gap-4 sm:grid-cols-2">
+                      @for (shot of gallery(); track shot.src; let first = $first) {
+                        <figure [class]="'overflow-hidden rounded-lg border border-line bg-surface' + (first ? ' sm:col-span-2' : '')">
+                          <img [src]="shot.src" [alt]="shot.alt" loading="lazy" decoding="async" class="block h-auto w-full" />
+                        </figure>
+                      }
+                    </div>
+                  }
                 </section>
 
                 @if (p.decisions?.length) {
@@ -327,6 +336,8 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
   });
 
   project = computed(() => [...PROJECTS, ...FUTURE_PROJECTS].find((item) => item.id === this.id()));
+  /** Planned projects have no screenshots, so only shipped ones are looked up. */
+  protected readonly gallery = computed(() => PROJECTS.find((item) => item.id === this.id())?.gallery ?? []);
   /** Only shipped projects can have a live deployment. */
   protected readonly demo = computed(() => {
     const current = this.project();
@@ -334,7 +345,6 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
   });
 
   ngOnInit() {
-    if (!isPlatformBrowser(this.platformId)) return;
     const current = this.project();
     this.title.setTitle(current ? `${current.name} · Alessandro Bruno` : "Project not found · Alessandro Bruno");
     if (!current) return;
@@ -350,6 +360,8 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
     this.meta.updateTag({ property: "og:url", content: url });
     this.meta.updateTag({ name: "twitter:title", content: `${current.name} · Alessandro Bruno` });
     this.meta.updateTag({ name: "twitter:description", content: description });
+    // Title and share tags are prerendered with the page; GitHub stats are fetched in the browser only.
+    if (!isPlatformBrowser(this.platformId)) return;
     // The page renders from static data at once; GitHub stats fill in when (and if) they arrive.
     this.loading.set(true);
     this.timeout = setTimeout(() => this.loading.set(false), 6500);
@@ -371,7 +383,7 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
   }
 
   private setupObserver() {
-    if (this.observer) return;
+    if (this.observer || typeof document === "undefined") return;
     const sections = ["overview", "problem", "built", "decisions", "impact", "lesson", "story", "metrics", "diff"]
       .map((id) => document.getElementById(id))
       .filter((section): section is HTMLElement => section !== null);

@@ -5,6 +5,7 @@ import { THEME_CHANGE_EVENT, toggleThemeFromPointer, type ResolvedTheme } from "
 let nextUid = 0;
 
 function domTheme(): ResolvedTheme {
+  if (typeof document === "undefined") return "light";
   return document.documentElement.classList.contains("dark") ? "dark" : "light";
 }
 
@@ -51,6 +52,7 @@ export class ThemeToggleComponent implements OnInit {
   });
 
   ngOnInit() {
+    if (typeof window === "undefined") return;
     const onChange = () => {
       const next = domTheme();
       if (next === this.theme()) return;

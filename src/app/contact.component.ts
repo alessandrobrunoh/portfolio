@@ -82,6 +82,7 @@ export class ContactComponent implements OnInit {
   protected readonly localTime = signal(LOCAL_TIME.format(new Date()));
 
   ngOnInit() {
+    if (typeof window === "undefined") return;
     const id = window.setInterval(() => this.localTime.set(LOCAL_TIME.format(new Date())), 30_000);
     this.destroyRef.onDestroy(() => window.clearInterval(id));
   }

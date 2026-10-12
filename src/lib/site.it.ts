@@ -18,8 +18,8 @@ export const IT: SiteData = {
     x: "",
     avatar: "/avatar.jpg",
     company: { name: "Luna S.r.l.", href: "https://lunapartner.it" },
-    bio: "Sono un software engineer a Bologna. Mi incuriosisce capire come funziona davvero un sistema, e non mi piace lasciare un problema a metà. In Luna S.r.l. lavoro sul software dei clienti, quello già in produzione. Una parte importante del lavoro è sedersi con loro e decidere insieme cosa vale la pena costruire. Per conto mio faccio gli strumenti che mi mancavano. Trama è quello principale. Mi sono laureato all'Università di Bologna nel 2026, con una tesi sulla telemetria in tempo reale: PETRA.",
-    availability: "Disponibile per ruoli da Software Engineer e Forward Deployed Engineer — backend, full-stack o a contatto con il cliente; da remoto o ibrido in Italia, con preavviso. Cittadino UE.",
+    bio: "Sono un software engineer a Bologna. Mi incuriosisce capire come funziona davvero un sistema, e non mi piace lasciare un problema a metà. Il backend è dove mi trovo meglio, e passo a web, mobile o strumenti quando il problema lo chiede. In Luna S.r.l. lavoro sul software dei clienti, quello già in produzione. Una parte importante del lavoro è sedersi con loro e decidere insieme cosa vale la pena costruire. Per conto mio faccio gli strumenti che mi mancavano. Trama è quello principale. Mi sono laureato all'Università di Bologna nel 2026, con una tesi sulla telemetria in tempo reale: PETRA.",
+    availability: "Disponibile per ruoli da Software Engineer e Forward Deployed Engineer — soprattutto backend, anche full-stack o a contatto con il cliente. Italia e resto d'Europa, da remoto o ibrido; con preavviso. Cittadino UE.",
   },
 
   TOC: [
@@ -35,7 +35,7 @@ export const IT: SiteData = {
     href: "https://lunapartner.it",
     location: "Bologna, Italia",
     summary:
-      "In Luna S.r.l. lavoro su diversi aspetti del software dei clienti: una piattaforma fleet con Java/Spring Boot, Angular e React Native, servizi in produzione in Rust e una nuova console operatore con API Spring Boot e interfaccia React. Prima di implementare discuto le opzioni con il cliente: cosa fare adesso, cosa può aspettare, e quanto costa ogni scelta a chi gestisce la piattaforma. Il codice passa da una code review senior.",
+      "In Luna S.r.l. lavoro su diversi aspetti del software dei clienti: una piattaforma fleet con Java/Spring Boot, Angular e React Native, una piattaforma event-driven in Rust che ho progettato per un cliente e una nuova console operatore con API Spring Boot e interfaccia React. Prima di implementare discuto le opzioni con il cliente: cosa fare adesso, cosa può aspettare, e quanto costa ogni scelta a chi gestisce la piattaforma. Il codice passa da una code review senior.",
   },
 
   ROLES: [
@@ -45,7 +45,7 @@ export const IT: SiteData = {
       current: true,
       caseId: "event-platform",
       bullets: [
-        "Dentro la piattaforma in produzione di un cliente: servizi Rust event-driven che elaborano i suoi carichi — consumer asincroni su Valkey Streams, payload su S3.",
+        "Ho progettato la piattaforma Rust event-driven per il progetto di un cliente, e la sviluppo in un team di 5–10 persone: consumer asincroni su Valkey Streams, payload su S3.",
         "Ho reso i servizi osservabili da capo a capo: trace e log con OpenTelemetry verso Grafana, Loki e Tempo, così i problemi si seguono tra i servizi invece di indovinarli.",
         "Sto costruendo una nuova console operatore dall'inizio alla fine — API in Spring Boot e interfaccia React per chi gestisce la piattaforma ogni giorno.",
         "Le scelte di implementazione le discuto con il cliente prima di scriverle: cosa costruire, cosa lasciare, e cosa si rompe per chi opera la piattaforma se scegliamo male.",
@@ -62,6 +62,7 @@ export const IT: SiteData = {
         "Diff piccoli e revisionabili su branch impilati — l'abitudine che rende sicuro portare modifiche nel sistema di qualcun altro.",
       ],
       tags: ["Spring Boot", "Angular", "React Native", "WebSocket", "Rust"],
+      impact: [{ value: "~200", label: "Mezzi sulla piattaforma fleet oggi" }],
     },
   ],
 
@@ -88,7 +89,7 @@ export const IT: SiteData = {
       title: "UI per il port forwarding e forward SSH live",
       repo: "zed-industries/zed",
       href: "https://github.com/zed-industries/zed/pull/55248",
-      note: "Aggiungere o rimuovere forward nelle sessioni remote senza riconnettersi.",
+      note: "Aggiungere o rimuovere forward nelle sessioni remote senza riconnettersi. Completata, in attesa della review dei maintainer.",
     },
     {
       status: "Merged",
@@ -152,6 +153,17 @@ export const IT: SiteData = {
       featured: true,
       year: "2026",
       stack: ["Bevy", "SpacetimeDB", "WebAssembly", "Stato distribuito"],
+      gallery: [
+        { src: "/projects/eivar/select-character-ui.webp", alt: "Selezione del personaggio di Eivar Online sull'illustrazione del gioco" },
+        { src: "/projects/eivar/crafting.webp", alt: "Crafting dal fabbro: ricette e materiali che servono per un'ascia" },
+        { src: "/projects/eivar/gathering.webp", alt: "Raccolta del legno da una quercia, con la barra di canalizzazione" },
+        { src: "/projects/eivar/loot-system.webp", alt: "Finestra del loot dopo un'uccisione: oro e legno da raccogliere" },
+        { src: "/projects/eivar/inscriptions.webp", alt: "Iscrizioni su una spada: un elemento per l'arma e parole che cambiano ogni abilità" },
+        { src: "/projects/eivar/item-example.webp", alt: "Statistiche di una staffa da mago accanto a equipaggiamento e inventario" },
+        { src: "/projects/eivar/in-game-market.webp", alt: "Acquisto di una staffa da mago al Market 1 dentro il gioco" },
+        { src: "/projects/eivar/website-market.webp", alt: "Lo stesso order book del Market 1 sul sito di Eivar" },
+        { src: "/projects/eivar/game-ui.webp", alt: "Campo di allenamento con i bersagli e la barra delle abilità" },
+      ],
       highlights: [
         "Simulazione server-authoritative con predizione lato client",
         "Stato replicato tramite un modulo SpacetimeDB compilato in WebAssembly",
@@ -179,8 +191,8 @@ export const IT: SiteData = {
         "Accessibile agli strumenti AI tramite MCP",
       ],
       learned:
-        "Rilasciare un demone che le persone usano davvero. Storage content-addressed, una TUI, e la disciplina di tenere ogni byte sul dispositivo.",
-      body: "Lo strumento di cronologia locale che volevo usare ogni giorno. Un demone osserva i salvataggi, una TUI e una CLI cercano e ripristinano, e niente lascia la macchina. È ancora il progetto che mi ha insegnato a rilasciare uno strumento Rust che le persone usano davvero.",
+        "Rilasciare un demone che uso ogni giorno. Storage content-addressed, una TUI, e la disciplina di tenere ogni byte sul dispositivo.",
+      body: "Lo strumento di cronologia locale che volevo usare ogni giorno. Un demone osserva i salvataggi, una TUI e una CLI cercano e ripristinano, e niente lascia la macchina. È ancora il progetto che mi ha insegnato cosa serve perché uno strumento Rust resti acceso tutto il giorno, ogni giorno.",
     },
     {
       id: "ducklake",
@@ -210,6 +222,7 @@ export const IT: SiteData = {
         "Le derive macro mappano struct in tabelle senza boilerplate",
         "Filtri type-safe, order_by, limit, count, fetch_one",
         "Pooling, migrazioni e time travel di DuckLake",
+        "39 test di integrazione su un DuckDB reale",
       ],
       learned: "Il livello sotto la query: confini tipizzati, ergonomia dei dati, e cosa serve per rendere lo storage analitico un prodotto.",
       body: "Un ORM Rust leggero per DuckDB, costruito per rendere lo storage analitico accessibile senza nasconderne le parti utili. Il lavoro riguarda confini tipizzati, ergonomia dei dati e piccole decisioni API che rendono uno strumento piacevole da continuare a usare.",
@@ -231,9 +244,45 @@ export const IT: SiteData = {
         "Sessioni evento con analisi delle battaglie",
         "Login Discord con accesso basato sui ruoli",
       ],
+      impact: [{ value: "~50", label: "Persone che lo usano: i 30 membri della gilda, più giocatori esterni" }],
       learned:
         "Un dominio reale con utenti reali: autenticazione, banca, composizioni, e un bot che doveva restare online per una gilda — non una demo.",
       body: "Un'API Rust/Axum, una dashboard Angular e un bot Discord — che coprono banca, composizioni, tracciamento dell'energia sifonata e dati live di Albion. Costruito per una gilda che aveva bisogno di uno strumento vero, non di un foglio di calcolo.",
+    },
+    {
+      id: "traingame",
+      name: "TrainGame",
+      blurb: "Una simulazione di vita su un treno senza fine: centinaia di NPC con un lavoro, un'economia chiusa e bande, e un LLM che propone una novità al giorno, che il motore verifica prima che diventi reale.",
+      problem: "Volevo un mondo che continuasse a cambiare senza dover scrivere io ogni oggetto ed evento, e senza consegnare il gioco a un modello linguistico. Un modello è bravo con le idee e pessimo con le regole: lasciato solo inventa oggetti che non esistono, rompe l'economia, e due partite dallo stesso salvataggio non vanno mai allo stesso modo.",
+      decisions: [
+        {
+          title: "L'AI propone, il motore decide",
+          context: "Se il modello scrive direttamente il mondo, ogni risposta sbagliata diventa un bug nel salvataggio, e la simulazione smette di essere riproducibile.",
+          choice: "La simulazione non chiama mai il modello. Il Narratore legge un riassunto compatto del treno e chiede una novità al giorno: un oggetto, una ricetta, un lavoro o un evento. Un primo controllo scarta le risposte con la forma sbagliata e concede al modello un nuovo tentativo. Poi il Custode, dentro la simulazione, verifica la bozza sui cataloghi reali e la applica a un minuto di gioco fissato in anticipo, oppure la rifiuta con un motivo. Se il modello è in ritardo, i cervelli veloci vanno avanti.",
+        },
+        {
+          title: "Decidere solo quando un'azione finisce",
+          context: "Un treno con centinaia di NPC non può far prendere una decisione a ciascuno a ogni frame, e le carrozze fuori schermo devono comunque vivere.",
+          choice: "Un NPC sa solo in quale carrozza si trova e quale azione sta facendo fino a quando. Decide di nuovo solo quando l'azione finisce: le carrozze fuori schermo non devono mai recuperare, e il renderer traduce carrozza, azione e postazione in sprite.",
+        },
+      ],
+      href: "https://github.com/alessandrobrunoh/train-game-test",
+      stars: GITHUB_STATS.stars["train-game-test"] ?? 0,
+      lang: "Rust",
+      meta: "In corso",
+      featured: true,
+      year: "2026",
+      stack: ["Bevy", "Simulazione deterministica", "SQLite", "LLM"],
+      gallery: [{ src: "/projects/traingame/train-game.webp", alt: "Una carrozza dormitorio e la mensa del treno, con NPC che parlano, mangiano e cucinano" }],
+      highlights: [
+        "Simulazione deterministica senza dipendenze grafiche né di AI",
+        "Economia chiusa: cibo, merci, salari e tasse, con prezzi che crescono con la distanza da dove un oggetto viene prodotto",
+        "Un LLM propone una novità al giorno; il motore la convalida, o la rifiuta con un motivo",
+        "Ogni evento in SQLite e ogni risposta del modello registrata, così una partita si rigioca identica",
+      ],
+      learned:
+        "Dove tracciare il confine tra un modello e un motore di regole: il modello è una fonte di proposte con un budget, uno schema e un ripiego, mai l'autorità. La stessa idea degli agenti in Trama, dentro un gioco.",
+      body: "Un workspace Rust di sei crate: sim, il mondo deterministico senza grafica; game, il front end in Bevy; history, ogni evento in SQLite, così i morti restano consultabili e gli alberi genealogici attraversano le generazioni; llm, un client compatibile con OpenAI con budget di chiamate, registrazione e replay; narrator, i prompt e i controlli attorno al modello; e sim-laya, un cervello opzionale per gli NPC basato su un piccolo modello di scelta eseguito con candle. Le persone mangiano a turni, fanno la coda in una mensa piena, lavorano, commerciano, si sposano, litigano e formano bande che estorcono e proteggono i propri membri. Senza un modello configurato, il gioco gira interamente sui cervelli veloci.",
     },
     {
       id: "briscola",
@@ -296,69 +345,29 @@ export const IT: SiteData = {
     groups: [
       {
         name: "Rust",
-        level: "Esperto",
+        level: "Avanzato",
         items: "Tokio · Axum · SQLx · Tree-sitter · Bevy",
-        also: "Actix, SeaORM, Diesel, clap, ratatui, Leptos, Dioxus, GPUI, wasm-bindgen",
       },
       {
         name: "TypeScript",
         level: "Competente",
         items: "Angular · React · React Native · Node",
-        also: "Svelte, Expo, NestJS, Tailwind CSS",
       },
       {
         name: "Java & Python",
         level: "Competente",
         items: "Spring Boot · Hibernate · Maven",
-        also: "JHipster, Gradle, Kafka, Python",
       },
       {
         name: "Infrastruttura",
         level: "",
         items: "Docker · PostgreSQL · Valkey · S3 · OpenTelemetry · Grafana",
-        also: "Linux, Loki, Tempo, Alloy, Redis, DuckLake, Kubernetes",
+        also: "Linux, Loki, Tempo, Alloy, Redis, DuckLake",
       },
     ],
   },
 
-  FUTURE_PROJECTS: [
-    {
-      id: "solana-dex",
-      name: "Mini DEX su Solana",
-      blurb: "Matching degli ordini on-chain sotto i vincoli della blockchain.",
-      href: "",
-      lang: "Solana",
-      meta: "Pianificato",
-      year: "Prossimo",
-      stack: ["Rust", "Solana", "Anchor"],
-      highlights: [
-        "Order book on-chain con logica di matching in un programma",
-        "Vincoli del modello ad account invece di un database libero",
-        "I limiti di compute budget costringono ogni istruzione a essere essenziale",
-      ],
-      learned: "Come regge il matching on-chain sotto il modello ad account di Solana e i limiti di calcolo — non solo la teoria.",
-      body: "Un matcher di ordini per DEX scritto come programma Solana. La parte interessante non è la logica di matching — è costruirla dentro un modello ad account e un compute budget che ti costringono a giustificare ogni byte e ogni istruzione.",
-    },
-    {
-      id: "btree-db",
-      name: "Mini motore di database con un B-Tree",
-      blurb: "Interni dello storage — il livello sotto gli ORM.",
-      href: "https://github.com/alessandrobrunoh/mini-db-btree",
-      lang: "Rust",
-      meta: "Pianificato",
-      year: "Prossimo",
-      stack: ["Rust", "B-Tree", "Storage"],
-      highlights: [
-        "Split delle pagine, letture e scritture su pagine disco grezze",
-        "Nessun ORM in mezzo — il livello di storage stesso",
-        "Uno sguardo dalle fondamenta a ciò su cui poggia ducklake-orm",
-      ],
-      learned:
-        "Cosa fa davvero un B-Tree su disco — split delle pagine, letture e scritture — invece di limitarsi a chiamarne uno tramite un ORM.",
-      body: "Un piccolo motore di database costruito attorno a un B-Tree, da zero. Dopo aver pubblicato un ORM, questo è il livello sottostante: come i dati vengono davvero organizzati, suddivisi e trovati su disco.",
-    },
-
-  ],
+  FUTURE_PROJECTS: [],
 
   CASES: [
     {
@@ -366,7 +375,7 @@ export const IT: SiteData = {
       title: "Una piattaforma event-driven per un cliente",
       role: "Sviluppatore Software · Luna S.r.l.",
       era: "2025 — oggi",
-      blurb: "Lavoro dentro il backend in produzione di un cliente: consumer Rust su Valkey Streams, payload su S3, tracing da capo a capo e una console operatore per chi gestisce la piattaforma.",
+      blurb: "Ho progettato il backend event-driven in Rust di un cliente: consumer su Valkey Streams, payload su S3, tracing da capo a capo e una console operatore per chi gestisce la piattaforma.",
       problem: "Un cliente fa girare i suoi carichi su un backend event-driven. Il lavoro arriva come eventi, i payload stanno su S3, e ogni evento deve produrre il suo effetto una volta sola — sotto carico, con i retry — mentre chi gestisce la piattaforma deve poter vedere cosa è successo quando qualcosa va storto.",
       built: [
         "Consumer asincroni in Rust su Valkey Streams che leggono, elaborano e confermano gli eventi, con i payload su S3.",
@@ -405,7 +414,7 @@ export const IT: SiteData = {
         "Spring Boot",
         "React",
       ],
-      confidentiality: "Lavoro per un cliente: il cliente, i suoi dati e i dettagli interni sono omessi di proposito.",
+      confidentiality: "Lavoro per un cliente sotto NDA: il cliente, i suoi dati e i dettagli interni sono omessi di proposito.",
     },
   ],
 
@@ -487,7 +496,7 @@ export const IT: SiteData = {
       tag: "Review",
       title: "Lo rileggo come se non fosse mio",
       body: "Metto in discussione l’implementazione, verifico i casi limite e rendo ogni diff facile da rivedere. Scrivere codice è solo una parte del lavoro: controllarlo conta altrettanto.",
-      detail: "Recentemente ho iniziato a usare Delta.dev per scrivere codice con agenti AI, dedicando molta attenzione alla review. Considero il codice generato una proposta, non un risultato finito: leggo il diff, verifico il design, eseguo i test e chiedo correzioni. La stessa disciplina vale per il codice che scrivo io e per le review con il team.",
+      detail: "All'università e nella prima metà del tirocinio ho scritto tutto il mio codice a mano. Poi sono arrivati gli agenti e ci sono passato gradualmente: oggi scrivo codice con gli agenti in Delta.dev, e il tempo che passavo a scrivere lo dedico a definire la modifica e a rivederla. Averlo scritto prima a mano è ciò che mi fa capire quando una proposta è sbagliata. Considero il codice generato una proposta, non un risultato finito: leggo il diff, verifico il design, eseguo i test e chiedo correzioni. La stessa disciplina vale per il codice che scrivo io e per le review con il team.",
       practice: [
         "Leggo ogni diff cercando correttezza, chiarezza e modifiche involontarie.",
         "Eseguo i test pertinenti e verifico anche i percorsi di errore.",
