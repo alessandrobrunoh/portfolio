@@ -178,6 +178,23 @@ export const IT: SiteData = {
       name: "Mnemosyne",
       blurb: "Cronologia semantica del codice, local-first: simboli e modifiche strutturali via Tree-sitter, non diff per righe — interrogabile dagli agenti AI via MCP.",
       problem: "Git ricorda solo quello che committi. Tra un commit e l'altro il lavoro si perde, e i diff per righe non dicono quale funzione è cambiata né come. Volevo una cronologia locale che capisca la struttura del codice, interrogabile anche dagli strumenti AI.",
+      decisions: [
+        {
+          title: "L'identità viene dal codice, non dal nome",
+          context: "Un diff per righe vede una funzione rinominata come una cancellazione e un'aggiunta, quindi la sua storia si ferma al rename.",
+          choice: "Tree-sitter analizza ogni salvataggio, e ogni funzione, struct o classe riceve un hash strutturale del suo corpo. Stesso nome con un hash nuovo è una modifica; un nome nuovo con lo stesso hash è un rename, così la storia segue la funzione. Il prezzo: un rename e una modifica nello stesso salvataggio sembrano una cancellazione e un'aggiunta, e solo i linguaggi con una grammatica inclusa, quattordici oggi, hanno la storia dei simboli. Gli altri file vengono comunque salvati e si possono ripristinare come contenuto semplice.",
+        },
+        {
+          title: "Ogni chunk salvato una volta, i file ricostruiti quando servono",
+          context: "Una cronologia locale salva molto più spesso di quanto si faccia un commit. Uno snapshot completo per ogni salvataggio riempirebbe il disco di copie dello stesso codice.",
+          choice: "Ogni salvataggio viene diviso in chunk seguendo la struttura del codice, e ogni chunk è salvato una sola volta sotto il suo hash BLAKE3, compresso con zstd. redb tiene l'indice di snapshot e simboli in un solo file, senza server. Una versione vecchia viene ricomposta dai suoi chunk quando la chiedi. Il costo è all'uscita: leggere un file vecchio richiede più lavoro che aprire uno snapshot, e siccome i chunk sono condivisi, cancellare la cronologia richiede un garbage collector, non la cancellazione di un file. Se la cronologia dovesse essere condivisa tra più macchine, terrei gli oggetti content-addressed, che viaggiano così come sono, e riprogetterei l'indice a file singolo.",
+        },
+        {
+          title: "Non perdere mai un salvataggio, non rallentarne mai uno",
+          context: "I file watcher perdono eventi, e editor e formatter possono scrivere lo stesso file più volte in un secondo.",
+          choice: "I salvataggi hanno un debounce per file, e l'attesa cresce da uno a dieci secondi finché un file continua a cambiare, così una raffica diventa un solo snapshot. Un polling ogni 30 secondi recupera quello che il watcher ha perso, e una scansione ogni minuto trova i file nuovi. La cronologia può arrivare qualche secondo dopo il salvataggio; in cambio, il demone non si fa sentire mentre scrivi.",
+        },
+      ],
       href: "https://github.com/alessandrobrunoh/Mnemosyne",
       stars: GITHUB_STATS.stars["Mnemosyne"] ?? 0,
       lang: "Rust",
@@ -387,7 +404,7 @@ export const IT: SiteData = {
         {
           title: "Confermare dopo l'effetto, non dopo la lettura",
           context: "Venivo da un mondo request/response, dove una chiamata riceve risposta e si dimentica. Su un event bus trattavo “consegnato” ed “elaborato” come la stessa cosa. Non lo sono: lo spazio tra i due è dove vivono retry, duplicati e problemi di ordinamento.",
-          choice: "Rendere ogni consumer una piccola macchina a stati esplicita — leggi, elabora, conferma — e confermare solo quando il lavoro è stato davvero fatto. I retry hanno smesso di essere casi limite e sono diventati parte del design.",
+          choice: "Rendere ogni consumer una piccola macchina a stati esplicita — leggi, elabora, conferma — e confermare solo quando il lavoro è stato davvero fatto. I retry hanno smesso di essere casi limite e sono diventati parte del design. Il costo lo accetto di proposito: se un consumer si ferma dopo il lavoro ma prima della conferma, l'evento torna. La consegna è almeno una volta, quindi ogni handler deve poter girare due volte senza danni.",
           code: "// delivered is not processed\nlet message = stream.read().await?;\nif worker.handle(&message).await? {\n    stream.ack(message.id).await?;\n}",
         },
         {
