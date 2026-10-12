@@ -22,7 +22,7 @@ import { CONTRIBUTIONS, PROJECTS, UI, lang } from "../lib/site";
               <a [routerLink]="['/projects', p.id]" class="card card-link project-card project-lead" appSpotlight>
                 <div class="flex items-start justify-between gap-3">
                   <span class="eyebrow"><span class="eyebrow-index">01</span><span class="eyebrow-rule" aria-hidden="true"></span>{{ lang() === 'it' ? 'In evidenza' : 'Featured' }}</span>
-                  <span class="meta-mono">@if (p.stars) { <span title="GitHub stars">★ {{ p.stars }}</span> · }{{ p.year }}</span>
+                  <span class="meta-mono">@if (showStars(p.stars)) { <span title="GitHub stars">★ {{ p.stars }}</span> · }{{ p.year }}</span>
                 </div>
                 <div class="project-lead-body">
                   <div>
@@ -56,7 +56,7 @@ import { CONTRIBUTIONS, PROJECTS, UI, lang } from "../lib/site";
               <a [routerLink]="['/projects', p.id]" class="card card-link project-card" appSpotlight>
                 <div class="flex items-start justify-between gap-3">
                   <span class="eyebrow-index">0{{ i + 1 }}</span>
-                  <span class="meta-mono">@if (p.stars) { <span title="GitHub stars">★ {{ p.stars }}</span> · }{{ p.year }}</span>
+                  <span class="meta-mono">@if (showStars(p.stars)) { <span title="GitHub stars">★ {{ p.stars }}</span> · }{{ p.year }}</span>
                 </div>
                 <h3 class="project-name mt-10">{{ p.name }}</h3>
                 <p class="mt-2.5 flex-1 text-small text-muted">{{ p.blurb }}</p>
@@ -110,6 +110,11 @@ export class ProjectsComponent {
     lang();
     return CONTRIBUTIONS.filter((c) => c.status !== "Published");
   });
+
+  /** A handful of stars reads as a negative signal on a card, so they show from ten up. */
+  protected showStars(stars: number | undefined) {
+    return (stars ?? 0) >= 10;
+  }
 
   protected isPublished(name: string) {
     return CONTRIBUTIONS.some((c) => c.status === "Published" && c.title === name);
