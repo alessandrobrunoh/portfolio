@@ -153,6 +153,17 @@ export const IT: SiteData = {
       featured: true,
       year: "2026",
       stack: ["Bevy", "SpacetimeDB", "WebAssembly", "Stato distribuito"],
+      gallery: [
+        { src: "/projects/eivar/select-character-ui.webp", alt: "Selezione del personaggio di Eivar Online sull'illustrazione del gioco" },
+        { src: "/projects/eivar/crafting.webp", alt: "Crafting dal fabbro: ricette e materiali che servono per un'ascia" },
+        { src: "/projects/eivar/gathering.webp", alt: "Raccolta del legno da una quercia, con la barra di canalizzazione" },
+        { src: "/projects/eivar/loot-system.webp", alt: "Finestra del loot dopo un'uccisione: oro e legno da raccogliere" },
+        { src: "/projects/eivar/inscriptions.webp", alt: "Iscrizioni su una spada: un elemento per l'arma e parole che cambiano ogni abilità" },
+        { src: "/projects/eivar/item-example.webp", alt: "Statistiche di una staffa da mago accanto a equipaggiamento e inventario" },
+        { src: "/projects/eivar/in-game-market.webp", alt: "Acquisto di una staffa da mago al Market 1 dentro il gioco" },
+        { src: "/projects/eivar/website-market.webp", alt: "Lo stesso order book del Market 1 sul sito di Eivar" },
+        { src: "/projects/eivar/game-ui.webp", alt: "Campo di allenamento con i bersagli e la barra delle abilità" },
+      ],
       highlights: [
         "Simulazione server-authoritative con predizione lato client",
         "Stato replicato tramite un modulo SpacetimeDB compilato in WebAssembly",

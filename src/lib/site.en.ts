@@ -149,6 +149,17 @@ export const EN: SiteData = {
       featured: true,
       year: "2026",
       stack: ["Bevy", "SpacetimeDB", "WebAssembly", "Distributed state"],
+      gallery: [
+        { src: "/projects/eivar/select-character-ui.webp", alt: "Eivar Online character select screen over the game's key art" },
+        { src: "/projects/eivar/crafting.webp", alt: "Crafting at the blacksmith: recipe list and the materials an axe needs" },
+        { src: "/projects/eivar/gathering.webp", alt: "Gathering wood from an oak tree, with the channel bar running" },
+        { src: "/projects/eivar/loot-system.webp", alt: "Loot window after a kill: gold and a wood drop to take" },
+        { src: "/projects/eivar/inscriptions.webp", alt: "Inscriptions on a sword: an element for the weapon and words that change each ability" },
+        { src: "/projects/eivar/item-example.webp", alt: "A mage staff's stats next to the equipment and inventory panels" },
+        { src: "/projects/eivar/in-game-market.webp", alt: "Buying a mage staff at Market 1 from inside the game" },
+        { src: "/projects/eivar/website-market.webp", alt: "The same Market 1 order book on the Eivar website" },
+        { src: "/projects/eivar/game-ui.webp", alt: "Training ground with target dummies and the ability bar" },
+      ],
       highlights: [
         "Server-authoritative simulation with client-side prediction",
         "Replicated state through a SpacetimeDB module compiled to WebAssembly",

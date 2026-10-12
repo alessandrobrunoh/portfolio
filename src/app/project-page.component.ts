@@ -81,8 +81,8 @@ const PAGE_META = [
                   </ol>
                   @if (gallery().length) {
                     <div class="mt-8 grid gap-4 sm:grid-cols-2">
-                      @for (shot of gallery(); track shot.src) {
-                        <figure class="overflow-hidden rounded-lg border border-line bg-surface">
+                      @for (shot of gallery(); track shot.src; let first = $first) {
+                        <figure [class]="'overflow-hidden rounded-lg border border-line bg-surface' + (first ? ' sm:col-span-2' : '')">
                           <img [src]="shot.src" [alt]="shot.alt" loading="lazy" decoding="async" class="block h-auto w-full" />
                         </figure>
                       }
