@@ -35,3 +35,5 @@ yarn-error.log*
 
 # Playwright MCP artifacts
 .playwright-mcp/
+.delta/
+.agents/plans/
