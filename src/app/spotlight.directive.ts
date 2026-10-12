@@ -34,7 +34,8 @@ export class SpotlightDirective implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    cancelAnimationFrame(this.frame);
+    // Nothing was scheduled on the server, where cancelAnimationFrame does not exist.
+    if (this.frame) cancelAnimationFrame(this.frame);
     this.cleanup?.();
   }
 }

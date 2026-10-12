@@ -123,6 +123,7 @@ export class CaseStudyPageComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngAfterViewInit() {
+    if (typeof document === "undefined") return;
     const sections = ["overview", "problem", "built", "decisions", "impact", "lesson"]
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);

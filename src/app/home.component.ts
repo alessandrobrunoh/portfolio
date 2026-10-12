@@ -83,6 +83,7 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnInit() {
     this.title.setTitle("Alessandro Bruno — Software Engineer");
+    if (typeof document === "undefined") return;
     const ids = TOC.map((item) => item.href.slice(1));
     const els = ids.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => el !== null);
     if (els.length === 0) return;
@@ -111,6 +112,7 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   private setupRevealObserver() {
+    if (typeof document === "undefined") return;
     const revealItems = Array.from(document.querySelectorAll<HTMLElement>(".reveal-on-scroll"));
     if (revealItems.length === 0) return;
     if (!("IntersectionObserver" in window)) {

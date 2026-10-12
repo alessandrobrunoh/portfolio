@@ -334,7 +334,6 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
   });
 
   ngOnInit() {
-    if (!isPlatformBrowser(this.platformId)) return;
     const current = this.project();
     this.title.setTitle(current ? `${current.name} · Alessandro Bruno` : "Project not found · Alessandro Bruno");
     if (!current) return;
@@ -350,6 +349,8 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
     this.meta.updateTag({ property: "og:url", content: url });
     this.meta.updateTag({ name: "twitter:title", content: `${current.name} · Alessandro Bruno` });
     this.meta.updateTag({ name: "twitter:description", content: description });
+    // Title and share tags are prerendered with the page; GitHub stats are fetched in the browser only.
+    if (!isPlatformBrowser(this.platformId)) return;
     // The page renders from static data at once; GitHub stats fill in when (and if) they arrive.
     this.loading.set(true);
     this.timeout = setTimeout(() => this.loading.set(false), 6500);
@@ -371,7 +372,7 @@ export class ProjectPageComponent implements AfterViewInit, OnDestroy {
   }
 
   private setupObserver() {
-    if (this.observer) return;
+    if (this.observer || typeof document === "undefined") return;
     const sections = ["overview", "problem", "built", "decisions", "impact", "lesson", "story", "metrics", "diff"]
       .map((id) => document.getElementById(id))
       .filter((section): section is HTMLElement => section !== null);

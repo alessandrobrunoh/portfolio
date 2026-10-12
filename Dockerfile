@@ -16,13 +16,13 @@ COPY . .
 RUN npm run build
 
 # ---- runtime --------------------------------------------------------------
-# The app is a client-rendered SPA (vite.config.ts sets `analog({ ssr: false })`),
-# so nginx serving dist/client is the whole story — no Node process at runtime.
+# Every route is prerendered to static HTML at build time (vite.config.ts), so
+# nginx serving dist/analog/public is the whole story — no Node process at runtime.
 FROM nginx:1.29-alpine AS runtime
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY nginx-security.conf /etc/nginx/snippets/security.conf
-COPY --from=build /app/dist/client /usr/share/nginx/html
+COPY --from=build /app/dist/analog/public /usr/share/nginx/html
 
 # nginx:alpine ships an unprivileged variant of the config; port 8080 needs no root.
 EXPOSE 8080
