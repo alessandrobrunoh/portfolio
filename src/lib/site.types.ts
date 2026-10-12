@@ -107,6 +107,8 @@ export interface Project {
   href: string;
   /** Live deployment, if the project has one. */
   demo?: string;
+  /** Screenshots under public/projects/<id>/, shown after "What I built". */
+  gallery?: { src: string; alt: string }[];
   /** Real star count, wired from GITHUB_STATS at the data layer. */
   stars?: number;
   lang: string;

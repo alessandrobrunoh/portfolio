@@ -35,5 +35,8 @@ yarn-error.log*
 
 # Playwright MCP artifacts
 .playwright-mcp/
+
+# Local tool state: npm cache, Delta workspaces, agent plans
+.npm-cache/
 .delta/
 .agents/plans/

@@ -1489,6 +1489,11 @@ html.theme-vt::view-transition-new(root) {
     grid-column: 1 / -1;
   }
 
+  /* With an odd number of cards after the lead, the last one takes the whole row. */
+  .project-grid > li:last-child:nth-child(even) {
+    grid-column: 1 / -1;
+  }
+
   /* Work entrance: each card rises with a slight scale; inside, highlights and chips follow. */
   .project-grid > li.reveal-on-scroll {
     transform: translateY(1.5rem) scale(0.97);
