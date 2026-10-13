@@ -19,8 +19,8 @@ import { CONTRIBUTIONS, EDUCATION, PROFILE, STACK, UI, lang } from "../lib/site"
           <!-- The grid answers the pointer: a blue lens follows it and the cells it crosses light up and fade. -->
           <div class="hero-grid">
             <div #plane class="hero-grid-plane">
-              <span class="hero-grid-pulse"></span>
-              <span class="hero-grid-lens"></span>
+              <span class="hero-grid-pulse"><span class="hero-grid-pulse-lines"></span></span>
+              <span #lens class="hero-grid-lens"><span #lensLines class="hero-grid-lens-lines"></span></span>
             </div>
           </div>
         </div>
@@ -146,49 +146,88 @@ export class IntroComponent implements AfterViewInit, OnDestroy {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly zone = inject(NgZone);
   private readonly plane = viewChild<ElementRef<HTMLElement>>("plane");
+  private readonly lens = viewChild<ElementRef<HTMLElement>>("lens");
+  private readonly lensLines = viewChild<ElementRef<HTMLElement>>("lensLines");
   private cleanup: (() => void) | null = null;
 
   /**
-   * Grid hover: the lens follows the pointer (CSS vars on the plane) and every 64px cell the pointer
-   * enters gets a short-lived highlight that fades out, leaving a trail. Mouse and pen only.
+   * Grid hover: a blue lens follows the pointer and every 64px cell it enters gets a short-lived
+   * highlight that fades out, leaving a trail. The lens disc's mask is fixed (rasterized once);
+   * each coalesced frame the disc translates to the pointer and the blue lines inside
+   * counter-translate, so the lit lattice stays aligned while only compositor transforms change.
+   * Mouse and pen only, and the whole effect runs outside Angular.
    */
   ngAfterViewInit() {
     if (typeof window === "undefined" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const hero = this.host.nativeElement.querySelector<HTMLElement>(".hero");
     const plane = this.plane()?.nativeElement;
-    if (!hero || !plane) return;
+    const lens = this.lens()?.nativeElement;
+    const lines = this.lensLines()?.nativeElement;
+    if (!hero || !plane || !lens || !lines) return;
+    const CELL = 64;
+    // A whole number of cells, so the offset lines still land on the plane's lattice.
+    const OVERSCAN = CELL * 3;
+    let half = lens.offsetWidth / 2;
+    let docLeft = 0;
+    let docTop = 0;
     let lastCell = "";
-    const move = (event: PointerEvent) => {
-      if (event.pointerType === "touch") return;
+    let frame = 0;
+    let pending: PointerEvent | null = null;
+    const measure = () => {
       const rect = plane.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      plane.style.setProperty("--mx", `${x}px`);
-      plane.style.setProperty("--my", `${y}px`);
+      docLeft = rect.left + window.scrollX;
+      docTop = rect.top + window.scrollY;
+      half = lens.offsetWidth / 2;
+      lines.style.width = `${Math.ceil(rect.width) + OVERSCAN * 2}px`;
+      lines.style.height = `${Math.ceil(rect.height) + OVERSCAN * 2}px`;
+    };
+    const render = () => {
+      frame = 0;
+      const event = pending;
+      if (!event) return;
+      // pageX/Y keeps the cached document-relative origin valid while the page scrolls.
+      const x = event.pageX - docLeft;
+      const y = event.pageY - docTop;
+      const dx = Math.round(x - half);
+      const dy = Math.round(y - half);
+      lens.style.transform = `translate(${dx}px, ${dy}px)`;
+      lines.style.transform = `translate(${-dx}px, ${-dy}px)`;
       plane.classList.add("is-hovering");
-      const cx = Math.floor(x / 64);
-      const cy = Math.floor(y / 64);
+      const cx = Math.floor(x / CELL);
+      const cy = Math.floor(y / CELL);
       const key = `${cx}:${cy}`;
       if (key === lastCell) return;
       lastCell = key;
+      if (plane.querySelectorAll(".grid-cell").length >= 24) return;
       const cell = document.createElement("span");
       cell.className = "grid-cell";
-      cell.style.left = `${cx * 64}px`;
-      cell.style.top = `${cy * 64}px`;
+      cell.style.left = `${cx * CELL}px`;
+      cell.style.top = `${cy * CELL}px`;
       cell.addEventListener("animationend", () => cell.remove(), { once: true });
       plane.appendChild(cell);
+    };
+    const move = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      pending = event;
+      if (!frame) frame = requestAnimationFrame(render);
     };
     const leave = () => {
       plane.classList.remove("is-hovering");
       lastCell = "";
     };
+    measure();
     this.zone.runOutsideAngular(() => {
+      hero.addEventListener("pointerenter", measure);
       hero.addEventListener("pointermove", move);
       hero.addEventListener("pointerleave", leave);
+      window.addEventListener("resize", measure);
     });
     this.cleanup = () => {
+      if (frame) cancelAnimationFrame(frame);
+      hero.removeEventListener("pointerenter", measure);
       hero.removeEventListener("pointermove", move);
       hero.removeEventListener("pointerleave", leave);
+      window.removeEventListener("resize", measure);
     };
   }
 
