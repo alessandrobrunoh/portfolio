@@ -866,6 +866,7 @@ html.theme-vt::view-transition-new(root) {
   }
 
   .hero-grid-plane {
+    container-type: size;
     position: absolute;
     inset: 0;
     background-image:
@@ -874,30 +875,55 @@ html.theme-vt::view-transition-new(root) {
     background-size: 64px 64px;
   }
 
-  .hero-grid-pulse,
-  .hero-grid-lens {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgb(59 130 246 / 0.35) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(59 130 246 / 0.35) 1px, transparent 1px);
-    background-size: 64px 64px;
-  }
-
+  /* The pulse and the lens are discs with a FIXED mask (rasterized once) that hold the plane's
+     blue lines. Each glides via transform only; the lines inside counter-translate, so the lit
+     lattice stays aligned with the gray grid while nothing repaints. See IntroComponent. */
   .hero-grid-pulse {
-    -webkit-mask-image: radial-gradient(circle 14rem at var(--px, 60%) var(--py, 40%), #000, transparent 70%);
-    mask-image: radial-gradient(circle 14rem at var(--px, 60%) var(--py, 40%), #000, transparent 70%);
-    animation: grid-pulse 14s ease-in-out infinite alternate;
+    --lines-ink: rgb(59 130 246 / 0.35);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 28rem;
+    height: 28rem;
+    -webkit-mask-image: radial-gradient(circle 14rem at center, #000, transparent 70%);
+    mask-image: radial-gradient(circle 14rem at center, #000, transparent 70%);
+    animation: grid-pulse-window 14s ease-in-out infinite alternate;
+    will-change: transform;
   }
 
   .hero-grid-lens {
-    background-image:
-      linear-gradient(rgb(59 130 246 / 0.7) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(59 130 246 / 0.7) 1px, transparent 1px);
-    -webkit-mask-image: radial-gradient(circle 10rem at var(--mx, -20rem) var(--my, -20rem), #000, transparent 72%);
-    mask-image: radial-gradient(circle 10rem at var(--mx, -20rem) var(--my, -20rem), #000, transparent 72%);
+    --lines-ink: rgb(59 130 246 / 0.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20rem;
+    height: 20rem;
+    -webkit-mask-image: radial-gradient(circle 10rem at center, #000, transparent 72%);
+    mask-image: radial-gradient(circle 10rem at center, #000, transparent 72%);
     opacity: 0;
     transition: opacity var(--motion-emphasis) var(--ease-out-quart);
+    will-change: transform;
+  }
+
+  /* Oversized by three cells per side so every disc position stays covered, and offset by a
+   whole number of cells so the lattice still lands on the gray grid. The pulse sizes itself in
+   container units (percent of the plane); the lens is sized by IntroComponent. */
+  .hero-grid-pulse-lines,
+  .hero-grid-lens-lines {
+    position: absolute;
+    top: -192px;
+    left: -192px;
+    background-image:
+      linear-gradient(var(--lines-ink) 1px, transparent 1px),
+      linear-gradient(90deg, var(--lines-ink) 1px, transparent 1px);
+    background-size: 64px 64px;
+    will-change: transform;
+  }
+
+  .hero-grid-pulse-lines {
+    width: calc(100cqw + 384px);
+    height: calc(100cqh + 384px);
+    animation: grid-pulse-lines 14s ease-in-out infinite alternate;
   }
 
   .hero-grid-plane.is-hovering .hero-grid-lens {
@@ -3223,17 +3249,6 @@ html.theme-vt::view-transition-new(root) {
 }
 
 /* ---------- Motion ---------- */
-@property --px {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 60%;
-}
-
-@property --py {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 40%;
-}
 
 @keyframes data-rise {
   from { transform: scaleX(0); opacity: 0.4; }
@@ -3357,10 +3372,17 @@ html.theme-vt::view-transition-new(root) {
   100% { opacity: 0; transform: scale(1); }
 }
 
-@keyframes grid-pulse {
-  0% { --px: 58%; --py: 30%; }
-  50% { --px: 86%; --py: 62%; }
-  100% { --px: 66%; --py: 78%; }
+@keyframes grid-pulse-window {
+  0% { transform: translate(calc(58cqw - 14rem), calc(30cqh - 14rem)); }
+  50% { transform: translate(calc(86cqw - 14rem), calc(62cqh - 14rem)); }
+  100% { transform: translate(calc(66cqw - 14rem), calc(78cqh - 14rem)); }
+}
+
+/* The pulse's lines run opposite its window, keeping the lattice document-fixed. */
+@keyframes grid-pulse-lines {
+  0% { transform: translate(calc(14rem - 58cqw), calc(14rem - 30cqh)); }
+  50% { transform: translate(calc(14rem - 86cqw), calc(14rem - 62cqh)); }
+  100% { transform: translate(calc(14rem - 66cqw), calc(14rem - 78cqh)); }
 }
 
 @keyframes mark-float {
