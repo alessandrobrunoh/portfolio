@@ -1,79 +1,173 @@
-import { Component } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, OnDestroy, inject, signal } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { IconComponent } from "./icon.component";
-import { ToolsComponent } from "./tools.component";
 import { PROFILE, TOC, lang } from "../lib/site";
 
 @Component({
   selector: "app-footer",
   standalone: true,
-  imports: [IconComponent, RouterLink, ToolsComponent],
+  imports: [IconComponent, RouterLink],
   template: `
-    <footer class="site-footer dark">
-      <div class="container-x">
-        <app-tools />
+    <footer class="site-footer" [class.is-expanded]="expanded()">
+      <div class="site-footer-shell">
+        <div class="footer-card">
+          <div class="footer-grid">
+            <!-- Left Column: Brand Identity & Descriptive Closing -->
+            <div class="footer-brand-col">
+              <div class="flex items-center gap-3.5">
+                <a href="#intro" class="footer-mark-link" [attr.aria-label]="profile.name">
+                  <img class="footer-logo dark:hidden" src="/brand/ab-monogram.webp" alt="" width="160" height="111" loading="lazy" />
+                  <img class="footer-logo hidden dark:block" src="/brand/ab-monogram-white-160.webp" alt="" width="160" height="111" loading="lazy" />
+                </a>
+                <div>
+                  <p class="brand-wordmark text-caption text-fg">{{ profile.name }}</p>
+                  <p class="mt-0.5 font-mono text-caption text-accent">
+                    {{ lang() === 'it' ? 'Ingegnere del Software Full-Spectrum' : 'Full-Spectrum Software Engineer' }}
+                  </p>
+                </div>
+              </div>
 
-        <!-- End of page: the white monogram and a sign-off (the footer is always dark), not a second contact form. -->
-        <div class="footer-main">
-          <div>
-            <img class="footer-logo" src="/brand/ab-monogram-white.webp" [alt]="profile.name" width="480" height="333" loading="lazy" />
+              <h3 class="mt-5 text-title font-semibold tracking-tight text-fg">
+                {{
+                  lang() === 'it'
+                    ? 'Costruisco sistemi che restano chiari, veloci e affidabili in produzione'
+                    : 'Building systems that stay clear, fast, and reliable in production'
+                }}<span class="brand-dot" aria-hidden="true">.</span>
+              </h3>
+
+              <p class="mt-2.5 max-w-xl text-body text-muted leading-relaxed">
+                {{
+                  lang() === 'it'
+                    ? 'Dagli agenti AI e server MCP in Rust alle architetture distribuite event-driven, fino alle interfacce web/mobile e alle simulazioni multiplayer. Se stai cercando qualcuno che segua un prodotto da capo a capo, parliamone.'
+                    : 'From AI agents and Rust MCP servers to event-driven distributed backends, web/mobile interfaces, and multiplayer simulations. If you need someone who can own a system end to end, let’s talk.'
+                }}
+              </p>
+
+              <div class="mt-6 flex flex-wrap items-center gap-3">
+                <a [href]="'mailto:' + profile.email" class="btn btn-primary">
+                  <svg appIcon="mail" class="size-4"></svg>
+                  <span>{{ profile.email }}</span>
+                </a>
+                <a href="/alessandro-bruno-cv.pdf" download class="btn btn-ghost">
+                  <svg appIcon="download" class="size-4"></svg>
+                  <span>{{ lang() === 'it' ? 'Scarica il CV (PDF)' : 'Download CV (PDF)' }}</span>
+                </a>
+                <button type="button" (click)="openShortcuts()" class="btn btn-ghost">
+                  <span>{{ lang() === 'it' ? 'Scorciatoie' : 'Shortcuts' }}</span>
+                  <kbd class="kbd-cap ml-0.5">?</kbd>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Columns: Structured Sitemap & Direct Channels -->
+            <div class="footer-links-grid">
+              <div>
+                <p class="font-mono text-micro uppercase tracking-wider text-faint">
+                  {{ lang() === 'it' ? 'Navigazione' : 'Navigation' }}
+                </p>
+                <ul class="mt-3 space-y-2.5 text-small">
+                  @for (item of toc; track item.href) {
+                    <li>
+                      <a [href]="'/' + item.href" class="footer-nav-link">
+                        <span class="font-mono text-caption text-accent">{{ item.n }}</span>
+                        <span>{{ item.label }}</span>
+                      </a>
+                    </li>
+                  }
+                </ul>
+              </div>
+
+              <div>
+                <p class="font-mono text-micro uppercase tracking-wider text-faint">
+                  {{ lang() === 'it' ? 'Risorse & Profili' : 'Resources & Profiles' }}
+                </p>
+                <ul class="mt-3 space-y-2.5 text-small">
+                  <li>
+                    <a routerLink="/brand" class="footer-nav-link">
+                      <span>ab. Brand Guidelines</span>
+                      <svg appIcon="arrow-up-right" class="size-3.5 text-faint"></svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a [href]="profile.github" target="_blank" rel="noreferrer" class="footer-nav-link">
+                      <span>GitHub</span>
+                      <svg appIcon="arrow-up-right" class="size-3.5 text-faint"></svg>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/alessandro-bruno-cv.pdf" download class="footer-nav-link">
+                      <span>{{ lang() === 'it' ? 'Curriculum Vitae' : 'Resume / CV' }}</span>
+                      <svg appIcon="download" class="size-3.5 text-faint"></svg>
+                    </a>
+                  </li>
+                  @if (profile.x) {
+                    <li>
+                      <a [href]="'https://x.com/' + profile.x" target="_blank" rel="noreferrer" class="footer-nav-link">
+                        <span>X / &#64;{{ profile.x }}</span>
+                        <svg appIcon="arrow-up-right" class="size-3.5 text-faint"></svg>
+                      </a>
+                    </li>
+                  }
+                </ul>
+              </div>
+            </div>
           </div>
-          <div class="min-w-0">
-            <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span>{{ lang() === 'it' ? 'Sei arrivato alla fine' : 'End of stream' }}</p>
-            <p class="mt-4 text-title font-medium tracking-tight text-fg">
-              {{ lang() === 'it' ? 'Grazie per aver letto fino a qui.' : 'Thanks for reading all the way down.' }}
-            </p>
-            <p class="mt-2 max-w-prose text-body text-muted">
-              {{
-                lang() === 'it'
-                  ? 'Se quello che hai visto somiglia a ciò che serve al tuo team, il CV ha la versione in una pagina.'
-                  : 'If this looks like what your team needs, the CV has the one-page version.'
-              }}
-            </p>
-          </div>
-          <div class="flex flex-wrap gap-2 lg:flex-col">
-            <a href="/alessandro-bruno-cv.pdf" download class="btn btn-primary">
-              <svg appIcon="download" class="size-4"></svg>
-              {{ lang() === 'it' ? 'Scarica il CV' : 'Download CV' }}
-            </a>
-            <button type="button" (click)="scrollToTop()" class="btn btn-ghost">
-              <svg appIcon="arrow-up" class="size-4"></svg>
-              {{ lang() === 'it' ? 'Torna in cima' : 'Back to top' }}
+
+          <div class="footer-bottom">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="live-dot" aria-hidden="true"></span>
+              <span>© {{ year }} {{ profile.name }} · {{ profile.location }}</span>
+            </div>
+
+            <button type="button" (click)="scrollToTop()" class="footer-top-btn">
+              <span>{{ lang() === 'it' ? 'Torna all’inizio' : 'Back to top' }}</span>
+              <svg appIcon="arrow-up" class="size-3.5"></svg>
             </button>
           </div>
-        </div>
-
-        <!-- The wordmark, as the brand asks for in footers: Inter Light, uppercase, wide tracking, white on dark. -->
-        <p class="footer-giant reveal-on-scroll" aria-hidden="true">
-          @for (ch of letters; track $index) { <span [style.--i]="$index">{{ ch === ' ' ? '\u00a0' : ch }}</span> }
-        </p>
-
-        <div class="footer-bottom">
-          <span>© {{ year }} {{ profile.name }} · {{ profile.location }}</span>
-          <nav class="flex flex-wrap gap-x-5 gap-y-2" [attr.aria-label]="lang() === 'it' ? 'Sezioni' : 'Sections'">
-            @for (item of toc; track item.href) {
-              @if (item.href !== '#intro') { <a [href]="'/' + item.href">{{ item.label }}</a> }
-            }
-          </nav>
-          <span class="flex gap-5">
-            <a routerLink="/brand">Brand</a>
-            <a [href]="'mailto:' + profile.email">Email</a>
-            <a [href]="profile.github" target="_blank" rel="noreferrer">GitHub</a>
-          </span>
         </div>
       </div>
     </footer>
   `,
 })
-export class FooterComponent {
+export class FooterComponent implements AfterViewInit, OnDestroy {
   protected readonly profile = PROFILE;
   protected readonly lang = lang;
   protected readonly toc = TOC;
-  /** The wordmark letter by letter, so it can type itself in when the footer arrives. */
-  protected readonly letters = PROFILE.name.split("");
   protected readonly year = new Date().getFullYear();
+  protected readonly expanded = signal(false);
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private observer: IntersectionObserver | null = null;
+
+  ngAfterViewInit() {
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
+      this.expanded.set(true);
+      return;
+    }
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          this.expanded.set(entry.isIntersecting && entry.intersectionRatio >= 0.25);
+        }
+      },
+      { threshold: [0, 0.25, 0.55] },
+    );
+    this.observer.observe(this.host.nativeElement);
+  }
+
+  ngOnDestroy() {
+    this.observer?.disconnect();
+  }
 
   scrollToTop() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
+  openShortcuts() {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new KeyboardEvent("keydown", { key: "?" }));
+    }
   }
 }
