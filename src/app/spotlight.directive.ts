@@ -2,8 +2,8 @@ import { Directive, ElementRef, NgZone, OnDestroy, OnInit, inject } from "@angul
 
 /**
  * A soft light that follows the pointer across a card. Writes --mx/--my on the host; the
- * `.card[data-spotlight]::before` gradient does the rest. Mouse and pen only, off under
- * prefers-reduced-motion, and outside Angular so pointermove never runs change detection.
+ * `.card[data-spotlight]::before` gradient does the rest. Caches the bounding rect on
+ * pointerenter so pointermove never forces a synchronous layout reflow.
  */
 @Directive({
   selector: "[appSpotlight]",
@@ -20,21 +20,45 @@ export class SpotlightDirective implements OnInit, OnDestroy {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const node = this.el.nativeElement;
+    let rect: DOMRect | null = null;
+    let lastX = 0;
+    let lastY = 0;
+
+    const enter = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      rect = node.getBoundingClientRect();
+    };
+
     const move = (event: PointerEvent) => {
       if (event.pointerType === "touch") return;
-      cancelAnimationFrame(this.frame);
+      lastX = event.clientX;
+      lastY = event.clientY;
+      if (this.frame) return;
       this.frame = requestAnimationFrame(() => {
-        const rect = node.getBoundingClientRect();
-        node.style.setProperty("--mx", `${event.clientX - rect.left}px`);
-        node.style.setProperty("--my", `${event.clientY - rect.top}px`);
+        this.frame = 0;
+        if (!rect) rect = node.getBoundingClientRect();
+        node.style.setProperty("--mx", `${Math.round(lastX - rect.left)}px`);
+        node.style.setProperty("--my", `${Math.round(lastY - rect.top)}px`);
       });
     };
-    this.zone.runOutsideAngular(() => node.addEventListener("pointermove", move));
-    this.cleanup = () => node.removeEventListener("pointermove", move);
+
+    const leave = () => {
+      rect = null;
+    };
+
+    this.zone.runOutsideAngular(() => {
+      node.addEventListener("pointerenter", enter, { passive: true });
+      node.addEventListener("pointermove", move, { passive: true });
+      node.addEventListener("pointerleave", leave, { passive: true });
+    });
+    this.cleanup = () => {
+      node.removeEventListener("pointerenter", enter);
+      node.removeEventListener("pointermove", move);
+      node.removeEventListener("pointerleave", leave);
+    };
   }
 
   ngOnDestroy() {
-    // Nothing was scheduled on the server, where cancelAnimationFrame does not exist.
     if (this.frame) cancelAnimationFrame(this.frame);
     this.cleanup?.();
   }

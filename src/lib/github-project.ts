@@ -28,6 +28,7 @@ interface GithubTreeEntry {
 
 interface GithubTree {
   tree: GithubTreeEntry[];
+  truncated?: boolean;
 }
 
 interface GithubCommitSummary {
@@ -39,13 +40,105 @@ interface GithubCommitDetail {
   files?: Array<{ filename: string; status: string; additions: number; deletions: number; patch?: string }>;
 }
 
+/** Strictly human-authored programming & stylesheet extensions (excludes .ron/.json/.yaml data tables & game assets). */
 const SOURCE_EXTENSIONS = new Set([
-  "c", "cc", "cpp", "css", "go", "h", "hpp", "html", "java", "js", "jsx", "kt", "m", "mdx", "php", "py", "rb", "rs", "scss", "sh", "sql", "swift", "ts", "tsx", "vue",
+  "astro",
+  "c",
+  "cc",
+  "cpp",
+  "cs",
+  "css",
+  "dart",
+  "gd",
+  "glsl",
+  "go",
+  "graphql",
+  "h",
+  "hpp",
+  "html",
+  "java",
+  "js",
+  "jsx",
+  "kt",
+  "kts",
+  "lua",
+  "m",
+  "mjs",
+  "cjs",
+  "php",
+  "prisma",
+  "proto",
+  "py",
+  "rb",
+  "rs",
+  "scala",
+  "scss",
+  "sh",
+  "sql",
+  "svelte",
+  "swift",
+  "toml",
+  "ts",
+  "tsx",
+  "vue",
+  "wgsl",
+  "wit",
+  "zig",
 ]);
-const EXCLUDED_PARTS = [".git/", "node_modules/", "dist/", "build/", "target/", "vendor/", "coverage/", "generated/", "fixtures/", "__snapshots__/"];
-const EXCLUDED_NAMES = new Set(["package-lock.json", "pnpm-lock.yaml", "yarn.lock", "Cargo.lock", "go.sum"]);
-const MAX_FILES = 40;
-const MAX_FILE_BYTES = 700_000;
+
+const EXCLUDED_SEGMENTS = new Set([
+  ".git",
+  ".github",
+  "node_modules",
+  "dist",
+  "build",
+  "out",
+  "target",
+  "pkg",
+  "wasm",
+  "vendor",
+  "third_party",
+  "external",
+  "deps",
+  "coverage",
+  "generated",
+  "gen",
+  "fixtures",
+  "testdata",
+  "snapshots",
+  "__snapshots__",
+  ".angular",
+  ".nx",
+  ".next",
+  ".svelte-kit",
+  "assets",
+  "public",
+  "static",
+  "resources",
+  "data",
+  "datasets",
+  "seeds",
+  "dumps",
+  "docs",
+]);
+
+const EXCLUDED_NAMES = new Set([
+  "package-lock.json",
+  "pnpm-lock.yaml",
+  "yarn.lock",
+  "cargo.lock",
+  "go.sum",
+  "bun.lockb",
+  "composer.lock",
+  "poetry.lock",
+  "uv.lock",
+]);
+
+const EXACT_READ_LIMIT = 140;
+const MAX_SOURCE_FILE_BYTES = 180_000;
+
+/** Session-level cache so re-opening a project page is instantaneous and avoids GitHub rate limits. */
+const STATS_CACHE = new Map<string, GithubProjectStats>();
 
 function repoFromUrl(href: string) {
   const match = href.match(/^https?:\/\/github\.com\/([^/]+)\/([^/#?]+)/);
@@ -54,16 +147,42 @@ function repoFromUrl(href: string) {
 
 function isUsefulSource(path: string, size = 0) {
   const lower = path.toLowerCase();
-  if (size > MAX_FILE_BYTES || EXCLUDED_NAMES.has(path.split("/").pop() ?? "")) return false;
-  if (EXCLUDED_PARTS.some((part) => lower.includes(part))) return false;
-  const file = path.split("/").pop() ?? "";
-  if (file.startsWith(".") || file.includes(".min.")) return false;
-  const extension = file.includes(".") ? file.slice(file.lastIndexOf(".") + 1).toLowerCase() : "";
-  return SOURCE_EXTENSIONS.has(extension) && !lower.includes("/test") && !lower.includes("spec.");
+  const segments = lower.split("/");
+  const file = segments[segments.length - 1] ?? "";
+  if (size <= 0 || size > MAX_SOURCE_FILE_BYTES || EXCLUDED_NAMES.has(file)) return false;
+
+  // Exclude any path inside build, compilation, asset, or vendor directories
+  for (let i = 0; i < segments.length - 1; i++) {
+    const seg = segments[i];
+    if (EXCLUDED_SEGMENTS.has(seg) || seg.startsWith(".")) return false;
+  }
+
+  if (
+    file.startsWith(".") ||
+    file.includes(".min.") ||
+    file.includes(".bundle.") ||
+    file.includes(".generated.") ||
+    file.endsWith(".pb.rs") ||
+    file.endsWith(".pb.go") ||
+    file.endsWith(".d.ts") ||
+    file.endsWith(".map") ||
+    file.endsWith(".lock")
+  ) {
+    return false;
+  }
+
+  const extension = file.includes(".") ? file.slice(file.lastIndexOf(".") + 1) : "";
+  return SOURCE_EXTENSIONS.has(extension);
 }
 
 function countUsefulLines(source: string) {
-  return source.split(/\r?\n/).filter((line) => {
+  const lines = source.split(/\r?\n/);
+  // Skip auto-generated files
+  const head = lines.slice(0, 5).join(" ").toLowerCase();
+  if (head.includes("auto-generated") || head.includes("do not edit") || head.includes("@generated")) {
+    return 0;
+  }
+  return lines.filter((line) => {
     const trimmed = line.trim();
     return trimmed.length > 0 && !/^(\/\/|#|<!--|\/\*|\*|\*\/)/.test(trimmed);
   }).length;
@@ -117,6 +236,10 @@ async function githubJson<T>(url: string): Promise<T> {
 export async function loadGithubProjectStats(href: string): Promise<GithubProjectStats | null> {
   const repo = repoFromUrl(href);
   if (!repo) return null;
+  const cacheKey = `${repo.owner}/${repo.name}`;
+  const cached = STATS_CACHE.get(cacheKey);
+  if (cached) return cached;
+
   const base = `https://api.github.com/repos/${repo.owner}/${repo.name}`;
   const metadata = await githubJson<GithubRepository>(base);
   const [languageBytes, tree, readme, diff] = await Promise.all([
@@ -131,19 +254,45 @@ export async function loadGithubProjectStats(href: string): Promise<GithubProjec
     .sort(([, a], [, b]) => b - a)
     .slice(0, 5)
     .map(([name, bytes]) => ({ name, bytes, percent: Math.round((bytes / languagesTotal) * 100) }));
-  const files = tree.tree.filter((entry) => entry.type === "blob" && isUsefulSource(entry.path, entry.size)).slice(0, MAX_FILES);
-  const counts = await Promise.all(
-    files.map(async (file) => {
+
+  // Filter strictly real source files (excluding build/target/dist/vendor/assets/generated/large dumps)
+  const allSourceFiles = tree.tree.filter((entry) => entry.type === "blob" && isUsefulSource(entry.path, entry.size));
+  const totalFilesCount = allSourceFiles.length;
+
+  // Read up to 140 files directly from raw.githubusercontent.com (CDN, no API rate limit).
+  // Sort by median sizes first so we don't bias density toward huge data tables.
+  const sortedFiles = [...allSourceFiles].sort((a, b) => (b.size ?? 0) - (a.size ?? 0));
+  const filesToRead = sortedFiles.slice(0, EXACT_READ_LIMIT);
+  const remainingFiles = sortedFiles.slice(EXACT_READ_LIMIT);
+
+  let exactLines = 0;
+  let readBytes = 0;
+
+  await Promise.all(
+    filesToRead.map(async (file) => {
       try {
         const response = await fetch(`https://raw.githubusercontent.com/${repo.owner}/${repo.name}/${metadata.default_branch}/${file.path}`);
-        return response.ok ? countUsefulLines(await response.text()) : 0;
+        if (!response.ok) return;
+        const text = await response.text();
+        const lines = countUsefulLines(text);
+        if (lines > 0) {
+          exactLines += lines;
+          readBytes += file.size ?? text.length;
+        }
       } catch {
-        return 0;
+        // Ignore single file fetch failure
       }
     }),
   );
 
-  return {
+  // If the repo has more than 140 source files, estimate the remaining small files using the measured density
+  // clamped to a realistic range (1 line per 28–55 bytes of source code)
+  const rawDensity = readBytes > 0 ? exactLines / readBytes : 1 / 40;
+  const safeDensity = Math.min(Math.max(rawDensity, 1 / 55), 1 / 28);
+  const remainingBytes = remainingFiles.reduce((acc, f) => acc + (f.size ?? 0), 0);
+  const usefulLines = exactLines + Math.round(remainingBytes * safeDensity);
+
+  const result: GithubProjectStats = {
     description: metadata.description,
     readmeExcerpt: readme,
     latestCommit: diff.latestCommit,
@@ -152,7 +301,10 @@ export async function loadGithubProjectStats(href: string): Promise<GithubProjec
     forks: metadata.forks_count,
     updatedAt: metadata.pushed_at,
     languages,
-    usefulLines: counts.reduce((total, count) => total + count, 0),
-    filesCounted: files.length,
+    usefulLines,
+    filesCounted: totalFilesCount,
   };
+
+  STATS_CACHE.set(cacheKey, result);
+  return result;
 }
