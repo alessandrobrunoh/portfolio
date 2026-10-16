@@ -4,9 +4,9 @@ import type { SiteData } from "./site.types";
 export const EN: SiteData = {
   PROFILE: {
     name: "Alessandro Bruno",
-    role: "Software Engineer — in production",
-    shortRole: "Backend · Web & mobile · Developer tools",
-    headline: "I build the software, and I work out what to build with the people who have to use it.",
+    role: "From AI & backend — to the interface",
+    shortRole: "AI & Agents · Backend Systems · Web & Mobile · Engines",
+    headline: "I study and build across the entire stack — from Rust backends, AI agent workflows, and distributed systems to web interfaces — figuring out what is worth building with the people who use it.",
     location: "Bologna, Italy",
     github: "https://github.com/alessandrobrunoh",
     website: "https://alessandrobrunoh.it",
@@ -14,8 +14,8 @@ export const EN: SiteData = {
     x: "",
     avatar: "/avatar.jpg",
     company: { name: "Luna S.r.l.", href: "https://lunapartner.it" },
-    bio: "I'm a software engineer in Bologna. I get curious about how a system actually works, and I don't like leaving a problem half done. Backend is where I am most at home, and I move to web, mobile or tooling when the problem asks for it. At Luna S.r.l. I work on client software that is already in production. A good part of that job is sitting with the client and deciding, together, what is worth building. On my own time I make the tools I was missing. Trama is the main one. I graduated from the University of Bologna in 2026, with a thesis on real-time telemetry called PETRA.",
-    availability: "Open to Software Engineer and Forward Deployed Engineer roles — backend first, also full-stack or customer-facing. Italy and the rest of Europe, remote or hybrid; available with notice. EU citizen.",
+    bio: "I'm a software engineer in Bologna driven by curiosity: whatever a problem requires — AI agents, distributed Rust backends, web and mobile interfaces, or custom engines — I study it deeply and build it end to end. At Luna S.r.l. I design and ship production software with clients, sitting with them to decide what is actually worth building before writing code. On my own time I build the developer tools and simulations I was missing, led by Trama and Mnemosyne. I graduated from the University of Bologna in 2026 with a thesis on real-time telemetry (PETRA).",
+    availability: "Open to Software Engineer, AI Engineer, and Forward Deployed Engineer roles — full-spectrum across backend, AI tooling, and frontend. Italy and Europe, remote or hybrid; EU citizen.",
   },
 
   TOC: [
@@ -145,7 +145,7 @@ export const EN: SiteData = {
       href: "https://github.com/alessandrobrunoh/Eivar-Online",
       stars: GITHUB_STATS.stars["Eivar-Online"] ?? 0,
       lang: "Rust",
-      meta: "In progress",
+      meta: "Bevy · SpacetimeDB",
       featured: true,
       year: "2026",
       stack: ["Bevy", "SpacetimeDB", "WebAssembly", "Distributed state"],
@@ -276,7 +276,7 @@ export const EN: SiteData = {
       href: "https://github.com/alessandrobrunoh/train-game-test",
       stars: GITHUB_STATS.stars["train-game-test"] ?? 0,
       lang: "Rust",
-      meta: "In progress",
+      meta: "Bevy · LLM Sim",
       featured: true,
       year: "2026",
       stack: ["Bevy", "Deterministic simulation", "SQLite", "LLM"],

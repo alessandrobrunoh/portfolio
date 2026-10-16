@@ -8,9 +8,9 @@ import type { SiteData } from "./site.types";
 export const IT: SiteData = {
   PROFILE: {
     name: "Alessandro Bruno",
-    role: "Software Engineer — in produzione",
-    shortRole: "Backend · Web & mobile · Tool per sviluppatori",
-    headline: "Costruisco il software, e cosa costruire lo decido con chi lo deve usare.",
+    role: "Dall'AI e il backend — fino all'interfaccia",
+    shortRole: "AI & Agenti · Backend · Web & Mobile · Sistemi",
+    headline: "Studio e costruisco su tutto lo stack — dai backend in Rust e workflow per agenti AI fino alle interfacce web e mobile — decidendo cosa ha davvero senso costruire insieme a chi lo usa.",
     location: "Bologna, Italia",
     github: "https://github.com/alessandrobrunoh",
     website: "https://alessandrobrunoh.it",
@@ -18,8 +18,8 @@ export const IT: SiteData = {
     x: "",
     avatar: "/avatar.jpg",
     company: { name: "Luna S.r.l.", href: "https://lunapartner.it" },
-    bio: "Sono un software engineer a Bologna. Mi incuriosisce capire come funziona davvero un sistema, e non mi piace lasciare un problema a metà. Il backend è dove mi trovo meglio, e passo a web, mobile o strumenti quando il problema lo chiede. In Luna S.r.l. lavoro sul software dei clienti, quello già in produzione. Una parte importante del lavoro è sedersi con loro e decidere insieme cosa vale la pena costruire. Per conto mio faccio gli strumenti che mi mancavano. Trama è quello principale. Mi sono laureato all'Università di Bologna nel 2026, con una tesi sulla telemetria in tempo reale: PETRA.",
-    availability: "Disponibile per ruoli da Software Engineer e Forward Deployed Engineer — soprattutto backend, anche full-stack o a contatto con il cliente. Italia e resto d'Europa, da remoto o ibrido; con preavviso. Cittadino UE.",
+    bio: "Sono un software engineer a Bologna spinto dalla curiosità: qualunque cosa richieda un problema — agenti AI, backend distribuiti in Rust, interfacce web e mobile o motori di simulazione — la studio a fondo e la costruisco da capo a capo. In Luna S.r.l. progetto e rilascio software in produzione per i clienti, sedendomi con loro per decidere insieme cosa vale davvero la pena costruire. Nel tempo libero creo gli strumenti che mi mancavano, a partire da Trama e Mnemosyne. Mi sono laureato all'Università di Bologna nel 2026 con la tesi PETRA sulla telemetria real-time.",
+    availability: "Disponibile per ruoli da Software Engineer, AI Engineer e Forward Deployed Engineer — su tutto lo stack tra backend, AI, frontend e sistemi. Italia e resto d'Europa, da remoto o ibrido. Cittadino UE.",
   },
 
   TOC: [
@@ -149,7 +149,7 @@ export const IT: SiteData = {
       href: "https://github.com/alessandrobrunoh/Eivar-Online",
       stars: GITHUB_STATS.stars["Eivar-Online"] ?? 0,
       lang: "Rust",
-      meta: "In corso",
+      meta: "Bevy · SpacetimeDB",
       featured: true,
       year: "2026",
       stack: ["Bevy", "SpacetimeDB", "WebAssembly", "Stato distribuito"],
@@ -286,7 +286,7 @@ export const IT: SiteData = {
       href: "https://github.com/alessandrobrunoh/train-game-test",
       stars: GITHUB_STATS.stars["train-game-test"] ?? 0,
       lang: "Rust",
-      meta: "In corso",
+      meta: "Bevy · LLM Sim",
       featured: true,
       year: "2026",
       stack: ["Bevy", "Simulazione deterministica", "SQLite", "LLM"],
