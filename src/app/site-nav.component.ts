@@ -5,122 +5,138 @@ import { ThemeToggleComponent } from "./theme-toggle.component";
 import { LOGO_SVG, WORDMARK_SVG, copySvg } from "../lib/brand";
 import { PROFILE, TOC, UI, lang, setLanguage, type Lang } from "../lib/site";
 
-/** Fixed top bar on every page: the soft monogram, section links, language, theme, contact. */
+/** Soft Minimal Floating Pill Bar: anchored by the ab. monogram and smooth pill links. */
 @Component({
   selector: "app-site-nav",
   standalone: true,
   imports: [IconComponent, RouterLink, ThemeToggleComponent],
   template: `
     <header class="site-nav" [class.is-scrolled]="scrolled()" [class.is-open]="menuOpen()">
-      <div class="container-x site-nav-inner">
-        <div class="relative">
-          <a
-            #brand
-            [href]="home() ? '#intro' : '/'"
-            class="site-brand"
-            (click)="menuOpen.set(false)"
-            (contextmenu)="openBrandMenu($event)"
-            [attr.aria-haspopup]="'menu'"
-            [attr.aria-expanded]="brandMenu()"
-          >
-            <img class="dark:hidden" src="/brand/ab-monogram-black.webp" alt="" width="160" height="111" />
-            <img class="hidden dark:block" src="/brand/ab-monogram-white-160.webp" alt="" width="160" height="111" />
-            <span class="brand-wordmark hidden xl:inline" aria-hidden="true">{{ profile.name }}</span>
-            <span class="sr-only">{{ profile.name }} — home</span>
-          </a>
-
-          <!-- Right-click (or the context-menu key) on the mark: brand assets, like a product logo. -->
-          @if (brandMenu()) {
-            <div #brandMenuEl class="brand-menu" role="menu" [attr.aria-label]="lang() === 'it' ? 'Risorse del brand' : 'Brand assets'" (keydown)="onMenuKey($event)">
-              <button type="button" role="menuitem" class="brand-menu-item" (click)="copy('logo')">
-                <svg [appIcon]="copied() === 'logo' ? 'check' : 'copy'" class="size-4" [class.text-accent]="copied() === 'logo'"></svg>
-                <span>{{ copied() === 'logo' ? (lang() === 'it' ? 'Copiato' : 'Copied') : (lang() === 'it' ? 'Copia logo come SVG' : 'Copy logo as SVG') }}</span>
-              </button>
-              <button type="button" role="menuitem" class="brand-menu-item" (click)="copy('wordmark')">
-                <svg [appIcon]="copied() === 'wordmark' ? 'check' : 'copy'" class="size-4" [class.text-accent]="copied() === 'wordmark'"></svg>
-                <span>{{ copied() === 'wordmark' ? (lang() === 'it' ? 'Copiato' : 'Copied') : (lang() === 'it' ? 'Copia wordmark come SVG' : 'Copy wordmark as SVG') }}</span>
-              </button>
-              <span class="brand-menu-sep" role="separator"></span>
-              <a role="menuitem" class="brand-menu-item" routerLink="/brand" (click)="closeBrandMenu()">
-                <svg appIcon="book" class="size-4"></svg>
-                <span>{{ lang() === 'it' ? 'Linee guida del brand' : 'Brand guidelines' }}</span>
-                <svg appIcon="arrow-right" class="ml-auto size-3.5 opacity-60"></svg>
-              </a>
-            </div>
-          }
-        </div>
-
-        <nav [attr.aria-label]="lang() === 'it' ? 'Sezioni' : 'Sections'" class="site-nav-links hidden lg:flex">
-          @for (item of links(); track item.href) {
+      <div class="site-nav-inner">
+        <div class="site-nav-pill">
+          <div class="relative flex items-center">
             <a
-              [href]="linkFor(item.href)"
-              class="site-nav-link"
-              [class.is-active]="active() === item.href"
-              [attr.aria-current]="active() === item.href ? 'location' : null"
+              #brand
+              [href]="home() ? '#intro' : '/'"
+              class="site-brand"
+              (click)="menuOpen.set(false)"
+              (contextmenu)="openBrandMenu($event)"
+              [attr.aria-haspopup]="'menu'"
+              [attr.aria-expanded]="brandMenu()"
             >
-              <span class="n">{{ item.n }}</span>{{ item.label }}
+              <img class="dark:hidden" src="/brand/ab-monogram.webp" alt="" width="160" height="111" />
+              <img class="hidden dark:block" src="/brand/ab-monogram-white-160.webp" alt="" width="160" height="111" />
+              <span class="brand-wordmark hidden sm:inline" aria-hidden="true">{{ profile.name }}</span>
+              <span class="sr-only">{{ profile.name }} — home</span>
             </a>
-          }
-        </nav>
 
-        <div class="flex items-center gap-2">
-          <div class="nav-controls">
-            <button
-              type="button"
-              class="nav-ctl lang-roll"
-              (click)="setLang(lang() === 'it' ? 'en' : 'it')"
-              [attr.data-lang]="lang()"
-              [attr.aria-label]="lang() === 'it' ? 'Switch to English' : 'Passa all’italiano'"
-              [attr.title]="lang() === 'it' ? 'Switch to English' : 'Passa all’italiano'"
-            >
-              <svg appIcon="globe" class="lang-roll-globe size-4"></svg>
-              <span class="lang-roll-track" aria-hidden="true"><span lang="en">EN</span><span lang="it">IT</span></span>
-            </button>
-            <span class="nav-controls-sep" aria-hidden="true"></span>
-            <app-theme-toggle />
+            <!-- Right-click (or the context-menu key) on the mark: brand assets, like a product logo. -->
+            @if (brandMenu()) {
+              <div #brandMenuEl class="brand-menu" role="menu" [attr.aria-label]="lang() === 'it' ? 'Risorse del brand' : 'Brand assets'" (keydown)="onMenuKey($event)">
+                <div class="brand-menu-head">ab. Brand Kit</div>
+                <button type="button" role="menuitem" class="brand-menu-item" (click)="copy('logo')">
+                  <svg [appIcon]="copied() === 'logo' ? 'check' : 'copy'" class="size-4" [class.text-accent]="copied() === 'logo'"></svg>
+                  <span>{{ copied() === 'logo' ? (lang() === 'it' ? 'Copiato' : 'Copied') : (lang() === 'it' ? 'Copia logo come SVG' : 'Copy logo as SVG') }}</span>
+                </button>
+                <button type="button" role="menuitem" class="brand-menu-item" (click)="copy('wordmark')">
+                  <svg [appIcon]="copied() === 'wordmark' ? 'check' : 'copy'" class="size-4" [class.text-accent]="copied() === 'wordmark'"></svg>
+                  <span>{{ copied() === 'wordmark' ? (lang() === 'it' ? 'Copiato' : 'Copied') : (lang() === 'it' ? 'Copia wordmark come SVG' : 'Copy wordmark as SVG') }}</span>
+                </button>
+                <span class="brand-menu-sep" role="separator"></span>
+                <a role="menuitem" class="brand-menu-item" routerLink="/brand" (click)="closeBrandMenu()">
+                  <svg appIcon="book" class="size-4"></svg>
+                  <span>{{ lang() === 'it' ? 'Linee guida del brand' : 'Brand guidelines' }}</span>
+                  <svg appIcon="arrow-right" class="ml-auto size-3.5 opacity-60"></svg>
+                </a>
+              </div>
+            }
           </div>
-          <a [href]="linkFor('#contact')" class="btn btn-primary btn-sm hidden sm:inline-flex">
-            {{ lang() === 'it' ? 'Contattami' : 'Contact' }}
-          </a>
-          <button
-            type="button"
-            class="icon-btn lg:hidden"
-            (click)="menuOpen.set(!menuOpen())"
-            [attr.aria-expanded]="menuOpen()"
-            aria-controls="site-nav-sheet"
-            [attr.aria-label]="menuOpen() ? ui.closeMenu : ui.openMenu"
-          >
-            <svg [appIcon]="menuOpen() ? 'x' : 'menu'" class="size-5"></svg>
-          </button>
-        </div>
-      </div>
 
-      @if (menuOpen()) {
-        <div id="site-nav-sheet" class="site-nav-sheet lg:hidden">
-          <nav class="container-x" [attr.aria-label]="lang() === 'it' ? 'Sezioni' : 'Sections'">
+          <nav [attr.aria-label]="lang() === 'it' ? 'Sezioni' : 'Sections'" class="site-nav-links hidden lg:flex">
             @for (item of links(); track item.href) {
-              <a [href]="linkFor(item.href)" class="sheet-link" (click)="menuOpen.set(false)">
-                <span class="n">{{ item.n }}</span>{{ item.label }}
+              <a
+                [href]="linkFor(item.href)"
+                class="site-nav-link"
+                [class.is-active]="active() === item.href"
+                [attr.aria-current]="active() === item.href ? 'location' : null"
+              >
+                <span class="dot" aria-hidden="true"></span>
+                <span>{{ item.label }}</span>
               </a>
             }
-            <div class="mt-6 flex flex-wrap gap-2">
-              <a [href]="'mailto:' + profile.email" class="btn btn-primary">
-                <svg appIcon="mail" class="size-4"></svg>{{ profile.email }}
-              </a>
-              <a [href]="profile.github" target="_blank" rel="noreferrer" class="btn btn-ghost">
-                <svg appIcon="github" class="size-4"></svg>GitHub
-              </a>
-            </div>
           </nav>
+
+          <div class="site-nav-actions">
+            <button
+              type="button"
+              class="keybind-hint-btn hidden md:inline-flex"
+              (click)="triggerHelp()"
+              [attr.title]="lang() === 'it' ? 'Scorciatoie da tastiera (?)' : 'Keyboard shortcuts (?)'"
+              [attr.aria-label]="lang() === 'it' ? 'Scorciatoie da tastiera' : 'Keyboard shortcuts'"
+            >
+              <kbd class="kbd-cap">?</kbd>
+            </button>
+
+            <div class="nav-controls">
+              <button
+                type="button"
+                class="nav-ctl lang-roll"
+                (click)="setLang(lang() === 'it' ? 'en' : 'it')"
+                [attr.data-lang]="lang()"
+                [attr.aria-label]="lang() === 'it' ? 'Switch to English' : 'Passa all’italiano'"
+                [attr.title]="lang() === 'it' ? 'Switch to English (L)' : 'Passa all’italiano (L)'"
+              >
+                <svg appIcon="globe" class="lang-roll-globe size-3.5"></svg>
+                <span class="lang-roll-track" aria-hidden="true"><span lang="en">EN</span><span lang="it">IT</span></span>
+              </button>
+              <span class="nav-controls-sep" aria-hidden="true"></span>
+              <app-theme-toggle />
+            </div>
+
+            <a [href]="linkFor('#contact')" class="btn btn-primary btn-sm hidden sm:inline-flex">
+              <span>{{ lang() === 'it' ? 'Contattami' : 'Let’s talk' }}</span>
+              <svg appIcon="arrow-up-right" class="size-3.5"></svg>
+            </a>
+
+            <button
+              type="button"
+              class="icon-btn lg:hidden"
+              (click)="menuOpen.set(!menuOpen())"
+              [attr.aria-expanded]="menuOpen()"
+              aria-controls="site-nav-sheet"
+              [attr.aria-label]="menuOpen() ? ui.closeMenu : ui.openMenu"
+            >
+              <svg [appIcon]="menuOpen() ? 'x' : 'menu'" class="size-5"></svg>
+            </button>
+          </div>
         </div>
-      }
+
+        @if (menuOpen()) {
+          <div id="site-nav-sheet" class="site-nav-sheet lg:hidden">
+            <nav [attr.aria-label]="lang() === 'it' ? 'Sezioni' : 'Sections'">
+              @for (item of links(); track item.href) {
+                <a [href]="linkFor(item.href)" class="sheet-link" (click)="menuOpen.set(false)">
+                  <span class="n">{{ item.n }}</span>{{ item.label }}
+                  <svg appIcon="arrow-up-right" class="ml-auto size-4 text-faint"></svg>
+                </a>
+              }
+              <div class="mt-5 flex flex-wrap gap-2">
+                <a [href]="'mailto:' + profile.email" class="btn btn-primary">
+                  <svg appIcon="mail" class="size-4"></svg>{{ profile.email }}
+                </a>
+                <a [href]="profile.github" target="_blank" rel="noreferrer" class="btn btn-ghost">
+                  <svg appIcon="github" class="size-4"></svg>GitHub
+                </a>
+              </div>
+            </nav>
+          </div>
+        }
+      </div>
     </header>
   `,
 })
 export class SiteNavComponent implements OnInit {
-  /** Active section href on the home page (`#projects`); empty elsewhere. */
   active = input<string>("");
-  /** On the home page links are in-page anchors; on subpages they point back to `/#…`. */
   home = input<boolean>(true);
 
   protected readonly profile = PROFILE;
@@ -138,7 +154,6 @@ export class SiteNavComponent implements OnInit {
   protected readonly copied = signal<"logo" | "wordmark" | null>(null);
   private copiedTimer: ReturnType<typeof setTimeout> | undefined;
 
-  // The brand mark already leads to the intro, so the bar lists the sections after it.
   protected readonly links = computed(() => {
     lang();
     return TOC.filter((item) => item.href !== "#intro");
@@ -152,7 +167,7 @@ export class SiteNavComponent implements OnInit {
   onScroll() {
     if (typeof window === "undefined") return;
     const y = window.scrollY;
-    this.scrolled.set(y > 8);
+    this.scrolled.set(y > 16);
     if (this.brandMenu() && Math.abs(y - this.lastY) > 24) this.closeBrandMenu(false);
     if (Math.abs(y - this.lastY) < 6) return;
     this.lastY = y;
@@ -170,11 +185,15 @@ export class SiteNavComponent implements OnInit {
     if (this.brandMenu() && menu && !menu.contains(event.target as Node)) this.closeBrandMenu(false);
   }
 
+  protected triggerHelp() {
+    if (typeof window === "undefined") return;
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "?" }));
+  }
+
   protected openBrandMenu(event: MouseEvent) {
     event.preventDefault();
     this.copied.set(null);
     this.brandMenu.set(true);
-    // Focus the first item once it renders, so the keyboard path works too.
     setTimeout(() => this.items()[0]?.focus());
   }
 
@@ -191,7 +210,6 @@ export class SiteNavComponent implements OnInit {
       clearTimeout(this.copiedTimer);
       this.copiedTimer = setTimeout(() => this.closeBrandMenu(), 900);
     } catch {
-      // Clipboard denied or file unreachable: open the file instead so it can be saved by hand.
       window.open(which === "logo" ? LOGO_SVG : WORDMARK_SVG, "_blank", "noopener");
       this.closeBrandMenu();
     }

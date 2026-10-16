@@ -4,7 +4,6 @@ import { ContactComponent } from "./contact.component";
 import { ExperienceComponent } from "./experience.component";
 import { FooterComponent } from "./footer.component";
 import { IconComponent } from "./icon.component";
-
 import { IntroComponent } from "./intro.component";
 import { ProjectsComponent } from "./projects.component";
 import { ApproachComponent } from "./approach.component";
@@ -19,7 +18,6 @@ import { TOC, UI, lang } from "../lib/site";
     ExperienceComponent,
     FooterComponent,
     IconComponent,
-
     IntroComponent,
     ProjectsComponent,
     SiteNavComponent,
@@ -44,7 +42,6 @@ import { TOC, UI, lang } from "../lib/site";
       </main>
       <app-footer />
 
-
       <button
         type="button"
         (click)="scrollToTop()"
@@ -63,17 +60,41 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
 
   protected readonly ui = UI;
   protected readonly lang = lang;
-  private observer: IntersectionObserver | null = null;
   private revealObserver: IntersectionObserver | null = null;
   private readonly title = inject(Title);
 
   @HostListener("window:scroll")
   onWindowScroll() {
-    if (typeof window !== "undefined") {
-      this.showScrollTop.set(window.scrollY > 400);
-    }
+    if (typeof window === "undefined") return;
+    this.showScrollTop.set(window.scrollY > 400);
+    this.updateActiveSection();
   }
 
+  private updateActiveSection() {
+    if (typeof window === "undefined" || typeof document === "undefined") return;
+    const anchor = window.innerHeight * 0.28;
+    let current = "#intro";
+
+    for (const item of TOC) {
+      const id = item.href.slice(1);
+      const el = document.getElementById(id);
+      if (!el) continue;
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= anchor) {
+        current = item.href;
+      }
+    }
+
+    // If user scrolled all the way to the bottom, activate the last section (#contact)
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 48) {
+      const last = TOC[TOC.length - 1];
+      if (last) current = last.href;
+    }
+
+    if (this.active() !== current) {
+      this.active.set(current);
+    }
+  }
 
   scrollToTop() {
     if (typeof window !== "undefined") {
@@ -83,31 +104,10 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnInit() {
     this.title.setTitle("Alessandro Bruno — Software Engineer");
-    if (typeof document === "undefined") return;
-    const ids = TOC.map((item) => item.href.slice(1));
-    const els = ids.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => el !== null);
-    if (els.length === 0) return;
-
-    const visible = new Map<string, number>();
-    this.observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            visible.set(entry.target.id, entry.intersectionRatio);
-          } else {
-            visible.delete(entry.target.id);
-          }
-        }
-        const top = [...visible.entries()].sort((a, b) => b[1] - a[1])[0];
-        if (top) this.active.set(`#${top[0]}`);
-      },
-      { rootMargin: "-15% 0px -65% 0px", threshold: [0.1, 0.4] },
-    );
-
-    for (const el of els) this.observer.observe(el);
   }
 
   ngAfterViewInit() {
+    this.updateActiveSection();
     this.setupRevealObserver();
   }
 
@@ -134,7 +134,6 @@ export class HomeComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.observer?.disconnect();
     this.revealObserver?.disconnect();
   }
 }

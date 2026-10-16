@@ -13,6 +13,7 @@ export type IconName =
   | "chevron-left"
   | "chevron-right"
   | "arrow-up"
+  | "arrow-down"
   | "arrow-left"
   | "arrow-right"
   | "globe"
@@ -82,6 +83,10 @@ export type IconName =
       @case ("arrow-up") {
         <svg:path d="m5 12 7-7 7 7" />
         <svg:path d="M12 19V5" />
+      }
+      @case ("arrow-down") {
+        <svg:path d="M12 5v14" />
+        <svg:path d="m19 12-7 7-7-7" />
       }
       @case ("arrow-left") {
         <svg:path d="m12 19-7-7 7-7" />
