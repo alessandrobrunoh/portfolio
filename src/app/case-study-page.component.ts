@@ -8,7 +8,6 @@ import { TocComponent } from "./toc.component";
 import { CASES, lang } from "../lib/site";
 import type { TocItem } from "../lib/site.types";
 
-/** Case study from client work: /work/:id. Same reading order as a project page, no repository. */
 @Component({
   selector: "app-case-study-page",
   standalone: true,
@@ -21,27 +20,43 @@ import type { TocItem } from "../lib/site.types";
         <div class="container-x page-shell">
           <app-toc [items]="headings()" [active]="active()" />
           <main id="overview" class="min-w-0 scroll-mt-24">
-            <div class="project-reveal flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4 meta-mono">
-              <button type="button" class="inline-flex min-h-9 items-center gap-2 transition-colors hover:text-fg" (click)="goBack($event)">
-                <svg appIcon="arrow-left" class="size-3.5"></svg>
+            <div class="project-reveal flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4">
+              <button type="button" class="inline-flex min-h-9 items-center gap-2 text-small font-medium text-muted transition-colors hover:text-fg" (click)="goBack($event)">
+                <svg appIcon="arrow-left" class="size-4"></svg>
                 {{ it() ? 'Torna all’esperienza' : 'Back to Experience' }}
               </button>
-              <span>{{ it() ? 'caso / lavoro per clienti' : 'case / client work' }}</span>
+              <span class="badge-soft">
+                <span class="badge-soft-dot" aria-hidden="true"></span>
+                <span>{{ c.era }} · {{ c.role }}</span>
+              </span>
             </div>
 
             <article class="project-copy mt-10 max-w-3xl">
-              <p class="eyebrow"><span class="eyebrow-index">{{ c.era }}</span><span class="eyebrow-rule" aria-hidden="true"></span>{{ c.role }}</p>
-              <h1 class="mt-5 text-heading font-medium tracking-display text-fg">{{ c.title }}<span class="brand-dot" aria-hidden="true">.</span></h1>
-              <p class="section-lede mt-6">{{ c.blurb }}</p>
-              <p class="mt-4 inline-flex items-center gap-2 meta-mono"><span class="size-1.5 rounded-full bg-silver" aria-hidden="true"></span>{{ c.confidentiality }}</p>
+              <h1 class="text-heading font-semibold tracking-display text-fg">{{ c.title }}<span class="brand-dot" aria-hidden="true">.</span></h1>
+              <p class="section-lede mt-5">{{ c.blurb }}</p>
+              <p class="mt-4 inline-flex items-center gap-2 font-mono text-caption text-muted">
+                <span class="size-2 rounded-full bg-silver" aria-hidden="true"></span>{{ c.confidentiality }}
+              </p>
 
-              <section id="problem" class="mt-16 scroll-mt-24">
-                <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>{{ it() ? 'Il problema' : 'The problem' }}</p>
-                <p class="mt-4 max-w-prose text-lede text-fg">{{ c.problem }}</p>
+              <section id="problem" class="mt-14 scroll-mt-24">
+                <div class="section-badge">
+                  <span class="section-badge-dot" aria-hidden="true"></span>
+                  <span>01</span>
+                  <span class="section-badge-sep" aria-hidden="true">·</span>
+                  <span>{{ it() ? 'Il problema' : 'The problem' }}</span>
+                </div>
+                <div class="project-why-box mt-4">
+                  <p class="max-w-prose text-lede font-medium text-fg leading-relaxed">{{ c.problem }}</p>
+                </div>
               </section>
 
-              <section id="built" class="mt-16 scroll-mt-24">
-                <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>{{ it() ? 'Cosa ho costruito' : 'What I built' }}</p>
+              <section id="built" class="mt-14 scroll-mt-24">
+                <div class="section-badge">
+                  <span class="section-badge-dot" aria-hidden="true"></span>
+                  <span>02</span>
+                  <span class="section-badge-sep" aria-hidden="true">·</span>
+                  <span>{{ it() ? 'Cosa ho costruito' : 'What I built' }}</span>
+                </div>
                 <ol class="project-highlights mt-5">
                   @for (item of c.built; track item; let j = $index) {
                     <li class="text-body"><span>0{{ j + 1 }}</span>{{ item }}</li>
@@ -50,15 +65,25 @@ import type { TocItem } from "../lib/site.types";
               </section>
 
               @if (c.decisions.length) {
-                <section id="decisions" class="mt-16 scroll-mt-24">
-                  <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>{{ it() ? 'Decisioni' : 'Decisions' }}</p>
+                <section id="decisions" class="mt-14 scroll-mt-24">
+                  <div class="section-badge">
+                    <span class="section-badge-dot" aria-hidden="true"></span>
+                    <span>03</span>
+                    <span class="section-badge-sep" aria-hidden="true">·</span>
+                    <span>{{ it() ? 'Decisioni architetturali' : 'Architectural decisions' }}</span>
+                  </div>
                   <app-decisions class="mt-5 block" [decisions]="c.decisions" />
                 </section>
               }
 
               @if (c.impact?.length) {
-                <section id="impact" class="mt-16 scroll-mt-24">
-                  <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>{{ it() ? 'Risultato' : 'Result' }}</p>
+                <section id="impact" class="mt-14 scroll-mt-24">
+                  <div class="section-badge">
+                    <span class="section-badge-dot" aria-hidden="true"></span>
+                    <span>04</span>
+                    <span class="section-badge-sep" aria-hidden="true">·</span>
+                    <span>{{ it() ? 'Risultato' : 'Result' }}</span>
+                  </div>
                   <dl class="impact-row mt-5">
                     @for (m of c.impact; track m.label) {
                       <div><dt>{{ m.label }}</dt><dd>{{ m.value }}</dd></div>
@@ -67,9 +92,14 @@ import type { TocItem } from "../lib/site.types";
                 </section>
               }
 
-              <section id="lesson" class="mt-16 scroll-mt-24">
-                <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>{{ it() ? 'Cosa ho imparato' : 'What I learned' }}</p>
-                <p class="mt-4 max-w-prose text-lede text-fg">{{ c.learned }}</p>
+              <section id="lesson" class="mt-14 scroll-mt-24">
+                <div class="section-badge">
+                  <span class="section-badge-dot" aria-hidden="true"></span>
+                  <span>05</span>
+                  <span class="section-badge-sep" aria-hidden="true">·</span>
+                  <span>{{ it() ? 'Cosa ho imparato' : 'What I learned' }}</span>
+                </div>
+                <p class="mt-4 max-w-prose text-lede text-fg leading-relaxed">{{ c.learned }}</p>
                 <ul class="mt-8 flex flex-wrap gap-1.5">
                   @for (t of c.stack; track t) { <li class="chip">{{ t }}</li> }
                 </ul>
