@@ -42,7 +42,7 @@ Software engineer in Bologna, backend first. At [Luna S.r.l.](https://lunapartne
 ## Open source
 
 - **Merged** · [JDL syntax highlighting](https://github.com/zed-industries/extensions/pull/3339) in `zed-industries/extensions`
-- **In review** · [Port forwarding UI and live SSH forwards](https://github.com/zed-industries/zed/pull/55248) in `zed-industries/zed`
+- **In review** · [Port forwarding UI](https://github.com/zed-industries/zed/pull/65705) in `zed-industries/zed`
 - **Published** · [ducklake-orm](https://crates.io/crates/ducklake-orm) on crates.io
 
 ## Stack
