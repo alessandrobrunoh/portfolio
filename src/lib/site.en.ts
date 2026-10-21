@@ -82,10 +82,10 @@ export const EN: SiteData = {
     },
     {
       status: "Open",
-      title: "Port forwarding UI and live SSH forwards",
+      title: "Port forwarding UI",
       repo: "zed-industries/zed",
-      href: "https://github.com/zed-industries/zed/pull/55248",
-      note: "Add or remove forwards on remote sessions without reconnecting. Finished; waiting for maintainer review.",
+      href: "https://github.com/zed-industries/zed/pull/65705",
+      note: "UI for port forwarding on remote sessions; dynamic port forwarding is not implemented yet. Waiting for maintainer review.",
     },
     {
       status: "Merged",
